@@ -161,7 +161,7 @@
 @section('scripts')
 
 {{-- my custom js --}}
-<script src="{{ asset('assets/intranet/js/tools.js') }}"></script>
-<script src="{{ asset('assets/intranet/js/ciclos.js') }}"></script>
+<script src="{{ asset('assets/js/tools.js') }}"></script>
+<script src="{{ asset('assets/js/ciclos.js') }}"></script>
 
 @endsection

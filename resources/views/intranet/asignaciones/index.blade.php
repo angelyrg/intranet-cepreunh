@@ -112,8 +112,8 @@
 @section('scripts')
 
     {{-- my custom js --}}
-    <script src="{{ asset('assets/intranet/js/tools.js') }}"></script>
-    <script src="{{ asset('assets/intranet/js/asignaturas.js') }}"></script>
+    <script src="{{ asset('assets/js/tools.js') }}"></script>
+    <script src="{{ asset('assets/js/asignaturas.js') }}"></script>
 
 
 

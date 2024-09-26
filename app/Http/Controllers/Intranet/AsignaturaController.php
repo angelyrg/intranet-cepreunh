@@ -62,7 +62,7 @@ class AsignaturaController extends Controller
 
             $docente = Asignatura::create($request->only(['descripcion','estado']));
 
-            $dataTable = ''; // $this->getData();
+            $dataTable = $this->getData();
 
             return response()->json([
                 'success' => true,
@@ -180,14 +180,12 @@ class AsignaturaController extends Controller
             $estado = $item->estado;
 
             $acciones = "
-            <div class='btnActionCarrera'>
-                <a class='badge fw-semibold py-1 bg-primary-subtle text-primary btnEditDocente' data-id='$id' role='button'>
+                <a class='badge fw-semibold py-1 bg-primary-subtle text-primary btnEditAsignatura' data-id='$id' role='button'>
                     <i class='ti ti-edit'></i>                                        
                 </a>
-                <a class='badge fw-semibold py-1 bg-danger-subtle text-danger btnDeleteDocente' data-id='$id' role='button'>
+                <a class='badge fw-semibold py-1 bg-danger-subtle text-danger btnDeleteAsignatura' data-id='$id' role='button'>
                     <i class='ti ti-trash'></i>                                        
                 </a>
-            </div>
             ";
 
             $estado = ($estado > 0) ? 'ACTIVO' : 'INACTIVO';

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Intranet;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Intranet\Sedes\SedeRequest;
+use App\Http\Requests\Sedes\SedeRequest;
 use App\Models\Intranet\Sede;
 use App\Services\SedeService;
 use DateTime;

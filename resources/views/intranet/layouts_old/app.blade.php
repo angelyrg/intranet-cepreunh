@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="{{asset('modernize/libs/sweetalert2/dist/sweetalert2.min.css')}}">
 
    <!-- Custom -->
-   <link rel="stylesheet" href="{{asset('assets/intranet/css/custom.css')}}" />
+   <link rel="stylesheet" href="{{asset('assets/css/custom.css')}}" />
 
    {{-- Tabler io Icons Adicionales --}}
    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />

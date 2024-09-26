@@ -1,9 +1,7 @@
 <?php
 
-namespace App\Models\intranet;
+namespace App\Models\Intranet;
 
-use App\Models\Intranet\Area;
-use App\Models\Intranet\CarreraCiclo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,5 +18,5 @@ class Carrera extends Model
     function CarreraCiclo(){
         return $this->HasMany(CarreraCiclo::class);
     }
-    
+
 }

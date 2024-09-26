@@ -1,0 +1,21 @@
++ COMANDOS
+php artisan make:controller Intranet/AsignaturaController --resource
+php artisan make:model Intranet/Asignaturas
+php artisan make:model Post -m |> con migracion
+
+- Migraciones
+php artisan make:migration create_docentes_table
+
+- Seeder:
+php artisan make:seeder DocentesSeeder
+php artisan db:seed --class=AsignaturasSeeder
+php artisan db:seed |> todos
+
+php artisan migrate:refresh --seed |> Regenerar la Base de Datos con Migraciones y Seeders
+
+-- git
+git pull origin dev |> para descargar de un branch remoto
+
+
+-- Livewire
+php artisan make:livewire Perfil/PerfilList

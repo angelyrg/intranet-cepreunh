@@ -1,0 +1,28 @@
+
+
+/* .form-group .form-control {
+   border-color: var(--bs-info-border-subtle) !important;
+ }
+
+ .validate .form-control {
+   border-color: var(--bs-info-border-subtle) !important;
+ } */
+
+#sidebarnav .sidebar-link {
+  /* display: flex;
+  font-size: 14px;
+  white-space: nowrap;
+  align-items: center;
+  line-height: 25px;
+  position: relative;
+  margin: 0px 0px 2px; */
+  padding: 8px;
+  /* border-radius: 4px; */
+  /* gap: 10px; */
+  /* text-decoration: none;
+  font-weight: 400; */
+}
+
+.left-sidebar .scroll-sidebar {
+  height: calc(100vh - 70px); /* 70px es altura del contenedor del logo */
+}
