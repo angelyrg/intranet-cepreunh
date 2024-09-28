@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Models\Intranet;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class Matricula extends Model
+{
+    use HasFactory;
+    use SoftDeletes;
+
+    protected $fillable = [
+        'ciclo_id',
+        'estudiante_id',
+        'carerra_id',
+        'sede_id',
+        'turno',
+        'estado',
+    ];
+
+
+    public function estudiante(){
+        return $this->belongsTo(Estudiante::class, 'estudiante_id');
+    }
+
+    public function ciclo(){
+        return $this->belongsTo(Ciclo::class, 'ciclo_id');
+    }
+
+    public function pagos(){
+        return $this->hasMany(Pago::class, 'matricula_id');
+    }
+}
