@@ -22,6 +22,8 @@ class EstudianteForm extends Component
     public $correo_institucional = '';
     #[Rule('required|min:6|max:9')]
     public $telefono_personal = '';
+    // #[Rule('required')]
+    public $tipo_documento = '';
 
     public function mount($studentId = null)
     {
@@ -33,6 +35,7 @@ class EstudianteForm extends Component
             $this->apellido_materno = $student->apellido_materno;
             $this->correo_institucional = $student->correo_institucional;
             $this->telefono_personal = $student->telefono_personal;
+            $this->tipo_documento = $student->tipo_documento;
         }
     }
 
@@ -41,9 +44,9 @@ class EstudianteForm extends Component
         $this->validate();
 
         if ($this->id) {
-            Estudiante::find($this->id)->update($this->only(['nombres', 'apellido_paterno', 'apellido_materno', 'correo_institucional', 'telefono_personal']));
+            Estudiante::find($this->id)->update($this->only(['nombres','apellido_paterno','apellido_materno','correo_institucional','telefono_personal','tipo_documento']));
         } else {
-            Estudiante::create($this->only(['nombres', 'apellido_paterno', 'apellido_materno', 'correo_institucional', 'telefono_personal']));
+            Estudiante::create($this->only(['nombres','apellido_paterno','apellido_materno','correo_institucional','telefono_personal','tipo_documento']));
         }
 
         $this->dispatch('student-saved');
