@@ -4,10 +4,11 @@ namespace App\Models\Intranet;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Permission\Traits\HasRoles;
 
 class Asignatura extends Model
 {
-    use HasFactory;
+    use HasFactory, HasRoles;
     
     protected $fillable = ['descripcion','estado'];
 

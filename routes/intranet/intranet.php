@@ -8,13 +8,16 @@ use App\Http\Controllers\Intranet\AsignaturaController;
 use App\Http\Controllers\Intranet\CarreraCicloController;
 use App\Http\Controllers\Intranet\CicloController;
 use App\Http\Controllers\Intranet\DocenteController;
+use App\Http\Controllers\Intranet\PermissionController;
 use App\Http\Controllers\Intranet\SedeController;
 use App\Models\Intranet\AsignaturaCiclo;
 use App\Models\Intranet\CarreraCiclo;
-
+use Spatie\Permission\Contracts\Permission;
 
 // Rutas protegidas con autenticación y confirmación de correo verificado
 Route::middleware(['auth', 'verified'])->group(function () {
+
+    Route::resource('permisos', PermissionController::class)->except(['create','show','destroy'])->names('permisos');
 
     Route::resource('sedes', SedeController::class)->except(['create','show','destroy'])->names('sedes');
     Route::delete('sedes/{sede}/eliminar', [SedeController::class, 'eliminar'])->name('sedes.eliminar');

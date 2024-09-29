@@ -121,7 +121,7 @@
                 </div>                
                 <form id="form{{ $title }}" method="POST" action="{{ route('asignaturas.store') }}" novalidate >
                     @csrf
-                    <input type="hidden" name="id" id="id">
+                    <input type="hidden" name="id" id="id{{ $title }}">
                     
                     <div class="modal-body">
                         <div class="row">
@@ -162,8 +162,8 @@
 @section('scripts')
 
     {{-- my custom js --}}
-    <script src="{{ asset('assets/intranet/js/tools.js') }}"></script>
-    <script src="{{ asset('assets/intranet/js/asignaturaciclo.js') }}"></script>
+    <script src="{{ asset('assets/js/tools.js') }}"></script>
+    <script src="{{ asset('assets/js/asignaturaciclo.js') }}"></script>
 
     <script src="{{ asset('modernize/libs/select2/dist/js/select2.min.js') }}"></script>
     <script src="{{ asset('modernize/libs/select2/dist/js/select2.full.min.js') }}"></script>

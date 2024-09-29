@@ -38,7 +38,7 @@
         </div>
         <div class="card-body p-4">
         <div class="table-responsive mb-4 border rounded-1">
-            <table class="table text-nowrap mb-0 align-middle" id="tbl{{ $page }}">
+            <table class="table text-nowrap mb-0 align-middle" id="tbl{{ $title }}">
             <thead class="text-dark fs-4">
                 <tr>
                     <th>
@@ -71,7 +71,7 @@
                 </div>                
                 <form id="form{{ $title }}" method="POST" action="{{ route('asignaturas.store') }}" novalidate >
                     @csrf
-                    <input type="hidden" name="id" id="id">
+                    <input type="hidden" name="id" id="id{{ $title }}">
                     
                     <div class="modal-body">
                         <div class="row">
@@ -112,8 +112,8 @@
 @section('scripts')
 
     {{-- my custom js --}}
-    <script src="{{ asset('assets/intranet/js/tools.js') }}"></script>
-    <script src="{{ asset('assets/intranet/js/asignaturas.js') }}"></script>
+    <script src="{{ asset('assets/js/tools.js') }}"></script>
+    <script src="{{ asset('assets/js/asignaturas.js') }}"></script>
 
 
 
