@@ -13,7 +13,10 @@ return new class extends Migration
     {
         Schema::create('estudiantes', function (Blueprint $table) {
             $table->id();
-            $table->string('tipo_documento', 50);
+            //Datos personales
+            $table->unsignedBigInteger('tipo_documento_id')->default(1); //1:DNI
+            $table->foreign('tipo_documento_id')->references('id')->on('tipos_documentos');
+
             $table->string('nro_documento', 50);
             $table->string('nombres', 150)->nullable();
             $table->string('apellido_paterno', 100)->nullable();
@@ -23,18 +26,30 @@ return new class extends Migration
 
             $table->string('telefono_personal', 15)->nullable();
             $table->string('whatsapp', 15)->nullable();
-            $table->string('telefono_apoderado', 15)->nullable();
             $table->string('correo_personal', 200)->nullable();
             $table->string('correo_institucional', 200)->nullable();
+            
 
-            $table->string('tipo_colegio', 100)->nullable();
-            $table->string('nombre_colegio', 255)->nullable();
+            // Direccion / Colegio
+            $table->string('ubigeodepartamento_id', 2)->nullable();
+            $table->foreign('ubigeodepartamento_id')->references('id')->on('ubigeodepartamento')->onDelete('set null');
+
+            $table->string('ubigeoprovincia_id', 4)->nullable();
+            $table->foreign('ubigeoprovincia_id')->references('id')->on('ubigeoprovincia')->onDelete('set null');
+
+            $table->string('ubigeodistrito_id', 6)->nullable();
+            $table->foreign('ubigeodistrito_id')->references('id')->on('ubigeodistrito')->onDelete('set null');
+
+            $table->string('direccion', 255)->nullable();
+
+            $table->integer('colegio_id')->nullable();
+            $table->foreign('colegio_id')->references('id')->on('colegios')->onDelete('set null');
             $table->string('year_culminacion', 4)->nullable();
 
-            $table->string('departamento', 50)->nullable();
-            $table->string('provincia', 50)->nullable();
-            $table->string('distrito', 50)->nullable();
-            $table->string('direccion', 255)->nullable();
+            // Apoderado
+            $table->unsignedBigInteger('apoderado_id')->nullable();
+            $table->foreign('apoderado_id')->references('id')->on('apoderados')->onDelete('set null');
+
 
             $table->boolean('estado')->default(true);
             $table->timestamps();

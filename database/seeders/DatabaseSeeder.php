@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CiclosSeeder::class);
         $this->call(CarreraCicloSeeder::class);
         $this->call(AsignaturaCicloSeeder::class);
+        $this->call(TiposDocumentosSeeder::class);
         
     }
 }
