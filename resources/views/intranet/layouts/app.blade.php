@@ -25,6 +25,7 @@
 
 
   @yield('css')
+  @livewireStyles
 
   <title>Intranet - CEPRE UNH</title>
 </head>
@@ -706,6 +707,20 @@
   <script src="{{ asset('modernize/js/forms/custom-validation-init.js') }}"></script>
 
   @yield('scripts')
+  @livewireScripts
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    document.addEventListener('livewire:initialized', () => {
+        Livewire.on('show-alert', (event) => {
+            Swal.fire({
+                title: '¡Éxito!',
+                text: event.message,
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        });
+    });
+  </script>
 
 </body>
 
