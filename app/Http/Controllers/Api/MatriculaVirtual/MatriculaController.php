@@ -7,6 +7,7 @@ use App\Http\Requests\Api\ValidacionPagoRequest;
 use App\Models\Intranet\Estudiante;
 use App\Models\Intranet\Matricula;
 use App\Models\Intranet\Pago;
+use App\Models\Intranet\TipoDocumento;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -34,7 +35,7 @@ class MatriculaController extends Controller
 
             // Buscar o crear estudiante por su DNI
             $estudiante = Estudiante::firstOrCreate(
-                ['nro_documento' => $dni, 'tipo_documento' => 'DNI']
+                ['nro_documento' => $dni, 'tipo_documento_id' => 1] //1:DNI
             );
 
             // Verificar si el estudiante ya está matriculado en el ciclo y si no, lo crea
@@ -59,14 +60,73 @@ class MatriculaController extends Controller
 
             return response()->json([
                 'success' => true,
-                'matricula' => $matricula,
+                'uuid' => $matricula->uuid,
             ], 200);
-
         } catch (\Exception $e) {
             Log::error('Error en MatriculaController::procesarMatricula: ' . $e->getMessage());
             return [
                 'success' => false,
                 'message' => 'Ocurrió un error al procesar la matrícula.'
+            ];
+        }
+    }
+
+    public function getByUUID(String $uuid)
+    {
+        try {
+            $matricula = Matricula::where('uuid', $uuid)
+                ->where('estado', 1)
+                ->with(['estudiante', 'ciclo', 'pagos'])
+                ->first();
+
+            if (!$matricula) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Matrícula no encontrada',
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => $matricula,
+            ], 200);
+        } catch (\Exception $e) {
+            Log::error('Error en MatriculaController::getByUUID: ' . $e->getMessage());
+            return [
+                'success' => false,
+                'message' => 'Ocurrió un error al obtener la matrícula.'
+            ];
+        }
+    }
+
+    public function getFullDataByUUID(String $uuid)
+    {
+        try {
+            $matricula = Matricula::where('uuid', $uuid)
+                ->where('estado', 1)
+                ->with(['estudiante', 'ciclo', 'pagos'])
+                ->first();
+
+            $tipos_documentos = TipoDocumento::all();
+
+            // TOdo: Devolver todos los campos aquí
+
+            if (!$matricula) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Matrícula no encontrada',
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => $matricula,
+            ], 200);
+        } catch (\Exception $e) {
+            Log::error('Error en MatriculaController::getByUUID: ' . $e->getMessage());
+            return [
+                'success' => false,
+                'message' => 'Ocurrió un error al obtener la matrícula.'
             ];
         }
     }
@@ -121,5 +181,4 @@ class MatriculaController extends Controller
             ];
         }
     }
-
 }

@@ -10,6 +10,8 @@ class UbigeoDistrito extends Model
     use HasFactory;
 
     protected $table = 'ubigeodistrito';
+    protected $keyType = 'string';
+    public $incrementing = false;
 
     function provincia()
     {

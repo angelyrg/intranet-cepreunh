@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api;
 
+use App\Models\Intranet\Ciclo;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -26,7 +27,17 @@ class ValidacionPagoRequest extends FormRequest
         return [
             'dni' => 'required|string|regex:/^[0-9]{8}$/',
             'nTransaccion' => 'required|string|max:20',
-            'ciclo' => 'required|integer|exists:ciclos,id',
+            'ciclo' => [
+                'required',
+                'integer',
+                'exists:ciclos,id',
+                function ($attribute, $value, $fail) {
+                    $ciclo = Ciclo::find($value);
+                    if (!$ciclo || $ciclo->estado !== 1) {
+                        $fail('El ciclo seleccionado no está disponible.');
+                    }
+                },
+            ],
         ];
     }
 
