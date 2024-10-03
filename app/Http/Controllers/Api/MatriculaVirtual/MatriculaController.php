@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\MatriculaVirtual;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\EstudianteRequest;
 use App\Http\Requests\Api\ValidacionPagoRequest;
 use App\Models\Intranet\Estudiante;
 use App\Models\Intranet\Matricula;
@@ -99,38 +100,6 @@ class MatriculaController extends Controller
         }
     }
 
-    public function getFullDataByUUID(String $uuid)
-    {
-        try {
-            $matricula = Matricula::where('uuid', $uuid)
-                ->where('estado', 1)
-                ->with(['estudiante', 'ciclo', 'pagos'])
-                ->first();
-
-            $tipos_documentos = TipoDocumento::all();
-
-            // TOdo: Devolver todos los campos aquí
-
-            if (!$matricula) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Matrícula no encontrada',
-                ], 404);
-            }
-
-            return response()->json([
-                'success' => true,
-                'data' => $matricula,
-            ], 200);
-        } catch (\Exception $e) {
-            Log::error('Error en MatriculaController::getByUUID: ' . $e->getMessage());
-            return [
-                'success' => false,
-                'message' => 'Ocurrió un error al obtener la matrícula.'
-            ];
-        }
-    }
-
     public function obtenerBoletaAPI($dni, $nTransaccion)
     {
         $data = [
@@ -178,6 +147,26 @@ class MatriculaController extends Controller
             return [
                 'success' => false,
                 'message' => 'Ocurrió un error al obtener la boleta.'
+            ];
+        }
+    }
+
+    public function updateDatosEstudiante(EstudianteRequest $request, Estudiante $estudiante)
+    {
+        try {
+            $validatedData = $request->validated();
+            $estudiante->update($validatedData);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Datos del estudiante actualizados correctamente.',
+                'data' => $estudiante
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error en MatriculaController::updateDatosEstudiante: ' . $e->getMessage());
+            return [
+                'success' => false,
+                'message' => 'Ocurrió un error al guardar la información del estudiante.'
             ];
         }
     }

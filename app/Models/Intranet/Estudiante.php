@@ -12,20 +12,25 @@ class Estudiante extends Model
     use SoftDeletes;
 
     protected $fillable = [
+        'tipo_documento_id',
+        'nro_documento',
         'nombres',
         'apellido_paterno',
         'apellido_materno',
-        'tipo_documento',
-        'nro_documento',
         'fecha_nacimiento',
         'pais_nacimiento',
-        'nacionalidades',
-        'whatsapp',
+        'nacionalidad',
         'telefono_personal',
-        'telefono_apoderado',
+        'whatsapp',
         'correo_personal',
         'correo_institucional',
-
+        'ubigeodepartamento_id',
+        'ubigeoprovincia_id',
+        'ubigeodistrito_id',
+        'direccion',
+        'colegio_id',
+        'year_culminacion',
+        'apoderado_id',
+        'estado',
     ];
-
 }
