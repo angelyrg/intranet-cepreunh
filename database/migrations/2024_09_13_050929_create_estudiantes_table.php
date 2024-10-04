@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('nombres', 150)->nullable();
             $table->string('apellido_paterno', 100)->nullable();
             $table->string('apellido_materno', 100)->nullable();
+            $table->date('fecha_nacimiento')->nullable();
             $table->string('pais_nacimiento', 50)->nullable();
             $table->string('nacionalidad', 255)->nullable();
 
@@ -28,7 +29,6 @@ return new class extends Migration
             $table->string('whatsapp', 15)->nullable();
             $table->string('correo_personal', 200)->nullable();
             $table->string('correo_institucional', 200)->nullable();
-            
 
             // Direccion / Colegio
             $table->string('ubigeodepartamento_id', 2)->nullable();
