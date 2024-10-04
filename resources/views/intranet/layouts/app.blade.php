@@ -720,6 +720,29 @@
             });
         });
     });
+
+    function initializeTooltips() {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[title]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        });
+    }
+
+    // Inicializar tooltips cuando la página carga
+    document.addEventListener('DOMContentLoaded', function () {
+        initializeTooltips();
+    });
+
+    // Volver a inicializar tooltips después de una actualización de Livewire
+    document.addEventListener('livewire:load', function () {
+        initializeTooltips();
+    });
+
+    // Volver a inicializar tooltips después de cada actualización de Livewire
+    document.addEventListener('livewire:update', function () {
+        initializeTooltips();
+    });
+
   </script>
 
 </body>

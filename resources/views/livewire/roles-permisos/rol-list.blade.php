@@ -1,32 +1,13 @@
 <div>
     {{-- Breadcrumb|start  --}}
-    <div class="row">
-        <div class="card bg-info-subtle shadow-none position-relative overflow-hidden mb-4">
-        <div class="card-body px-4 py-3">
-            <div class="row align-items-center">
-                <div class="col-9">
-                    <h4 class="fw-semibold mb-8">Lista de roles</h4>
-                    <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item">
-                            <a class="text-muted text-decoration-none" href="../main/index.html">Sistemas</a>
-                        </li>
-                        <li class="breadcrumb-item active" aria-current="page">Roles</li>
-                    </ol>
-                    </nav>
-                </div>
-                <div class="col-3">
-                    <div class="text-center">
-                        {{-- <button type="button" class="btn btn-primary btnAddEstudiante">
-                            <i class="ti ti-books fs-4"></i> NUEVO REGISTRO
-                        </button> --}}
-                        <button wire:click="showForm" class="btn btn-primary"><i class="ti ti-books fs-4"></i> AGREGAR ROL</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        </div>
-    </div>
+    <x-breadcrumb 
+        title="Lista de roles" 
+        parent-url="#"
+        parent-label="Configuración del Sistema"
+        current-label="Roles"
+        button-label="AGREGAR ROL"
+        action="showForm"
+    />
     {{-- Breadcrumb|end  --}}
 
     {{-- Content|start --}}

@@ -2,14 +2,13 @@
 
 namespace App\Livewire\RolesPermisos;
 
-use App\Models\Intranet\Role;
-use Livewire\Component;
+use App\Models\Intranet\Permission;
 use Livewire\Attributes\Rule;
+use Livewire\Component;
 
-use Illuminate\Support\Facades\Log;
-
-class RolForm extends Component
+class PermisoForm extends Component
 {
+
     public $title = 'Roles y permisos';
 
     public $id;
@@ -23,7 +22,7 @@ class RolForm extends Component
     {
 
         if ($roleId) {
-            $rules = Role::find($roleId);
+            $rules = Permission::find($roleId);
 
             $this->id = $rules->id;
             $this->name = $rules->name;
@@ -35,9 +34,9 @@ class RolForm extends Component
         $this->validate();
 
         if ($this->id) {
-            Role::find($this->id)->update($this->only(['name','guard_name']));
+            Permission::find($this->id)->update($this->only(['name','guard_name']));
         } else {
-            Role::create($this->only(['name','guard_name']));
+            Permission::create($this->only(['name','guard_name']));
         }
 
         $this->dispatch('role-saved');
@@ -49,10 +48,9 @@ class RolForm extends Component
         $this->dispatch('modal-closed');
         $this->reset(['id', 'name']);
     }
-
+    
     public function render()
     {
-        return view('livewire.roles-permisos.rol-form');
+        return view('livewire.roles-permisos.permiso-form');
     }
-
 }
