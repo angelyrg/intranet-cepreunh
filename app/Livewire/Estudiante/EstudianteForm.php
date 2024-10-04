@@ -3,6 +3,7 @@
 namespace App\Livewire\Estudiante;
 
 use App\Models\Intranet\Estudiante;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Livewire\Attributes\Rule;
 
@@ -27,6 +28,9 @@ class EstudianteForm extends Component
 
     public function mount($studentId = null)
     {
+
+        Log::error('data => ', [$studentId]);
+
         if ($studentId) {
             $student = Estudiante::find($studentId);
             $this->id = $student->id;

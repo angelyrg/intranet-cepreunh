@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Intranet\User;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -19,5 +19,8 @@ class UserSeeder extends Seeder
             'email' => 'joel.neskenz@gmail.com',
             'password' => Hash::make('password'),
         ])->assignRole('administrador');
+
+        // User::factory(99)->create();
+        User::factory(10)->create();
     }
 }
