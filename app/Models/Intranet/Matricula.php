@@ -5,6 +5,7 @@ namespace App\Models\Intranet;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Matricula extends Model
 {
@@ -18,18 +19,32 @@ class Matricula extends Model
         'sede_id',
         'turno',
         'estado',
+        'uuid'
     ];
 
 
-    public function estudiante(){
+    public function estudiante()
+    {
         return $this->belongsTo(Estudiante::class, 'estudiante_id');
     }
 
-    public function ciclo(){
+    public function ciclo()
+    {
         return $this->belongsTo(Ciclo::class, 'ciclo_id');
     }
 
-    public function pagos(){
+    public function pagos()
+    {
         return $this->hasMany(Pago::class, 'matricula_id');
+    }
+
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($matricula) {
+            $matricula->uuid = (string) Str::uuid(); // Genera un UUID
+        });
     }
 }
