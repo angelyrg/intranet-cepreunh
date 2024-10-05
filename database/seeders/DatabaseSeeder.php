@@ -28,6 +28,10 @@ class DatabaseSeeder extends Seeder
         $this->call(CarreraCicloSeeder::class);
         $this->call(AsignaturaCicloSeeder::class);
         $this->call(TiposDocumentosSeeder::class);
-        
+
+        $this->call(DiscapacidadSeeder::class);
+        $this->call(EstadoCivilSeeder::class);
+        $this->call(GeneroSeeder::class);
+        $this->call(IdentidadEtnicaSeeder::class);
     }
 }

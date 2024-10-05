@@ -21,6 +21,13 @@ return new class extends Migration
             $table->string('nombres', 150)->nullable();
             $table->string('apellido_paterno', 100)->nullable();
             $table->string('apellido_materno', 100)->nullable();
+
+            $table->unsignedBigInteger('genero_id')->nullable();
+            $table->foreign('genero_id')->references('id')->on('generos')->onDelete('set null');
+
+            $table->unsignedBigInteger('estado_civil_id')->nullable();
+            $table->foreign('estado_civil_id')->references('id')->on('estados_civiles')->onDelete('set null');
+
             $table->date('fecha_nacimiento')->nullable();
             $table->string('pais_nacimiento', 50)->nullable();
             $table->string('nacionalidad', 255)->nullable();
@@ -30,15 +37,32 @@ return new class extends Migration
             $table->string('correo_personal', 200)->nullable();
             $table->string('correo_institucional', 200)->nullable();
 
+            $table->boolean('discapacidad')->nullable()->default(false);
+            $table->text('discapacid_detalle')->nullable();
+
+            $table->unsignedBigInteger('identidad_etnica_id')->nullable();
+            $table->foreign('identidad_etnica_id')->references('id')->on('identidades_etnicas')->onDelete('set null');
+
+            // Lugar de nacimiento
+            $table->string('nacimiento_ubigeodepartamento_id', 2)->nullable();
+            $table->foreign('nacimiento_ubigeodepartamento_id')->references('id')->on('ubigeodepartamento')->onDelete('set null');
+
+            $table->string('nacimiento_ubigeoprovincia_id', 4)->nullable();
+            $table->foreign('nacimiento_ubigeoprovincia_id')->references('id')->on('ubigeoprovincia')->onDelete('set null');
+
+            $table->string('nacimiento_ubigeodistrito_id', 6)->nullable();
+            $table->foreign('nacimiento_ubigeodistrito_id')->references('id')->on('ubigeodistrito')->onDelete('set null');
+
+
             // Direccion / Colegio
-            $table->string('ubigeodepartamento_id', 2)->nullable();
-            $table->foreign('ubigeodepartamento_id')->references('id')->on('ubigeodepartamento')->onDelete('set null');
+            $table->string('direccion_ubigeodepartamento_id', 2)->nullable();
+            $table->foreign('direccion_ubigeodepartamento_id')->references('id')->on('ubigeodepartamento')->onDelete('set null');
 
-            $table->string('ubigeoprovincia_id', 4)->nullable();
-            $table->foreign('ubigeoprovincia_id')->references('id')->on('ubigeoprovincia')->onDelete('set null');
+            $table->string('direccion_ubigeoprovincia_id', 4)->nullable();
+            $table->foreign('direccion_ubigeoprovincia_id')->references('id')->on('ubigeoprovincia')->onDelete('set null');
 
-            $table->string('ubigeodistrito_id', 6)->nullable();
-            $table->foreign('ubigeodistrito_id')->references('id')->on('ubigeodistrito')->onDelete('set null');
+            $table->string('direccion_ubigeodistrito_id', 6)->nullable();
+            $table->foreign('direccion_ubigeodistrito_id')->references('id')->on('ubigeodistrito')->onDelete('set null');
 
             $table->string('direccion', 255)->nullable();
 
