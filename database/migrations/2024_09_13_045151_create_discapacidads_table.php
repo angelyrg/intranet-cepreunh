@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('descripcion', 100);
             $table->boolean('estado')->default(true);
             $table->timestamps();
+            $table->timestamp('deleted_at')->nullable();
         });
     }
 
