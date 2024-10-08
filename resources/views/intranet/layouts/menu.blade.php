@@ -10,7 +10,7 @@
       </li>
       <li class="nav-small-cap">
         <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-        <span class="hide-menu">SISTEMA</span>
+        <span class="hide-menu">CONFIG. DEL SISTEMA</span>
       </li>
       <li class="sidebar-item">
         <a class="sidebar-link" href="#" aria-expanded="false">
@@ -18,6 +18,38 @@
             <i class="ti ti-books"></i>
           </span>
           <span class="hide-menu">Menús</span>
+        </a>
+      </li>
+      <li class="sidebar-item">
+        <a class="sidebar-link" href="{{ route('roles.index') }}" aria-expanded="false">
+          <span>
+            <i class="ti ti-books"></i>
+          </span>
+          <span class="hide-menu">Roles</span>
+        </a>
+      </li>
+      <li class="sidebar-item">
+        <a class="sidebar-link" href="{{ route('permisos.index') }}" aria-expanded="false">
+          <span>
+            <i class="ti ti-books"></i>
+          </span>
+          <span class="hide-menu">Permisos</span>
+        </a>
+      </li>
+      <li class="sidebar-item">
+        <a class="sidebar-link" href="{{ route('usuarios.index') }}" aria-expanded="false">
+          <span>
+            <i class="ti ti-books"></i>
+          </span>
+          <span class="hide-menu">Usuarios</span>
+        </a>
+      </li>
+      <li class="sidebar-item">
+        <a class="sidebar-link" href="{{ route('empleados.index') }}" aria-expanded="false">
+          <span>
+            <i class="ti ti-books"></i>
+          </span>
+          <span class="hide-menu">Empleados</span>
         </a>
       </li>
       <li class="nav-small-cap">

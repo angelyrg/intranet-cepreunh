@@ -6,6 +6,16 @@
                 <div class="row">
                     <div class="col-lg-12">                            
                         <div class="form-group mb-4 ">
+                            <label for="tipo_documento" class="form-label">Tipodocumento</label>
+                            {{-- <input type="text" id="tipo_documento" wire:model="tipo_documento" class="form-control"> --}}
+                            <select wire:model="tipo_documento" id="tipo_documento" class="form-control">
+                                <option value="1">DNI</option>
+                            </select>
+                            @error('tipo_documento') <span class="error">{{ $message }}</span> @enderror
+                        </div>
+                    </div>
+                    <div class="col-lg-12">                            
+                        <div class="form-group mb-4 ">
                             <label for="nombres" class="form-label">Nombres</label>
                             <input type="text" id="nombres" wire:model="nombres" class="form-control">
                             @error('nombres') <span class="error">{{ $message }}</span> @enderror
