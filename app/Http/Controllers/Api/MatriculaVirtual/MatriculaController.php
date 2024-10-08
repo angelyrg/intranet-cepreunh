@@ -5,7 +5,12 @@ namespace App\Http\Controllers\Api\MatriculaVirtual;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\EstudianteRequest;
 use App\Http\Requests\Api\ValidacionPagoRequest;
+use App\Models\Common\UbigeoDepartamento;
+use App\Models\Intranet\Discapacidad;
+use App\Models\Intranet\EstadoCivil;
 use App\Models\Intranet\Estudiante;
+use App\Models\Intranet\Genero;
+use App\Models\Intranet\IdentidadEtnica;
 use App\Models\Intranet\Matricula;
 use App\Models\Intranet\Pago;
 use App\Models\Intranet\TipoDocumento;
@@ -90,6 +95,51 @@ class MatriculaController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => $matricula,
+            ], 200);
+        } catch (\Exception $e) {
+            Log::error('Error en MatriculaController::getByUUID: ' . $e->getMessage());
+            return [
+                'success' => false,
+                'message' => 'Ocurrió un error al obtener la matrícula.'
+            ];
+        }
+    }
+
+    public function getFullDataByUUID(String $uuid)
+    {
+        try {
+            $matricula = Matricula::where('uuid', $uuid)
+                ->where('estado', 1)
+                ->with(['estudiante', 'ciclo', 'pagos'])
+                ->first();
+
+            if (!$matricula) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Matrícula no encontrada',
+                ], 404);
+            }
+
+            $tipos_documentos = TipoDocumento::all();
+            $generos = Genero::all();
+            $estados_civiles = EstadoCivil::all();
+            $discapacidades = Discapacidad::all();
+            $identidades_etnicas = IdentidadEtnica::all();
+            $departamentos = UbigeoDepartamento::all();
+
+            $data = [
+                'matricula' => $matricula,
+                'tipos_documentos' => $tipos_documentos,
+                'generos' => $generos,
+                'estados_civiles' => $estados_civiles,
+                'discapacidades' => $discapacidades,
+                'identidades_etnicas' => $identidades_etnicas,
+                'ubigeos_departamentos' => $departamentos,
+            ];
+
+            return response()->json([
+                'success' => true,
+                'data' => $data,
             ], 200);
         } catch (\Exception $e) {
             Log::error('Error en MatriculaController::getByUUID: ' . $e->getMessage());

@@ -37,8 +37,8 @@ return new class extends Migration
             $table->string('correo_personal', 200)->nullable();
             $table->string('correo_institucional', 200)->nullable();
 
-            $table->boolean('discapacidad')->nullable()->default(false);
-            $table->text('discapacid_detalle')->nullable();
+            $table->boolean('tiene_discapacidad')->nullable()->default(false);
+            $table->text('discapacidades')->nullable();
 
             $table->unsignedBigInteger('identidad_etnica_id')->nullable();
             $table->foreign('identidad_etnica_id')->references('id')->on('identidades_etnicas')->onDelete('set null');
@@ -73,6 +73,9 @@ return new class extends Migration
             // Apoderado
             $table->unsignedBigInteger('apoderado_id')->nullable();
             $table->foreign('apoderado_id')->references('id')->on('apoderados')->onDelete('set null');
+
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users');
 
 
             $table->boolean('estado')->default(true);
