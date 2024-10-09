@@ -41,5 +41,6 @@ class DatabaseSeeder extends Seeder
         $this->call(EstadoCivilSeeder::class);
         $this->call(GeneroSeeder::class);
         $this->call(IdentidadEtnicaSeeder::class);
+        $this->call(FormaDePagoSeeder::class);
     }
 }

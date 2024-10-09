@@ -9,6 +9,7 @@ use App\Http\Controllers\Intranet\CarreraCicloController;
 use App\Http\Controllers\Intranet\CicloController;
 use App\Http\Controllers\Intranet\DocenteController;
 use App\Http\Controllers\Intranet\PermissionController;
+use App\Http\Controllers\Intranet\PrecioController;
 use App\Http\Controllers\Intranet\SedeController;
 use App\Models\Intranet\AsignaturaCiclo;
 use App\Models\Intranet\CarreraCiclo;
@@ -42,5 +43,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('asignaturaciclo/{asignaturaciclo}/eliminar', [AsignaturaCicloController::class, 'eliminar'])->name('asignaturaciclo.eliminar');
     Route::post('asignaturaciclo/asignaturas', [AsignaturaCicloController::class, 'asignaturas'])->name('asignaturaciclo.asignaturas');
 
+    Route::resource('precios', PrecioController::class)->names('precios');
 
 });
