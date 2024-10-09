@@ -44,23 +44,10 @@ return new class extends Migration
             $table->foreign('identidad_etnica_id')->references('id')->on('identidades_etnicas')->onDelete('set null');
 
             // Lugar de nacimiento
-            $table->string('nacimiento_ubigeodepartamento_id', 2)->nullable();
-            $table->foreign('nacimiento_ubigeodepartamento_id')->references('id')->on('ubigeodepartamento')->onDelete('set null');
-
-            $table->string('nacimiento_ubigeoprovincia_id', 4)->nullable();
-            $table->foreign('nacimiento_ubigeoprovincia_id')->references('id')->on('ubigeoprovincia')->onDelete('set null');
-
             $table->string('nacimiento_ubigeodistrito_id', 6)->nullable();
             $table->foreign('nacimiento_ubigeodistrito_id')->references('id')->on('ubigeodistrito')->onDelete('set null');
 
-
             // Direccion / Colegio
-            $table->string('direccion_ubigeodepartamento_id', 2)->nullable();
-            $table->foreign('direccion_ubigeodepartamento_id')->references('id')->on('ubigeodepartamento')->onDelete('set null');
-
-            $table->string('direccion_ubigeoprovincia_id', 4)->nullable();
-            $table->foreign('direccion_ubigeoprovincia_id')->references('id')->on('ubigeoprovincia')->onDelete('set null');
-
             $table->string('direccion_ubigeodistrito_id', 6)->nullable();
             $table->foreign('direccion_ubigeodistrito_id')->references('id')->on('ubigeodistrito')->onDelete('set null');
 
