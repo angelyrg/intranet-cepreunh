@@ -9,16 +9,22 @@ use Livewire\WithPagination;
 
 class EmpleadoList extends Component
 {
-    public $id;
-    
+    public $id;    
     public $title = 'Empleados';
-    public $showModal = false;
 
+    public $showModal = false;
+    public $showModalAsignarRolUsuario = false;
+    
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     public $search = '';
 
     public function updatingSearch(){
+        $this->resetPage();
+    }
+
+    #[On('empleado-saved')]
+    public function refreshList(){
         $this->resetPage();
     }
 
@@ -31,10 +37,10 @@ class EmpleadoList extends Component
     }
 
     public function delete($empleadoId){
-        $usuarios = Empleado::find($empleadoId);
-        if($usuarios){
-            $usuarios->delete();
-            $this->dispatch('show-alert', 'Usuario eliminado con éxito');
+        $empleados = Empleado::find($empleadoId);
+        if($empleados){
+            $empleados->delete(); // Soft delete
+            $this->dispatch('show-alert', 'Empleado eliminado con éxito');
         }
     }
 
@@ -48,6 +54,27 @@ class EmpleadoList extends Component
         $this->showModal = false;
     }
 
+    public function copyCorreo($correo)
+    {
+        // Asegúrate de que $correo tiene un valor antes de despachar el evento
+        logger('Correo a copiar: ' . $correo);
+        $this->dispatch('copyToClipboard', ['texto' => $correo]);
+    }
 
+    // jneskenz => app|asignar-rol-usuario|start
+
+    #[On('modal-closed-asignar-rol-usuario')]
+    public function hideModalAsignarRolUsuario(){
+        $this->showModalAsignarRolUsuario = false;
+    }
+
+    public function assignRoleUsuario($empleadoId = null){
+
+        $this->id = $empleadoId;
+        $this->showModalAsignarRolUsuario = true;
+    }
+
+
+    // jneskenz => app|asignar-rol-usuario|end
 
 }

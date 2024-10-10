@@ -1,7 +1,7 @@
 // notify|toastr-init.js
 
 // Toastr|
-function showToastr(message, tipoAlerta) {
+function showToastr(message, tipoAlerta, title = false) {
 
    toastr.options = {
       "closeButton": true,
@@ -23,19 +23,19 @@ function showToastr(message, tipoAlerta) {
    
    switch(tipoAlerta) {
        case 'success':
-           toastr.success(message, "Éxito");
+           toastr.success(message, (title)?"Éxito":'');
            break;
        case 'error':
-           toastr.error(message, "Error");
+           toastr.error(message, (title)?"Error":'');
            break;
        case 'warning':
-           toastr.warning(message, "Advertencia");
+           toastr.warning(message, (title)?"Advertencia":'');
            break;
        case 'info':
-           toastr.info(message, "Información");
+           toastr.info(message, (title)?"Información":'');
            break;
        default:
-           toastr.info(message, "Notificación");
+            toastr.info(message, (title)?"Notificación":'');
    }
 }
 

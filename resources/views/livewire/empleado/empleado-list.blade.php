@@ -21,51 +21,63 @@
         <div class="card-body">
             @if($empleados->count())
                 <div class="table-responsive table-xs mb-2 border rounded-1">
-                    <table class="table text-nowrap table-borderless table-bordered table-hover table-striped mb-0 align-middle">
-                        <thead class="text-dark fs-4">
+                    <table class="table text-nowrap table-sm fs-2 table-borderless table-bordered table-hover table-striped mb-0 align-middle">
+                        <thead class="text-muted">
                             <tr>
-                                <th><h6 class="fs-4 fw-semibold mb-0">ACCIONES</h6></th>
-                                <th><h6 class="fs-4 fw-semibold mb-0">ESTADO</h6></th>
-                                <th><h6 class="fs-4 fw-semibold mb-0">NOMBRES</h6></th>
-                                <th><h6 class="fs-4 fw-semibold mb-0">APELLIDOS</h6></th>
-                                <th><h6 class="fs-4 fw-semibold mb-0">TELÉFONO | WHATSAPP</h6></th>
-                                <th><h6 class="fs-4 fw-semibold mb-0">CORREO</h6></th>
-                                <th><h6 class="fs-4 fw-semibold mb-0">CORREO INSTITUCIONAL</h6></th>
+                                <th><h6 class="fs-2 fw-bold py-1 mb-0">ACCIONES</h6></th>
+                                <th><h6 class="fs-2 fw-bold py-1 mb-0">ESTADO</h6></th>
+                                <th><h6 class="fs-2 fw-bold py-1 mb-0">DEPARTAMENTO</h6></th>
+                                <th><h6 class="fs-2 fw-bold py-1 mb-0">NOMBRES</h6></th>
+                                <th><h6 class="fs-2 fw-bold py-1 mb-0">APELLIDOS</h6></th>
+                                <th><h6 class="fs-2 fw-bold py-1 mb-0">TELÉFONO | WHATSAPP</h6></th>
+                                <th><h6 class="fs-2 fw-bold py-1 mb-0">CORREO</h6></th>
+                                <th><h6 class="fs-2 fw-bold py-1 mb-0">CORREO INSTITUCIONAL</h6></th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($empleados as $empleado)
                                 <tr>
                                     <td>
-                                        <button type="button" class="btn badge fw-semibold p-1 bg-primary-subtle text-primary"  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Más acciones">
-                                            <i class="ti ti-menu-4"></i>
-                                        </button>
-                                        <ul class="dropdown-menu">                                          
-                                            <li>
-                                                <a class="dropdown-item bg-danger-subtle text-danger py-2" wire:click="delete({{ $empleado->id }})" onclick="confirm('¿Estás seguro?') || event.stopImmediatePropagation()">
+                                        <span class="" title="Más acciones">
+                                            <button class="btn badge bg-danger-subtle text-danger" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="ti ti-menu-4"></i>
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="">
+                                              <li>
+                                                <a class="dropdown-item bg-danger-subtle text-danger py-2" role="button" wire:click="delete({{ $empleado->id }})" onclick="confirm('¿Estás seguro?') || event.stopImmediatePropagation()">
                                                     <i class="ti ti-trash"></i> Eliminar
                                                 </a>
-                                            </li>                                            
-                                        </ul>                                        
+                                              </li>
+                                            </ul>
+                                        </span>                                     
                                         <a wire:click="showForm({{ $empleado->id }})" class="btn badge fw-semibold py-1 bg-primary-subtle text-primary" title="Editar Usuarios">
                                             <i class="ti ti-edit"></i>                                        
                                         </a>
-                                        <a wire:click="assignRole({{ $empleado->id }})" class="btn badge fw-semibold py-1 bg-primary-subtle text-primary" title="Asignar roles">
+                                        <a wire:click="assignRoleUsuario({{ $empleado->id }})" class="btn badge fw-semibold py-1 bg-primary-subtle text-primary" title="Asignación de usuario y roles">
                                             <i class="ti ti-user-cog"></i>
                                         </a>
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         @if($empleado->estado == 1)
-                                        <a class="badge fw-semibold py-1 bg-primary-subtle text-primary" role="button"><small>{{ __('ACTIVO') }}</small></a>
+                                        <a class="badge fw-semibold py-1 fs-1 bg-primary-subtle text-primary" role="button"><small>{{ __('ACTIVO') }}</small></a>
                                         @elseif($empleado->estado == 0)
-                                        <a class="badge fw-semibold py-1 bg-primary-subtle text-primary" role="button"><small>{{ __('SUSPENDIDO') }}</small></a>
+                                        <a class="badge fw-semibold py-1 fs-1 bg-primary-subtle text-primary" role="button"><small>{{ __('SUSPENDIDO') }}</small></a>
                                         @endif
                                     </td>
+                                    <td>{{ $empleado->departamento->descripcion }}</td>
                                     <td>{{ $empleado->nombres }}</td>
                                     <td>{{ $empleado->apellido_paterno }} {{ $empleado->apellido_materno }}</td>                          
                                     <td>{{ $empleado->telefono_personal }} | {{ $empleado->whatsapp }}</td>                          
-                                    <td>{{ $empleado->correo_personal }}</td>                          
-                                    <td>{{ $empleado->correo_institucional }}</td>                    
+                                    <td>
+                                        <a role="button" wire:click="copyCorreo('{{ $empleado->correo_personal }}')" title="{{ $empleado->correo_personal }}">
+                                            {{Str::limit($empleado->correo_personal, 15) ?? '' }}
+                                        </a>
+                                    </td>                          
+                                    <td>
+                                        <a role="button" wire:click="copyCorreo('{{ $empleado->correo_institucional }}')" title="{{ $empleado->correo_institucional }}">
+                                            {{Str::limit($empleado->correo_institucional, 15) ?? '' }}
+                                        </a>
+                                    </td>                    
                                 </tr>
                             @endforeach
                         </tbody>
@@ -83,7 +95,10 @@
 
     {{-- Modal|docentes|atart --}}
     @if($showModal)
-        <livewire:usuario.usuario-form :usuario-id="$id" wire:key="{{ $id ?? 'create' }}" />
+        <livewire:empleado.empleado-form :empleado-id="$id" wire:key="{{ $id ?? 'create' }}" />
+    @endif
+    @if($showModalAsignarRolUsuario)
+        <livewire:empleado.asignar-rol-usuario :empleado-id="$id" wire:key="{{ $id ?? 'create' }}" />
     @endif
     {{-- Modal|docentes|end --}}
     

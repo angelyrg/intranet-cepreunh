@@ -18,9 +18,9 @@
                 @csrf
                 <!-- Email Address -->
                 <div class="mb-3">
-                    <x-input-label class="form-label" for="email" :value="__('Correo')" />
-                    <x-text-input id="email" class="form-control" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-                    <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                    <x-input-label class="form-label" for="username" :value="__('Usuario')" />
+                    <x-text-input id="username" class="form-control" type="text" name="username" :value="old('username')" required autofocus autocomplete="username" />
+                    
                 </div>
                 <!-- Password -->
                 <div class="mb-3">
@@ -30,6 +30,10 @@
 
                     <x-input-error :messages="$errors->get('password')" class="mt-2" />
                 </div>
+                <div class="mb-3">
+                    <x-input-error :messages="$errors->get('username')" class="mt-2 text-danger" />
+                </div>
+                
                 <!-- Remember Me -->
                 <div class="d-flex align-items-center justify-content-between mb-4">
                     <div class="form-check">
@@ -38,12 +42,9 @@
                             {{ __('Recordar contraseña') }}
                         </label>
                     </div>
-
-                    
                 </div>
-
-                <div class="d-flex justify-content-end my-4">
-                    
+                
+                <div class="d-flex justify-content-end my-4">                    
                     <x-primary-button class="btn btn-primary w-100">
                         {{ __('INGRESAR AL INTRANET') }}
                     </x-primary-button>

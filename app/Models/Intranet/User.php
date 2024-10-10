@@ -50,6 +50,14 @@ class User extends Authenticatable
         ];
     }
 
+    public function tiposUsuarios(){
+        return $this->belongsTo(TiposUsuarios::class, 'tipo_usuario_id');
+    }
+
+    public function empleados(){
+        return $this->hasMany(Empleado::class, 'usuario_id');
+    }
+
     // public function role(){
     //     return $this->belongsTo(Permission::class, 'permitionID')
     // }
