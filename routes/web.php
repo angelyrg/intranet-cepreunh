@@ -10,7 +10,8 @@ use App\Livewire\RolesPermisos\RolComponent;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    // return view('welcome');
+    return redirect()->route('dashboard');
 });
 
 Route::get('/dashboard', function () {

@@ -16,6 +16,7 @@ Route::prefix('matricula_virtual')->group(function () {
 
     Route::post('validacion', [MatriculaController::class, 'procesarMatricula']);
     Route::get('getMatriculaByUUID/{uuid}', [MatriculaController::class, 'getByUUID']);
+    Route::get('getFullMatriculaDataByUUID/{uuid}', [MatriculaController::class, 'getFullDataByUUID']);
     Route::get('ciclos', [CicloController::class, 'obtenerCiclosActivos']);
     Route::put('estudiante/{estudiante}', [MatriculaController::class, 'updateDatosEstudiante']);
 });

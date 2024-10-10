@@ -22,11 +22,17 @@ return new class extends Migration
             $table->unsignedBigInteger('estudiante_id');
             $table->foreign('estudiante_id')->references('id')->on('estudiantes');
 
-            $table->unsignedBigInteger('carerra_id')->nullable();
-            $table->foreign('carerra_id')->references('id')->on('carreras');
+            $table->unsignedBigInteger('area_id')->nullable();
+            $table->foreign('area_id')->references('id')->on('areas');
+
+            $table->unsignedBigInteger('carrera_id')->nullable();
+            $table->foreign('carrera_id')->references('id')->on('carreras');
 
             $table->unsignedBigInteger('sede_id')->nullable();
             $table->foreign('sede_id')->references('id')->on('sedes');
+            
+            $table->unsignedBigInteger('apoderado_id')->nullable();
+            $table->foreign('apoderado_id')->references('id')->on('apoderados');
 
             $table->string('turno', 50)->nullable();
             $table->tinyInteger('estado')->default(1);

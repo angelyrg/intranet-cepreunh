@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Intranet;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Intranet\Ciclos\StoreCicloRequest;
-use App\Http\Requests\Intranet\Ciclos\UpdateCicloRequest;
+use App\Http\Requests\Ciclos\StoreCicloRequest;
+use App\Http\Requests\Ciclos\UpdateCicloRequest;
+use App\Models\Intranet\Area;
 use App\Models\Intranet\Ciclo;
 use App\Models\Intranet\Docente;
 use App\Models\Intranet\TiposCiclos;
+use Carbon\Carbon;
 use DateTime;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -36,7 +38,7 @@ class CicloController extends Controller
     public function store(StoreCicloRequest $request)
     {
         try {
-            $docente = Ciclo::create($request->only(['descripcion', 'fecha_inicio', 'fecha_fin', 'duracion', 'tipos_ciclos_id']));
+            $ciclo = Ciclo::create($request->only(['descripcion', 'fecha_inicio', 'fecha_fin', 'duracion', 'tipos_ciclos_id']));
 
             $dataTable = $this->getData();
 
@@ -83,6 +85,23 @@ class CicloController extends Controller
         }
     }
 
+    public function show($id){
+        $ciclo = Ciclo::with([
+            'asignaturaCiclos',
+            'tipo_ciclo',
+            'carreras',
+            'asignaturas',
+            'matriculas',
+            'precios',
+        ])->findOrFail($id);
+
+        // Formatear las fechas
+        $ciclo->fecha_inicio = Carbon::parse($ciclo->fecha_inicio)->format('d/m/Y');
+        $ciclo->fecha_fin = Carbon::parse($ciclo->fecha_fin)->format('d/m/Y');
+
+        return view('intranet.ciclos.show', compact('ciclo'));
+    }
+
 
     private function getData()
     {
@@ -106,6 +125,9 @@ class CicloController extends Controller
                 </a>
                 <a class='btn btn-sm btn-outline-danger btnDelete' data-id='$id' role='button'>
                     <i class='ti ti-trash'></i>                                        
+                </a>
+                <a class='btn btn-sm btn-outline-primary' href=".route('ciclos.show', $id).">
+                    <i class='ti ti-eye'></i>                                        
                 </a>
             </div>
             ";
