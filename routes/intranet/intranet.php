@@ -9,6 +9,7 @@ use App\Http\Controllers\Intranet\CarreraCicloController;
 use App\Http\Controllers\Intranet\CicloController;
 use App\Http\Controllers\Intranet\DocenteController;
 use App\Http\Controllers\Intranet\PermissionController;
+use App\Http\Controllers\Intranet\PrecioController;
 use App\Http\Controllers\Intranet\SedeController;
 use App\Models\Intranet\AsignaturaCiclo;
 use App\Models\Intranet\CarreraCiclo;
@@ -31,7 +32,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('asignaturas', AsignaturaController::class)->except(['create','show','destroy'])->names('asignaturas');
     Route::patch('asignaturas/{asignatura}/eliminar', [AsignaturaController::class, 'eliminar'])->name('asignaturas.eliminar');
 
-    Route::resource('ciclos', CicloController::class)->except(['create','show','destroy'])->names('ciclos');
+    Route::resource('ciclos', CicloController::class)->except(['create','destroy'])->names('ciclos');
     Route::delete('ciclos/{ciclo}/eliminar', [CicloController::class, 'eliminar'])->name('ciclos.eliminar');
 
     Route::resource('carreraciclo', CarreraCicloController::class)->except(['create','show','destroy'])->names('carreraciclo');
@@ -42,5 +43,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('asignaturaciclo/{asignaturaciclo}/eliminar', [AsignaturaCicloController::class, 'eliminar'])->name('asignaturaciclo.eliminar');
     Route::post('asignaturaciclo/asignaturas', [AsignaturaCicloController::class, 'asignaturas'])->name('asignaturaciclo.asignaturas');
 
+    Route::resource('precios', PrecioController::class)->names('precios');
 
 });

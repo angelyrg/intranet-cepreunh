@@ -2,6 +2,7 @@
 
 namespace App\Models\Intranet;
 
+use App\Models\Common\Colegio;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -17,6 +18,8 @@ class Estudiante extends Model
         'nombres',
         'apellido_paterno',
         'apellido_materno',
+        'genero_id',
+        'estado_civil_id',
         'fecha_nacimiento',
         'pais_nacimiento',
         'nacionalidad',
@@ -24,13 +27,44 @@ class Estudiante extends Model
         'whatsapp',
         'correo_personal',
         'correo_institucional',
-        'ubigeodepartamento_id',
-        'ubigeoprovincia_id',
-        'ubigeodistrito_id',
+        'discapacidad',
+        'discapacid_detalle',
+        'identidad_etnica_id',
+        'nacimiento_ubigeodepartamento_id',
+        'nacimiento_ubigeoprovincia_id',
+        'nacimiento_ubigeodistrito_id',
+        'direccion_ubigeodepartamento_id',
+        'direccion_ubigeoprovincia_id',
+        'direccion_ubigeodistrito_id',
         'direccion',
         'colegio_id',
         'year_culminacion',
         'apoderado_id',
         'estado',
     ];
+    
+    public function tipo_documento(){
+        return $this->belongsTo(TipoDocumento::class);
+    }
+
+    public function genero(){
+        return $this->belongsTo(Genero::class, 'genero_id');
+    }
+
+    public function estado_civil(){
+        return $this->belongsTo(EstadoCivil::class, 'estado_civil_id');
+    }
+
+    public function identidad_etnica(){
+        return $this->belongsTo(IdentidadEtnica::class, 'identidad_etnica_id');
+    }
+    
+    public function colegio(){
+        return $this->belongsTo(Colegio::class);
+    }
+
+    public function matriculas(){
+        return $this->hasMany(Matricula::class);
+    }
+
 }

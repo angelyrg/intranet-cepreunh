@@ -36,5 +36,11 @@ class DatabaseSeeder extends Seeder
         $this->call(EmpleadosSeeder::class);
 
         
+
+        $this->call(DiscapacidadSeeder::class);
+        $this->call(EstadoCivilSeeder::class);
+        $this->call(GeneroSeeder::class);
+        $this->call(IdentidadEtnicaSeeder::class);
+        $this->call(FormaDePagoSeeder::class);
     }
 }

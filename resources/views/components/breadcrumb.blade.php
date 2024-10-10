@@ -16,8 +16,9 @@
                 </div>
                 <div class="col-3">
                     <div class="text-center">
-                        <button wire:click="{{ $action }}" class="btn btn-primary">
-                            <i class="ti ti-books fs-4"></i> {{ $buttonLabel }}
+                        <button wire:click="{{ $action }}" class="btn btn-primary d-flex align-items-center justify-content-center gap-1">
+                            <i class="ti ti-plus fs-4"></i>
+                            <span>{{ $buttonLabel }}</span>
                         </button>
                     </div>
                 </div>

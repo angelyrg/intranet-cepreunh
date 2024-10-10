@@ -15,7 +15,8 @@ class Matricula extends Model
     protected $fillable = [
         'ciclo_id',
         'estudiante_id',
-        'carerra_id',
+        'area_id',
+        'carrera_id',
         'sede_id',
         'turno',
         'estado',
@@ -36,6 +37,16 @@ class Matricula extends Model
     public function pagos()
     {
         return $this->hasMany(Pago::class, 'matricula_id');
+    }
+    
+    public function area()
+    {
+        return $this->belongsTo(Area::class);
+    }
+
+    public function carrera()
+    {
+        return $this->belongsTo(Carrera::class, 'carrera_id');
     }
 
 
