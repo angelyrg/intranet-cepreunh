@@ -30,4 +30,23 @@ class Ciclo extends Model
         return $ciclo ? $ciclo->id : 0;
     }
 
+    public function carreras(){
+        return $this->belongsToMany(Carrera::class, 'carrera_ciclo');
+    }
+    
+    public function asignaturas(){
+        return $this->belongsToMany(Asignatura::class, 'asignatura_ciclo');
+    }
+    
+    public function matriculas(){
+        return $this->hasMany(Matricula::class);
+    }
+    
+    public function precios(){
+        return $this->hasMany(Precio::class, 'ciclo_id');
+    }
+ 
+
+    // TODO: Agregar las relaciones: Aulas, Semanas
+
 }

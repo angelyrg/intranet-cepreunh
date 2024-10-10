@@ -32,7 +32,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('asignaturas', AsignaturaController::class)->except(['create','show','destroy'])->names('asignaturas');
     Route::patch('asignaturas/{asignatura}/eliminar', [AsignaturaController::class, 'eliminar'])->name('asignaturas.eliminar');
 
-    Route::resource('ciclos', CicloController::class)->except(['create','show','destroy'])->names('ciclos');
+    Route::resource('ciclos', CicloController::class)->except(['create','destroy'])->names('ciclos');
     Route::delete('ciclos/{ciclo}/eliminar', [CicloController::class, 'eliminar'])->name('ciclos.eliminar');
 
     Route::resource('carreraciclo', CarreraCicloController::class)->except(['create','show','destroy'])->names('carreraciclo');

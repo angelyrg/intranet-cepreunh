@@ -2,6 +2,7 @@
 
 namespace App\Models\Intranet;
 
+use App\Models\Common\Colegio;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -41,4 +42,29 @@ class Estudiante extends Model
         'apoderado_id',
         'estado',
     ];
+    
+    public function tipo_documento(){
+        return $this->belongsTo(TipoDocumento::class);
+    }
+
+    public function genero(){
+        return $this->belongsTo(Genero::class, 'genero_id');
+    }
+
+    public function estado_civil(){
+        return $this->belongsTo(EstadoCivil::class, 'estado_civil_id');
+    }
+
+    public function identidad_etnica(){
+        return $this->belongsTo(IdentidadEtnica::class, 'identidad_etnica_id');
+    }
+    
+    public function colegio(){
+        return $this->belongsTo(Colegio::class);
+    }
+
+    public function matriculas(){
+        return $this->hasMany(Matricula::class);
+    }
+
 }

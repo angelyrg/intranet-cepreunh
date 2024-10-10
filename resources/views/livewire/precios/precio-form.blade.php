@@ -34,8 +34,13 @@
                     <div class="col-12">
                         <div class="form-group mb-4 ">
                             <label for="fraccionado" class="form-label">¿El monto de fraccionado?</label>
-                            <input type="checkbox" id="fraccionado" wire:model.defer="fraccionado" class="form-control">
+                            {{-- <input type="checkbox" id="fraccionado" wire:model.defer="fraccionado" class="form-control"> --}}
+                            <div class="form-check form-switch mb-0">
+                                <input class="form-check-input" type="checkbox" id="fraccionado" role="switch" wire:model.defer="fraccionado">
+                            </div>
                             @error('fraccionado') <span class="text-danger">{{ $message }}</span> @enderror
+
+
                         </div>
                     </div>
                 </div>
