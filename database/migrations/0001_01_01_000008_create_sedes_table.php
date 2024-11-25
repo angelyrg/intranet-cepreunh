@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sedes', function (Blueprint $table) {
-            $table->id();
-            
+            $table->id();            
             $table->string('descripcion', 255);
             $table->boolean('estado')->default(true);
 

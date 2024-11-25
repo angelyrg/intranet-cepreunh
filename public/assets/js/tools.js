@@ -37,6 +37,7 @@ function showToastr(message, tipoAlerta, title = false) {
        default:
             toastr.info(message, (title)?"Notificación":'');
    }
+   
 }
 
 

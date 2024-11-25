@@ -22,7 +22,7 @@
             @if($empleados->count())
                 <div class="table-responsive table-xs mb-2 border rounded-1">
                     <table class="table text-nowrap table-sm fs-2 table-borderless table-bordered table-hover table-striped mb-0 align-middle">
-                        <thead class="text-muted">
+                        <thead class="text-muted text-center">
                             <tr>
                                 <th><h6 class="fs-2 fw-bold py-1 mb-0">ACCIONES</h6></th>
                                 <th><h6 class="fs-2 fw-bold py-1 mb-0">ESTADO</h6></th>

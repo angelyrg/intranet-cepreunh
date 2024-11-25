@@ -23,9 +23,9 @@
       <li class="sidebar-item">
         <a class="sidebar-link" href="{{ route('roles.index') }}" aria-expanded="false">
           <span>
-            <i class="ti ti-books"></i>
+            <i class="ti ti-clipboard-list"></i>
           </span>
-          <span class="hide-menu">Roles</span>
+          <span class="hide-menu">Roles y permisos</span>
         </a>
       </li>
       <li class="sidebar-item">

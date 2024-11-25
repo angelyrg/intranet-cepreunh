@@ -137,14 +137,13 @@
 @endsection
     
 @section('scripts')
-
+    
+    <script src="{{ asset('modernize/libs/select2/dist/js/select2.min.js') }}"></script>
+    <script src="{{ asset('modernize/libs/select2/dist/js/select2.full.min.js') }}"></script>
 
     {{-- my custom js --}}
     <script src="{{ asset('assets/js/tools.js') }}"></script>
     <script src="{{ asset('assets/js/carreraciclo.js') }}"></script>
-    
-    <script src="{{ asset('modernize/libs/select2/dist/js/select2.min.js') }}"></script>
-    <script src="{{ asset('modernize/libs/select2/dist/js/select2.full.min.js') }}"></script>
 
 
 @endsection

@@ -25,6 +25,7 @@ class UserSeeder extends Seeder
             'email'     => 'joel.neskenz@gmail.com',
             'password'  => Hash::make('password'),
             'tipos_usuarios_id' => 1,
+            'sede_id' => 1,
         ])->assignRole('administrador');
 
         User::factory(20)->create();

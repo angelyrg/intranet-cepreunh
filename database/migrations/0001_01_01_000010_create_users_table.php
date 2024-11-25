@@ -20,6 +20,9 @@ return new class extends Migration
             $table->string('password');
             $table->unsignedBigInteger('tipos_usuarios_id');
             $table->foreign('tipos_usuarios_id')->references('id')->on('tipos_usuarios')->onDelete('cascade');
+
+            $table->unsignedBigInteger('sede_id');
+            $table->foreign('sede_id')->references('id')->on('sedes')->onDelete('cascade');
             
             $table->rememberToken();
             $table->timestamps();
