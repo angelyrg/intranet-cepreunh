@@ -11,7 +11,7 @@
 
 
   <!-- Favicon icon-->
-  <link rel="shortcut icon" type="image/png" href="{{asset('modernize/images/logos/favicon.png')}}" />
+  <link rel="shortcut icon" type="image/png" href="{{asset('modernize/images/logos/favicon-unh.png')}}" />
 
   <!-- Core Css -->
   <link rel="stylesheet" href="{{asset('modernize/css/styles.css')}}" />
@@ -32,7 +32,7 @@
 <body>
   <!-- Preloader -->
   <div class="preloader">
-    <img src="{{asset('modernize/images/logos/favicon.png')}}" alt="loader" class="lds-ripple img-fluid" />
+    <img src="{{asset('modernize/images/logos/favicon-unh.png')}}" alt="loader" class="lds-ripple img-fluid" />
   </div>
   <div id="main-wrapper">
     <!-- Sidebar Start -->
@@ -42,7 +42,7 @@
         <!-- Start Vertical Layout Sidebar 11 -->
         <!-- ---------------------------------- -->
         <div class="brand-logo bg-primary text-center d-flex align-items-center justify-content-between">
-          <a href="../main/index.html" class="text-nowrap logo-img">
+          <a href="#" class="text-nowrap logo-img">
 
             {{-- <img src="{{asset('modernize/images/logos/dark-logo.svg')}}" class="dark-logo" alt="Logo-Dark" />
             <img src="{{asset('modernize/images/logos/light-logo.svg')}}" class="light-logo" alt="Logo-light" /> --}}
@@ -476,7 +476,7 @@
                 </a>
                 <ul aria-expanded="false" class="collapse first-level">
                   <li class="sidebar-item">
-                    <a href="../main/index.html" class="sidebar-link">
+                    <a href="#" class="sidebar-link">
                       <i class="ti ti-aperture"></i>
                       <span class="hide-menu">Modern</span>
                     </a>

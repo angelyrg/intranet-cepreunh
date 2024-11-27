@@ -1,8 +1,12 @@
 <x-guest-layout>
     <div class="authentication-login min-vh-100 bg-body row justify-content-center align-items-center p-4">
         <div class="col-sm-8 col-md-6 col-xl-9">
+
+            <div class="bg-primary w-100 px-3 py-4 px-md-5 rounded-3">
+                <img src="{{asset('modernize/images/logos/dark-logo.png')}}" class="img-fluid" alt="Logo-Cepre UNH" />
+            </div>
             
-            <div class="text-center">
+            <div class="text-center mt-5">
                 <h2 class="mb-3 fs-7 fw-bolder">INICIAR SESIÓN</h2>
             </div>
             <p class="mb-9">Bienvenido a CEPRE UNH 👋 </p>
@@ -49,13 +53,13 @@
                     </x-primary-button>
                 </div>
                 
-                <div class="text-center">
+                {{-- <div class="text-center">
                     @if (Route::has('password.request'))
                         <a class="text-primary fw-medium me-3" href="{{ route('password.request') }}">
                             {{ __('¿Olvidaste tu contraseña?') }}
                         </a>
                     @endif
-                </div>
+                </div> --}}
 
             </form>
         </div>
