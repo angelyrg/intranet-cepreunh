@@ -12,7 +12,7 @@
 
     <!-- Core Css -->
     <link rel="stylesheet" href="{{asset('modernize/css/styles.css')}}" />
-    <title>Modernize Bootstrap Admin</title>
+    <title>Cepre UNH</title>
 </head>
 
 <body>
