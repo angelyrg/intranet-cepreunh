@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Intranet\EmpleadoController;
 use App\Http\Controllers\Intranet\PermissionController;
 use App\Http\Controllers\Intranet\RolController;
 use App\Http\Controllers\Intranet\RolPermisoController;
@@ -9,7 +10,8 @@ use App\Livewire\RolesPermisos\RolComponent;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    // return view('welcome');
+    return redirect()->route('dashboard');
 });
 
 Route::get('/dashboard', function () {
@@ -26,6 +28,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('roles', RolController::class)->except(['create', 'show', 'destroy'])->names('roles');
     Route::resource('permisos', PermissionController::class)->except(['create', 'show', 'destroy'])->names('permisos');
     Route::resource('usuarios', UsuarioController::class)->except(['create', 'show', 'destroy'])->names('usuarios');
+    Route::resource('empleados', EmpleadoController::class)->except(['create', 'show', 'destroy'])->names('empleados');
 });
 
 require __DIR__.'/intranet/auth.php';

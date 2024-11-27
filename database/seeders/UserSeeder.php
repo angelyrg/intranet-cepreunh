@@ -21,6 +21,7 @@ class UserSeeder extends Seeder
         ])->assignRole('administrador');
 
         // User::factory(99)->create();
-        User::factory(10)->create();
+        User::factory(20)->create();
+        
     }
 }

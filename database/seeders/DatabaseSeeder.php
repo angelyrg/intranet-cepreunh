@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Intranet\Departamento;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -31,7 +32,15 @@ class DatabaseSeeder extends Seeder
         $this->call(TiposDocumentosSeeder::class);
         $this->call(RoleSeeder::class);
         $this->call(UserSeeder::class);
+        $this->call(DepartamentosSeeder::class);
+        $this->call(EmpleadosSeeder::class);
 
         
+
+        $this->call(DiscapacidadSeeder::class);
+        $this->call(EstadoCivilSeeder::class);
+        $this->call(GeneroSeeder::class);
+        $this->call(IdentidadEtnicaSeeder::class);
+        $this->call(FormaDePagoSeeder::class);
     }
 }
