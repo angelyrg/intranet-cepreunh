@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Favicon icon-->
-    <link rel="shortcut icon" type="image/png" href="{{asset('modernize/images/logos/favicon-unh.png')}}" />
+    <link rel="shortcut icon" type="image/png" href="{{asset('assets/images/favicon.ico')}}" />
 
     <!-- Core Css -->
     <link rel="stylesheet" href="{{asset('modernize/css/styles.css')}}" />

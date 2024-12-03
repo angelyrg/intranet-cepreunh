@@ -15,7 +15,7 @@
       <li class="sidebar-item">
         <a class="sidebar-link" href="#" aria-expanded="false">
           <span>
-            <i class="ti ti-books"></i>
+            <i class="ti ti-menu-3"></i>
           </span>
           <span class="hide-menu">Menús</span>
         </a>
@@ -23,7 +23,7 @@
       <li class="sidebar-item">
         <a class="sidebar-link" href="{{ route('roles.index') }}" aria-expanded="false">
           <span>
-            <i class="ti ti-books"></i>
+            <i class="ti ti-user-shield"></i>
           </span>
           <span class="hide-menu">Roles</span>
         </a>
@@ -31,7 +31,7 @@
       <li class="sidebar-item">
         <a class="sidebar-link" href="{{ route('permisos.index') }}" aria-expanded="false">
           <span>
-            <i class="ti ti-books"></i>
+            <i class="ti ti-shield-pause"></i>
           </span>
           <span class="hide-menu">Permisos</span>
         </a>
@@ -39,7 +39,7 @@
       <li class="sidebar-item">
         <a class="sidebar-link" href="{{ route('usuarios.index') }}" aria-expanded="false">
           <span>
-            <i class="ti ti-books"></i>
+            <i class="ti ti-password-user"></i>
           </span>
           <span class="hide-menu">Usuarios</span>
         </a>
@@ -47,7 +47,7 @@
       <li class="sidebar-item">
         <a class="sidebar-link" href="{{ route('empleados.index') }}" aria-expanded="false">
           <span>
-            <i class="ti ti-books"></i>
+            <i class="ti ti-user-square-rounded"></i>
           </span>
           <span class="hide-menu">Empleados</span>
         </a>

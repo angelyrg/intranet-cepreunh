@@ -12,7 +12,7 @@ class Ciclo extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['descripcion', 'fecha_inicio', 'fecha_fin', 'duracion', 'tipos_ciclos_id', 'estado', 'deleted_at'];
+    protected $fillable = ['descripcion', 'fecha_inicio', 'fecha_fin', 'duracion', 'dias_lectivos', 'tipos_ciclos_id', 'estado', 'deleted_at'];
 
     public function asignaturaCiclos()
     {

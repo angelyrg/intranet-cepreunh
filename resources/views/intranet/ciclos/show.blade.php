@@ -58,15 +58,9 @@
                             </div>
                         </div>
                         <div class="row">
-                            <label class="control-label text-end col-md-7">Días lectivos:</label>
+                            <label class="control-label text-end col-md-7">Duración:</label>
                             <div class="col-md-5">
-                                <p class="form-control-static mb-0">{{ $ciclo->id }}</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label class="control-label text-end col-md-7">Ficha socioeconómica:</label>
-                            <div class="col-md-5">
-                                <p class="form-control-static mb-0">{{ $ciclo->id }}</p>
+                                <p class="form-control-static mb-0">{{ $ciclo->duracion }} semanas</p>
                             </div>
                         </div>
                     </div>
@@ -82,12 +76,6 @@
                             <label class="control-label text-end col-md-7">Fecha de Finalización:</label>
                             <div class="col-md-5">
                                 <p class="form-control-static mb-0">{{ $ciclo->fecha_fin }}</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label class="control-label text-end col-md-7">Duración:</label>
-                            <div class="col-md-5">
-                                <p class="form-control-static mb-0">{{ $ciclo->duracion }} semanas</p>
                             </div>
                         </div>
                     </div>
@@ -118,33 +106,23 @@
             <div class="card-header">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <h5 class="card-title fw-semibold">Carreras</h5>
+                        <h5 class="card-title fw-semibold">Días lectivos</h5>
                     </div>
                     <div>
                         <span class="badge fw-semibold py-1 bg-primary-subtle text-primary">
-                            <small>{{ count($ciclo->carreras) }}</small>
+                            <small>{{ count($ciclo->dias_lectivos) }}</small>
                         </span>
                     </div>
                 </div>
             </div>
-            <div class="card-body p-4">
-                {{-- {{ $ciclo->carreras }}
-                <div class="position-relative">
-                    <div class="d-flex align-items-center justify-content-between mb-4">
-                        <div class="d-flex">
-                            <div
-                                class="p-8 bg-primary-subtle rounded-2 d-flex align-items-center justify-content-center me-6">
-                                <img src="#" alt="" class="img-fluid" width="24" height="24">
-                            </div>
-                            <div>
-                                <h6 class="mb-1 fs-4 fw-semibold">PayPal</h6>
-                                <p class="fs-3 mb-0">Big Brands</p>
-                            </div>
+            <div class="card-body p-4 pt-0">
+                <div class="d-flex gap-3 flex-wrap">
+                    @foreach ($ciclo->dias_lectivos_texto as $dia)    
+                        <div class="bg-primary-subtle rounded-2 py-2 px-3 d-flex align-items-center justify-content-center">
+                            <strong>{{ $dia }}</strong>
                         </div>
-                        <h6 class="mb-0 fw-semibold">+$6,235</h6>
-                    </div>
-                </div> --}}
-                <a class="btn btn-outline-primary w-100" href="{{ route('carreras.index') }}">Ver carreras</a>
+                    @endforeach
+                </div>
             </div>
         </div>
     </div>
