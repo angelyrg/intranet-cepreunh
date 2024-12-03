@@ -21,7 +21,7 @@
                 <div class="col-3">
                     <div class="text-center" id="btnActionGeneral">
                         <button type="button" class="btn btn-primary btnAdd{{ $slug }}">
-                            <i class="ti ti-books fs-4"></i> NUEVO REGISTRO
+                            <i class="ti ti-plus fs-4"></i> NUEVO REGISTRO
                         </button>
                     </div>
                 </div>
@@ -76,7 +76,7 @@
 </div>
 {{-- content|end --}}
 
-{{-- modal|docentes|atart --}}
+{{-- modal|ciclos|atart --}}
 <div id="modal{{ $slug }}" class="modal fade" tabindex="-1" aria-labelledby="modal{{ $slug }}Label"
     style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-lg">
@@ -142,7 +142,48 @@
                                     </div>
                                 </div>
                             </div>
-    
+                            <div class="col-lg-6">
+                                <div class="mb-4 form-group">
+                                    <label for="dias_lectivos" class="form-label">Días Lectivos</label>
+                                    <div class="controls">
+                                        <div class="form-check form-check-inline">
+                                            <input type="checkbox" class="form-check-input" name="dias_lectivos[]"
+                                                value="1" id="lunes" checked>
+                                            <label class="form-check-label" for="lunes">Lunes</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input type="checkbox" class="form-check-input" name="dias_lectivos[]"
+                                                value="2" id="martes" checked>
+                                            <label class="form-check-label" for="martes">Martes</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input type="checkbox" class="form-check-input" name="dias_lectivos[]"
+                                                value="3" id="miercoles" checked>
+                                            <label class="form-check-label" for="miercoles">Miércoles</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input type="checkbox" class="form-check-input" name="dias_lectivos[]"
+                                                value="4" id="jueves" checked>
+                                            <label class="form-check-label" for="jueves">Jueves</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input type="checkbox" class="form-check-input" name="dias_lectivos[]"
+                                                value="5" id="viernes" checked>
+                                            <label class="form-check-label" for="viernes">Viernes</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input type="checkbox" class="form-check-input" name="dias_lectivos[]"
+                                                value="6" id="sabado">
+                                            <label class="form-check-label" for="sabado">Sábado</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input type="checkbox" class="form-check-input" name="dias_lectivos[]"
+                                                value="7" id="domingo">
+                                            <label class="form-check-label" for="domingo">Domingo</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -154,7 +195,7 @@
         </div>
     </div>
 </div>
-{{-- modal|docentes|end --}}
+{{-- modal|ciclos|end --}}
 
 @endsection
 

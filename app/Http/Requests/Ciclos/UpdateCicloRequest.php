@@ -36,6 +36,8 @@ class UpdateCicloRequest extends FormRequest
             'fecha_inicio' => 'required|date',
             'fecha_fin' => 'required|date|after:fecha_inicio',
             'duracion' => 'required|integer|min:1',
+            'dias_lectivos' => 'required|array|min:1',
+            'dias_lectivos.*' => 'in:1,2,3,4,5,6,7',
             'estado' => 'sometimes|boolean',
         ];
     }
@@ -55,6 +57,11 @@ class UpdateCicloRequest extends FormRequest
             'fecha_fin.required' => 'La fecha de fin es obligatoria.',
             'fecha_fin.date' => 'La fecha de fin debe ser una fecha válida.',
             'fecha_fin.after' => 'La fecha de fin debe ser posterior a la fecha de inicio.',
+
+            'dias_lectivos.required' => 'Debe seleccionar al menos un día lectivo.',
+            'dias_lectivos.array' => 'Los días lectivos deben ser un arreglo.',
+            'dias_lectivos.min' => 'Debe seleccionar al menos un día lectivo.',
+            'dias_lectivos.*.in' => 'Los valores de los días lectivos deben estar entre 1 y 7 (lunes a domingo).',
 
             'duracion.required' => 'La duración es obligatoria.',
             'duracion.integer' => 'La duración debe ser un número entero.',
