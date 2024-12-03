@@ -117,14 +117,18 @@ function showAlertSimple(title, message, typeAlert, typeIcon = '') {
 
 function displayErrors(errors){
     Object.keys(errors).forEach((key) => {
-        const element = document.querySelector(`[name="${key}"]`);
-        const controlsContainer = element.closest('.controls');        
-        const helpBlock = controlsContainer.querySelector('.help-block');
-        helpBlock.innerHTML = `<ul role="alert"><li>${errors[key]}</li></ul>`;
+        // const element = document.querySelector(`[name="${key}"]`);
+        const elements = document.querySelectorAll(`[name="${key}"], [name="${key}[]"]`);
+        elements.forEach((element) => {
+            const controlsContainer = element.closest(".controls");
+            const helpBlock = controlsContainer.querySelector(".help-block");
 
-        const validBlock = element.closest('.form-group');
-        validBlock.classList.remove('validate');
-        validBlock.classList.add('error');
+            helpBlock.innerHTML = `<ul role="alert"><li>${errors[key]}</li></ul>`;
+
+            const validBlock = element.closest(".form-group");
+            validBlock.classList.remove("validate");
+            validBlock.classList.add("error");
+        });
 
     });
 }
