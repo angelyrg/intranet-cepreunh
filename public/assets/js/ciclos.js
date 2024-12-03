@@ -13,7 +13,7 @@ $(document).ready(function() {
         addButtonSelector: `.btnAdd${slug}`,
         editButtonSelector: `.btnEdit${slug}`,
         deleteButtonSelector: `.btnDelete${slug}`,
-        baseUrl: `/intranet/ciclos`,
+        baseUrl: `/ciclos`,
     };
 
     // funciones
@@ -68,6 +68,15 @@ $(document).ready(function() {
     const fillForm = (form, data) => {
       Object.keys(data).forEach((key) => {
          const input = form.querySelector(`#${key}`);
+
+         if (key === "dias_lectivos"){
+            const checkboxes = form.querySelectorAll(`[name="${key}[]"]`);
+            const diasLectivosArray = (data[key] !== null) ? data[key].split(",") : [];
+            checkboxes.forEach((checkbox) => {
+                checkbox.checked = diasLectivosArray.includes(checkbox.value);
+            });
+         }
+         
          if (input) {
                if (input.type === "checkbox") {
                   input.checked = !!data[key];
@@ -105,7 +114,7 @@ $(document).ready(function() {
                 console.error("Error al procesar:", data.message);
             }
         } catch (error) {
-            console.error("Error:", error.message);
+            console.error("Error:", error);
         }
     });
 
@@ -131,7 +140,7 @@ $(document).ready(function() {
                     `${config.baseUrl}/${id}/edit`,
                     "GET"
                 );
-                
+
                 fillForm($(config.formSelector)[0], data);
                 $(config.modalSelector).modal("show");
             } catch (error) {
