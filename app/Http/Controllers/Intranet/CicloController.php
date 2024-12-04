@@ -153,11 +153,15 @@ class CicloController extends Controller
             </div>
             ";
 
-            $estado = ($estado > 0) ? 'ACTIVO' : 'INACTIVO';
+            if ($estado > 0) {
+                $estado = "<span class='badge bg-primary-subtle fw-semibold text-primary'>ACTIVO</span>";
+            } else {
+                $estado = "<span class='badge bg-danger-subtle fw-semibold text-danger'>INACTIVO</span>";
+            }
 
             $html .= "<tr>
                 <td>$acciones</td>
-                <td><span class='badge fw-semibold bg-primary-subtle text-primary'>$estado</span></td>
+                <td>$estado</td>
                 <td>
                     <a href=" . route('ciclos.show', $id) . ">
                         $descripcion
@@ -198,5 +202,15 @@ class CicloController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
+    }
+
+
+    public function matricula($ciclo)
+    {
+        $page = 'Matrícula';
+        $title = 'Matrícula';
+        $slug = 'Matricula';
+
+        return view('intranet.ciclos.matricula', compact('page', 'title', 'slug', 'ciclo'));
     }
 }

@@ -29,6 +29,7 @@
                                 <th><h6 class="fs-4 fw-semibold mb-0">NOMBRES</h6></th>
                                 <th><h6 class="fs-4 fw-semibold mb-0">APELLIDOS</h6></th>
                                 <th><h6 class="fs-4 fw-semibold mb-0">TELÉFONO | WHATSAPP</h6></th>
+                                <th><h6 class="fs-4 fw-semibold mb-0">SEDE</h6></th>
                                 <th><h6 class="fs-4 fw-semibold mb-0">CORREO</h6></th>
                                 <th><h6 class="fs-4 fw-semibold mb-0">CORREO INSTITUCIONAL</h6></th>
                             </tr>
@@ -63,7 +64,15 @@
                                     </td>
                                     <td>{{ $empleado->nombres }}</td>
                                     <td>{{ $empleado->apellido_paterno }} {{ $empleado->apellido_materno }}</td>                          
-                                    <td>{{ $empleado->telefono_personal }} | {{ $empleado->whatsapp }}</td>                          
+                                    <td>{{ $empleado->telefono_personal }} | {{ $empleado->whatsapp }}</td>
+                                    <td>
+                                        @if($empleado->sede)
+                                            {{ $empleado->sede->descripcion }}
+                                        @else
+                                            <small class="fst-italic">Sin sede</small>
+                                        @endif
+                                    </td>
+                                    
                                     <td>{{ $empleado->correo_personal }}</td>                          
                                     <td>{{ $empleado->correo_institucional }}</td>                    
                                 </tr>
@@ -81,10 +90,10 @@
 
     
 
-    {{-- Modal|docentes|atart --}}
+    {{-- Modal|empleados|atart --}}
     @if($showModal)
-        <livewire:usuario.usuario-form :usuario-id="$id" wire:key="{{ $id ?? 'create' }}" />
+        <livewire:empleado.empleado-form :empleado-id="$id" wire:key="{{ $id ?? 'create' }}" />
     @endif
-    {{-- Modal|docentes|end --}}
+    {{-- Modal|empleados|end --}}
     
 </div>

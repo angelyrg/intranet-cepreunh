@@ -18,4 +18,9 @@ class Precio extends Model
         'monto',
         'fraccionado',
     ];
+
+    public function forma_de_pago()
+    {
+        return $this->belongsTo(FormaDePago::class);
+    }
 }
