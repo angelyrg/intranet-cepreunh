@@ -49,6 +49,11 @@ class Matricula extends Model
         return $this->belongsTo(Carrera::class, 'carrera_id');
     }
 
+    public function sede()
+    {
+        return $this->belongsTo(Sede::class, 'sede_id');
+    }
+
 
     protected static function boot()
     {
