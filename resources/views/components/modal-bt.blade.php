@@ -5,7 +5,9 @@
                 <h4 class="modal-title text-white">{{ $modalNombre }}</h4>
                 <button type="button" class="btn-close btn-close-white border" wire:click="closeModal" aria-label="Close"></button>
             </div>
-            {{ $slot }}
+            <div class="modal-body">
+                {{ $slot }}
+            </div>
         </div>
     </div>
 </div>

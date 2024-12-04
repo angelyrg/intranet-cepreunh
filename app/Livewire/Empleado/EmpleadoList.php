@@ -18,6 +18,7 @@ class EmpleadoList extends Component
     protected $paginationTheme = 'bootstrap';
     public $search = '';
 
+    #[On('empleado-saved')]
     public function updatingSearch(){
         $this->resetPage();
     }
@@ -43,7 +44,7 @@ class EmpleadoList extends Component
         $this->showModal = true;
     }
 
-    #[On('modal-closed')]
+    #[On('empleados-modal-closed')]
     public function hideModal(){
         $this->showModal = false;
     }

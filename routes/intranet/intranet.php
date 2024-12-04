@@ -8,10 +8,12 @@ use App\Http\Controllers\Intranet\AsignaturaController;
 use App\Http\Controllers\Intranet\CarreraCicloController;
 use App\Http\Controllers\Intranet\CicloController;
 use App\Http\Controllers\Intranet\DocenteController;
+use App\Http\Controllers\Intranet\MatriculaController;
 use App\Http\Controllers\Intranet\PermissionController;
 use App\Http\Controllers\Intranet\PrecioController;
 use App\Http\Controllers\Intranet\SedeController;
 use App\Models\Intranet\AsignaturaCiclo;
+use App\Models\Intranet\Carrera;
 use App\Models\Intranet\CarreraCiclo;
 use Spatie\Permission\Contracts\Permission;
 
@@ -26,6 +28,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('areas', AreaController::class)->except(['create', 'show', 'destroy'])->names('areas');
     Route::patch('areas/{area}/eliminar', [AreaController::class, 'eliminar'])->name('areas.eliminar');
 
+    Route::get('carreras/{area_id}', function ($area_id) {
+        $carreras = Carrera::where('area_id', $area_id)->get();
+        return response()->json($carreras);
+    });
+
+
     Route::resource('carreras', CarreraController::class)->names('carreras');
     Route::resource('docentes', DocenteController::class)->names('docentes');
 
@@ -34,6 +42,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('ciclos', CicloController::class)->except(['create','destroy'])->names('ciclos');
     Route::delete('ciclos/{ciclo}/eliminar', [CicloController::class, 'eliminar'])->name('ciclos.eliminar');
+    Route::get('ciclos/{ciclo}/matricula', [CicloController::class, 'matricula'])->name('ciclos.matricula');
+
+    Route::get('matricula/matricular', [MatriculaController::class, 'buscar_dni'])->name('matricula.buscar_dni');
+    Route::post('matricula/store_estudiante', [MatriculaController::class, 'store_estudiante'])->name('matricula.store_estudiante');
+    Route::get('matricula/create', [MatriculaController::class, 'create'])->name('matricula.create');
+    Route::post('matricula/store', [MatriculaController::class, 'store'])->name('matricula.store');
+    Route::get('matricula/{matricula}/show', [MatriculaController::class, 'show'])->name('matricula.show');
+
+    // Route::resource('matriculas', MatriculaController::class)->names('matriculas');
+
+    
+
+
 
     Route::resource('carreraciclo', CarreraCicloController::class)->except(['create','show','destroy'])->names('carreraciclo');
     Route::patch('carreraciclo/{carreraciclo}/eliminar', [CarreraCicloController::class, 'eliminar'])->name('carreraciclo.eliminar');
