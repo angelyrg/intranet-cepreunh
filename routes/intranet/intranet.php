@@ -43,6 +43,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('ciclos', CicloController::class)->except(['create','destroy'])->names('ciclos');
     Route::delete('ciclos/{ciclo}/eliminar', [CicloController::class, 'eliminar'])->name('ciclos.eliminar');
     Route::get('ciclos/{ciclo}/matricula', [CicloController::class, 'matricula'])->name('ciclos.matricula');
+    Route::get('ciclos/{ciclo}/create_precios', [CicloController::class, 'create_precios'])->name('ciclos.create_precios');
+    
 
     Route::get('matricula/matricular', [MatriculaController::class, 'buscar_dni'])->name('matricula.buscar_dni');
     Route::post('matricula/store_estudiante', [MatriculaController::class, 'store_estudiante'])->name('matricula.store_estudiante');
@@ -52,7 +54,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Route::resource('matriculas', MatriculaController::class)->names('matriculas');
 
-    
 
 
 

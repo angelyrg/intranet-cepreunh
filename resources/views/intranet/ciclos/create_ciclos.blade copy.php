@@ -115,7 +115,7 @@
                         <a class="btn btn-primary d-block" href={{ route('ciclos.matricula', $ciclo->id) }}>Matricular estudiante</a>
                     </div>
                     <div>
-                        <a class="btn btn-outline-primary d-block" href={{ route('ciclos.create_precios', $ciclo->id) }}>Configurar precios</a>
+                        <a class="btn btn-outline-primary d-block" href={{ route('ciclos.matricula', $ciclo->id) }}>Configurar precios</a>
                     </div>
                 </div>
             </div>
