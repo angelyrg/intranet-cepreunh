@@ -115,6 +115,18 @@
                         <a class="btn btn-primary d-block" href={{ route('ciclos.matricula', $ciclo->id) }}>Matricular estudiante</a>
                     </div>
                     <div>
+                        <a class="btn btn-outline-primary d-block" href={{ route('ciclos.asignar_carreras', $ciclo->id) }}>
+                            <span>Carreras del ciclo</span>
+                            <span>[{{ count($ciclo->carreras) }}]</span>
+                        </a>
+                    </div>
+                    <div>
+                        <a class="btn btn-outline-primary d-block" href={{ route('ciclos.asignar_asignaturas', $ciclo->id) }}>
+                            <span>Asignaturas del ciclo</span>
+                            <span>[{{ count($ciclo->asignaturas) }}]</span>
+                        </a>
+                    </div>
+                    <div>
                         <a class="btn btn-outline-primary d-block" href={{ route('ciclos.create_precios', $ciclo->id) }}>Configurar precios</a>
                     </div>
                 </div>

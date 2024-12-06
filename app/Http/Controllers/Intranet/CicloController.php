@@ -219,4 +219,14 @@ class CicloController extends Controller
     {
         return view("intranet.ciclos.create_precios", compact('ciclo'));
     }
+
+    public function asignar_carreras(Ciclo $ciclo)
+    {
+        return view("intranet.ciclos.asignar_carreras", compact('ciclo'));
+    }
+    
+    public function asignar_asignaturas(Ciclo $ciclo)
+    {
+        return view("intranet.ciclos.asignar_asignaturas", compact('ciclo'));
+    }
 }

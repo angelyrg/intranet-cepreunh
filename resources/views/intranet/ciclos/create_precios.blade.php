@@ -18,6 +18,9 @@
                             <li class="breadcrumb-item">
                                 <a class="text-muted text-decoration-none" href="{{ route('ciclos.index') }}">Ciclos</a>
                             </li>
+                            <li class="breadcrumb-item">
+                                <a class="text-muted text-decoration-none" href="{{ route('ciclos.show', $ciclo->id) }}">{{ $ciclo->descripcion }}</a>
+                            </li>
                             <li class="breadcrumb-item active" aria-current="page">Configurar precios</li>
                         </ol>
                     </nav>
@@ -86,11 +89,27 @@
         </div>
     </div>
 
-    {{ $ciclo->carreras }}
+    <div class="row">
+    
+        @livewire('ciclo.grupo-precio', ['cicloId' => $ciclo->id])
+    
+    </div>
 
 </div>
 
 
 {{-- content|end --}}
 
+@endsection
+
+@section('scripts')
+<script>
+    function toggleSelectAll() {
+        var checkboxes = document.querySelectorAll('.carrera-checkbox');
+        var selectAllCheckbox = document.getElementById('select_all');
+        checkboxes.forEach(function(checkbox) {
+            checkbox.checked = selectAllCheckbox.checked;
+        });
+    }
+</script>
 @endsection
