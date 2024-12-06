@@ -7,7 +7,7 @@ use App\Models\Intranet\Carrera;
 use App\Models\Intranet\FormaDePago;
 use App\Models\Intranet\GrupoPrecio as IntranetGrupoPrecio;
 use App\Models\Intranet\Precio;
-// use App\Models\Intranet\GrupoPrecio;  // Asegúrate de importar GrupoPrecio
+use App\Models\Intranet\Sede;
 use Livewire\Component;
 
 class GrupoPrecio extends Component
@@ -18,19 +18,21 @@ class GrupoPrecio extends Component
     public $formasDePago;
     public $bancos;
     public $precios = [];
+    public $carreras;
+    
+    public $sedes = [];
+    public $sedeId;
 
     public function mount($cicloId)
     {
         $this->cicloId = $cicloId;
         $this->formasDePago = FormaDePago::all();
         $this->bancos = Banco::all();
+        $this->carreras = Carrera::all();
+        $this->sedes = Sede::all();
         $this->precios = $this->initializePrecios();
     }
 
-    /**
-     * Inicializa la estructura de precios con bancos asociados por defecto.
-     * Los bancos estarán asociados y con monto igual a 0, pero se podrán cambiar.
-     */
     public function initializePrecios()
     {
         $precios = [];
@@ -39,8 +41,8 @@ class GrupoPrecio extends Component
         foreach ($this->formasDePago as $formaDePago) {
             foreach ($this->bancos as $banco) {
                 $precios[$formaDePago->id]['bancos'][$banco->id] = [
-                    'monto' => 0,            // Monto inicial
-                    'desasociado' => false   // Desasociado por defecto
+                    'monto' => 0,
+                    'desasociado' => false
                 ];
             }
         }
@@ -52,16 +54,16 @@ class GrupoPrecio extends Component
     {
         // Validación de los campos
         $this->validate([
-            'grupoPrecio.nombre' => 'required|string|max:255',
             'carrerasSeleccionadas' => 'required|array',
             'precios.*.bancos.*.monto' => 'required|numeric|min:0',
         ]);
 
         // Crear el grupo de precios
         $grupo = IntranetGrupoPrecio::create([
-            'nombre' => $this->grupoPrecio['nombre'],
+            'ciclo_id' => $this->cicloId,
+            'sede_id' => $this->sedeId
         ]);
-        
+
         // Asociar las carreras seleccionadas al grupo
         $grupo->carreras()->attach($this->carrerasSeleccionadas);
 
@@ -72,6 +74,8 @@ class GrupoPrecio extends Component
                 if (!$precio['desasociado']) {
                     Precio::create([
                         'grupo_id' => $grupo->id,
+                        'sede_id' => $this->sedeId,
+                        'ciclo_id' => $this->cicloId,
                         'forma_de_pago_id' => $formaDePagoId,
                         'banco_id' => $bancoId,
                         'monto' => $precio['monto'],
@@ -80,15 +84,25 @@ class GrupoPrecio extends Component
             }
         }
 
-        // Mensaje de éxito
-        session()->flash('message', 'Grupo de precios creado con éxito.');
-        return redirect()->route('grupos_precios.index');
+        // return redirect()->route('grupos_precios.index');
+    }
+
+    /**
+     * Método para seleccionar/deseleccionar todas las carreras
+     */
+    public function seleccionarTodas($seleccionar)
+    {
+        if ($seleccionar) {
+            // Si se seleccionan todas, llenamos el array con todas las carreras
+            $this->carrerasSeleccionadas = $this->carreras->pluck('id')->toArray();
+        } else {
+            // Si se desmarcan todas, vaciamos el array
+            $this->carrerasSeleccionadas = [];
+        }
     }
 
     public function render()
     {
-        // Obtener todas las carreras
-        $carreras = Carrera::all();
-        return view('livewire.ciclo.grupo-precio', compact('carreras'));
+        return view('livewire.ciclo.grupo-precio');
     }
 }

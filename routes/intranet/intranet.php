@@ -15,6 +15,7 @@ use App\Http\Controllers\Intranet\SedeController;
 use App\Models\Intranet\AsignaturaCiclo;
 use App\Models\Intranet\Carrera;
 use App\Models\Intranet\CarreraCiclo;
+use App\Models\Intranet\FormaDePago;
 use Spatie\Permission\Contracts\Permission;
 
 // Rutas protegidas con autenticación y confirmación de correo verificado
@@ -32,6 +33,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         $carreras = Carrera::where('area_id', $area_id)->get();
         return response()->json($carreras);
     });
+    
+    // Route::get('precios/{sede_id}/{grupo_id}', function ($area_id) {
+    //     $modalidades = FormaDePago::where('area_id', $area_id)->get();
+    //     return response()->json($carreras);
+    // });    
 
 
     Route::resource('carreras', CarreraController::class)->names('carreras');

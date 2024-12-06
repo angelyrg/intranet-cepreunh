@@ -17,8 +17,8 @@ return new class extends Migration
             $table->unsignedBigInteger('grupo_id')->nullable();
             $table->foreign('grupo_id')->references('id')->on('grupo_precios');
             
-            $table->unsignedBigInteger('carrara_id')->nullable();
-            $table->foreign('carrara_id')->references('id')->on('carreras');
+            $table->unsignedBigInteger('carrera_id')->nullable();
+            $table->foreign('carrera_id')->references('id')->on('carreras');
 
             $table->timestamps();
         });

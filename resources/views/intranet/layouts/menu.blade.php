@@ -205,27 +205,11 @@
         </ul>
       </li> --}}
       <!-- ---------------------------------- -->
-      <!-- Cuenta -->
-      <!-- ---------------------------------- -->
-      <li class="nav-small-cap">
-        <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-        <span class="hide-menu">CUENTA</span>
-      </li>
-      <li class="sidebar-item">
-        <a class="sidebar-link" href="" aria-expanded="false">
-          <span>
-            <i class="ti ti-user"></i>
-          </span>
-          <span class="hide-menu">Mi perfil</span>
-        </a>
-      </li>
-
-      <!-- ---------------------------------- -->
       <!-- Home -->
       <!-- ---------------------------------- -->
       <li class="nav-small-cap">
         <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-        <span class="hide-menu">HOME</span>
+        <span class="hide-menu">OTROS</span>
       </li>
       <!-- ---------------------------------- -->
       <!-- Dashboard -->
@@ -252,14 +236,6 @@
                 <i class="ti ti-circle"></i>
               </div>
               <span class="hide-menu">Posts</span>
-            </a>
-          </li>
-          <li class="sidebar-item">
-            <a href="#" class="sidebar-link">
-              <div class="round-16 d-flex align-items-center justify-content-center">
-                <i class="ti ti-circle"></i>
-              </div>
-              <span class="hide-menu">Details</span>
             </a>
           </li>
         </ul>

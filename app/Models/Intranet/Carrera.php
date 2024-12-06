@@ -21,7 +21,7 @@ class Carrera extends Model
 
     public function grupo_precios()
     {
-        return $this->belongsToMany(GrupoPrecio::class);
+        return $this->belongsToMany(GrupoPrecio::class, 'carreras_grupos', 'carrera_id', 'grupo_id');
     }
 
 }

@@ -42,14 +42,14 @@
         <!-- ---------------------------------- -->
         <!-- Start Vertical Layout Sidebar 11 -->
         <!-- ---------------------------------- -->
-        <div class="brand-logo bg-primary text-center d-flex align-items-center justify-content-between">
+        <div class="brand-logo shadow-sm text-center d-flex align-items-center justify-content-between">
           <a href="#" class="text-nowrap logo-img">
 
             {{-- <img src="{{asset('modernize/images/logos/dark-logo.svg')}}" class="dark-logo" alt="Logo-Dark" />
             <img src="{{asset('modernize/images/logos/light-logo.svg')}}" class="light-logo" alt="Logo-light" /> --}}
 
-            <img src="{{asset('modernize/images/logos/dark-logo.png')}}" class="dark-logo w-70" alt="Logo-dark" />
-            <img src="{{asset('modernize/images/logos/light-logo.png')}}" class="light-logo w-70" alt="Logo-light" />
+            <img src="{{asset('assets/images/logos/CepreUNH.webp')}}" class="dark-logo w-70" alt="Logo-dark" />
+            <img src="{{asset('assets/images/logos/CepreUNH-positivo.webp')}}" class="light-logo w-70" alt="Logo-light" />
           </a>
           <a href="javascript:void(0)" class="sidebartoggler ms-auto text-decoration-none fs-5 d-block d-xl-none">
             <i class="ti ti-x"></i>
@@ -64,7 +64,7 @@
 
     <div class="page-wrapper">
       <!--  Header Start -->
-      <header class="topbar">
+      <header class="topbar shadow-sm">
         <div class="with-vertical">
           <!-- ---------------------------------- -->
           <!-- Start Vertical Layout Header -->
@@ -76,15 +76,15 @@
                   <i class="ti ti-menu-2"></i>
                 </a>
               </li>
-              <li class="nav-item d-none d-lg-block">
+              {{-- <li class="nav-item d-none d-lg-block">
                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" data-bs-toggle="modal"
                   data-bs-target="#exampleModal">
                   <i class="ti ti-search"></i>
                 </a>
-              </li>
+              </li> --}}
             </ul>
 
-            <ul class="navbar-nav quick-links d-none d-lg-flex">
+            {{-- <ul class="navbar-nav quick-links d-none d-lg-flex">
 
               <li class="nav-item dropdown-hover d-none d-lg-block">
                 <a class="nav-link" href="#">Chat</a>
@@ -95,10 +95,10 @@
               <li class="nav-item dropdown-hover d-none d-lg-block">
                 <a class="nav-link" href="#">Email</a>
               </li>
-            </ul>
+            </ul> --}}
 
             <div class="d-block d-lg-none">
-              <img src="{{ asset('modernize/images/logos/dark-logo.svg') }}" width="180" alt="" />
+              <img src="{{ asset('assets/images/logos/CepreUNH.webp') }}" width="180" alt="" />
             </div>
             <a class="navbar-toggler nav-icon-hover p-0 border-0" href="javascript:void(0)" data-bs-toggle="collapse"
               data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
@@ -249,7 +249,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
               </div>
               <div class="offcanvas-body" data-simplebar="" data-simplebar style="height: calc(100vh - 80px)">
-                <ul id="sidebarnav">
+                {{-- <ul id="sidebarnav">
                   <li class="sidebar-item">
                     <a class="sidebar-link" href="../main/app-chat.html" aria-expanded="false">
                       <span>
@@ -274,7 +274,7 @@
                       <span class="hide-menu">Email</span>
                     </a>
                   </li>
-                </ul>
+                </ul> --}}
               </div>
             </nav>
           </div>
@@ -290,18 +290,18 @@
               </li>
               <li class="nav-item d-none d-xl-block">
                 <a href="#" class="text-nowrap nav-link">
-                  <img src="{{ asset('modernize/images/logos/dark-logo.svg') }}" class="dark-logo" width="180" alt="" />
-                  <img src="{{ asset('modernize/images/logos/light-logo.svg') }}" class="light-logo" width="180" alt="" />
+                  <img src="{{ asset('assets/images/logos/CepreUNH.webp') }}" class="dark-logo" width="180" alt="" />
+                  <img src="{{ asset('assets/images/logos/CepreUNH-positivo.webp') }}" class="light-logo" width="180" alt="" />
                 </a>
               </li>
-              <li class="nav-item d-none d-xl-block">
+              {{-- <li class="nav-item d-none d-xl-block">
                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" data-bs-toggle="modal"
                   data-bs-target="#exampleModal">
                   <i class="ti ti-search"></i>
                 </a>
-              </li>
+              </li> --}}
             </ul>
-            <ul class="navbar-nav quick-links d-none d-xl-flex">
+            {{-- <ul class="navbar-nav quick-links d-none d-xl-flex">
               <li class="nav-item dropdown-hover d-none d-lg-block">
                 <a class="nav-link" href="../main/app-chat.html">Chat</a>
               </li>
@@ -311,10 +311,10 @@
               <li class="nav-item dropdown-hover d-none d-lg-block">
                 <a class="nav-link" href="../main/app-email.html">Email</a>
               </li>
-            </ul>
+            </ul> --}}
             <div class="d-block d-xl-none">
               <a href="#" class="text-nowrap nav-link">
-                <img src="{{ asset('modernize/images/logos/dark-logo.svg') }}" width="180" alt="" />
+                <img src="{{ asset('assets/images/logos/CepreUNH.webp') }}" width="180" alt="" />
               </a>
             </div>
             <a class="navbar-toggler nav-icon-hover p-0 border-0" href="javascript:void(0)" data-bs-toggle="collapse"
@@ -533,10 +533,11 @@
           $(e).prop("checked", !0);
         }
       </script>
-      <button class="btn btn-primary p-3 rounded-circle d-flex align-items-center justify-content-center customizer-btn"
+      {{-- TODO: Poner solo lo necesario en el botón de configuración --}}
+      {{-- <button class="btn btn-primary p-3 rounded-circle d-flex align-items-center justify-content-center customizer-btn"
         type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
         <i class="icon ti ti-settings fs-7"></i>
-      </button>
+      </button> --}}
 
       <div class="offcanvas customizer offcanvas-end" tabindex="-1" id="offcanvasExample"
         aria-labelledby="offcanvasExampleLabel">
