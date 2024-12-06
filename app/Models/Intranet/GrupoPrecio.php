@@ -21,4 +21,14 @@ class GrupoPrecio extends Model
         return $this->belongsTo(Ciclo::class);
     }
 
+    public function precios()
+    {
+        return $this->hasMany(Precio::class, 'grupo_id');
+    }
+
+    public function formas_de_pagos()
+    {
+        return $this->belongsToMany(FormaDePago::class, 'precios', 'grupo_id', 'forma_de_pago_id');
+    }
+
 }

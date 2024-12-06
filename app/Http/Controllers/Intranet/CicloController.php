@@ -8,6 +8,7 @@ use App\Http\Requests\Ciclos\UpdateCicloRequest;
 use App\Models\Intranet\Area;
 use App\Models\Intranet\Ciclo;
 use App\Models\Intranet\Docente;
+use App\Models\Intranet\Precio;
 use App\Models\Intranet\TiposCiclos;
 use Carbon\Carbon;
 use DateTime;
@@ -119,8 +120,10 @@ class CicloController extends Controller
             return $diasDeLaSemana[$dia] ?? '';
         }, $ciclo->dias_lectivos);
 
+        $precios = Precio::where('ciclo_id', $ciclo->id)->get();
+        $preciosAgrupados = $precios->groupBy('forma_de_pago_id');
 
-        return view('intranet.ciclos.show', compact('ciclo'));
+        return view('intranet.ciclos.show', compact('ciclo', 'precios', 'preciosAgrupados'));
     }
 
 

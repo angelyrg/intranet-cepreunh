@@ -17,6 +17,7 @@ class Precio extends Model
         'forma_de_pago_id',
         'monto',
         'fraccionado',
+        'grupo_id'
     ];
 
     public function forma_de_pago()

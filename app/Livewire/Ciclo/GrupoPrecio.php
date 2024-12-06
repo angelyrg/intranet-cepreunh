@@ -54,6 +54,8 @@ class GrupoPrecio extends Component
     {
         // Validación de los campos
         $this->validate([
+            'cicloId' => 'required',
+            'sedeId' => 'required',
             'carrerasSeleccionadas' => 'required|array',
             'precios.*.bancos.*.monto' => 'required|numeric|min:0',
         ]);
@@ -71,7 +73,7 @@ class GrupoPrecio extends Component
         foreach ($this->precios as $formaDePagoId => $formaDePagoPrecios) {
             foreach ($formaDePagoPrecios['bancos'] as $bancoId => $precio) {
                 // Solo guardar si el banco no está desasociado
-                if (!$precio['desasociado']) {
+                if (!$precio['desasociado'] && $precio['monto'] > 0) {
                     Precio::create([
                         'grupo_id' => $grupo->id,
                         'sede_id' => $this->sedeId,
