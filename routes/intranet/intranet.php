@@ -15,6 +15,7 @@ use App\Http\Controllers\Intranet\SedeController;
 use App\Models\Intranet\AsignaturaCiclo;
 use App\Models\Intranet\Carrera;
 use App\Models\Intranet\CarreraCiclo;
+use App\Models\Intranet\FormaDePago;
 use Spatie\Permission\Contracts\Permission;
 
 // Rutas protegidas con autenticación y confirmación de correo verificado
@@ -32,6 +33,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         $carreras = Carrera::where('area_id', $area_id)->get();
         return response()->json($carreras);
     });
+    
+    // Route::get('precios/{sede_id}/{grupo_id}', function ($area_id) {
+    //     $modalidades = FormaDePago::where('area_id', $area_id)->get();
+    //     return response()->json($carreras);
+    // });    
 
 
     Route::resource('carreras', CarreraController::class)->names('carreras');
@@ -43,6 +49,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('ciclos', CicloController::class)->except(['create','destroy'])->names('ciclos');
     Route::delete('ciclos/{ciclo}/eliminar', [CicloController::class, 'eliminar'])->name('ciclos.eliminar');
     Route::get('ciclos/{ciclo}/matricula', [CicloController::class, 'matricula'])->name('ciclos.matricula');
+    Route::get('ciclos/{ciclo}/create_precios', [CicloController::class, 'create_precios'])->name('ciclos.create_precios');
+    Route::get('ciclos/{ciclo}/asignar_carreras', [CicloController::class, 'asignar_carreras'])->name('ciclos.asignar_carreras');
+    Route::get('ciclos/{ciclo}/asignar_asignaturas', [CicloController::class, 'asignar_asignaturas'])->name('ciclos.asignar_asignaturas');
+    
 
     Route::get('matricula/matricular', [MatriculaController::class, 'buscar_dni'])->name('matricula.buscar_dni');
     Route::post('matricula/store_estudiante', [MatriculaController::class, 'store_estudiante'])->name('matricula.store_estudiante');
@@ -52,7 +62,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Route::resource('matriculas', MatriculaController::class)->names('matriculas');
 
-    
 
 
 

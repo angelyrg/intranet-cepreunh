@@ -13,6 +13,48 @@
         <span class="hide-menu">CONFIG. DEL SISTEMA</span>
       </li>
       <li class="sidebar-item">
+        <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+          <span class="d-flex">
+            <i class="ti ti-chart-donut-3"></i>
+          </span>
+          <span class="hide-menu">General</span>
+        </a>
+        <ul aria-expanded="false" class="collapse first-level">
+          <li class="sidebar-item">
+            <a href="{{ route('roles.index') }}" class="sidebar-link">
+              <div class="round-16 d-flex align-items-center justify-content-center">
+                <i class="ti ti-circle"></i>
+              </div>
+              <span class="hide-menu">Roles</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a href="{{ route('permisos.index') }}" class="sidebar-link">
+              <div class="round-16 d-flex align-items-center justify-content-center">
+                <i class="ti ti-circle"></i>
+              </div>
+              <span class="hide-menu">Permisos</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a href="{{ route('usuarios.index') }}" class="sidebar-link">
+              <div class="round-16 d-flex align-items-center justify-content-center">
+                <i class="ti ti-circle"></i>
+              </div>
+              <span class="hide-menu">Usuarios</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a href="{{ route('empleados.index') }}" class="sidebar-link">
+              <div class="round-16 d-flex align-items-center justify-content-center">
+                <i class="ti ti-circle"></i>
+              </div>
+              <span class="hide-menu">Empleados</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      {{-- <li class="sidebar-item">
         <a class="sidebar-link" href="#" aria-expanded="false">
           <span>
             <i class="ti ti-menu-3"></i>
@@ -51,11 +93,14 @@
           </span>
           <span class="hide-menu">Empleados</span>
         </a>
-      </li>
+      </li> --}}
       <li class="nav-small-cap">
         <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
         <span class="hide-menu">ADMINISTRACIÓN</span>
       </li>
+
+      
+
       <li class="sidebar-item">
         <a class="sidebar-link" href="{{ route('sedes.index') }}" aria-expanded="false">
           <span>
@@ -133,7 +178,7 @@
           <span class="hide-menu" title="Asignación de asignaturas">Asig. asignaturas</span>
         </a>
       </li> --}}
-      <li class="sidebar-item">
+      {{-- <li class="sidebar-item">
         <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false" >
           <span class="d-flex">
             <i class="ti ti-layout"></i>
@@ -158,29 +203,13 @@
             </a>
           </li>
         </ul>
-      </li>
-      <!-- ---------------------------------- -->
-      <!-- Cuenta -->
-      <!-- ---------------------------------- -->
-      <li class="nav-small-cap">
-        <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-        <span class="hide-menu">CUENTA</span>
-      </li>
-      <li class="sidebar-item">
-        <a class="sidebar-link" href="" aria-expanded="false">
-          <span>
-            <i class="ti ti-user"></i>
-          </span>
-          <span class="hide-menu">Mi perfil</span>
-        </a>
-      </li>
-
+      </li> --}}
       <!-- ---------------------------------- -->
       <!-- Home -->
       <!-- ---------------------------------- -->
       <li class="nav-small-cap">
         <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-        <span class="hide-menu">HOME</span>
+        <span class="hide-menu">OTROS</span>
       </li>
       <!-- ---------------------------------- -->
       <!-- Dashboard -->
@@ -207,14 +236,6 @@
                 <i class="ti ti-circle"></i>
               </div>
               <span class="hide-menu">Posts</span>
-            </a>
-          </li>
-          <li class="sidebar-item">
-            <a href="#" class="sidebar-link">
-              <div class="round-16 d-flex align-items-center justify-content-center">
-                <i class="ti ti-circle"></i>
-              </div>
-              <span class="hide-menu">Details</span>
             </a>
           </li>
         </ul>

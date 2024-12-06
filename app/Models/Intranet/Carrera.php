@@ -19,4 +19,9 @@ class Carrera extends Model
         return $this->HasMany(CarreraCiclo::class);
     }
 
+    public function grupo_precios()
+    {
+        return $this->belongsToMany(GrupoPrecio::class, 'carreras_grupos', 'carrera_id', 'grupo_id');
+    }
+
 }

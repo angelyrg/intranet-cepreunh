@@ -86,7 +86,6 @@
                             <label for="sede_id" class="form-label">Modalidad de pago</label>
                         <select name="sede_id" id="sede_id" class="form-select @error('sede_id') is-invalid @enderror" required>
                             @foreach ($ciclo->precios as $precio)
-                            {{ var_dump($precio->forma_de_pago) }}
                             <option value="{{ $precio->id }}">
                                 {{ $precio->forma_de_pago->descripcion }} - S/{{ number_format($precio->monto, 2) }}
                             </option>
@@ -175,7 +174,7 @@
                 .catch(error => {
                     console.error('Error al cargar las carreras:', error);
                 });
-        }
+        }        
     });
 </script>
 
