@@ -45,6 +45,12 @@ class Ciclo extends Model
     public function precios(){
         return $this->hasMany(Precio::class, 'ciclo_id');
     }
+    
+    public function grupo_precios(){
+        return $this->hasMany(GrupoPrecio::class);
+    }
+
+
  
 
     // TODO: Agregar las relaciones: Aulas, Semanas

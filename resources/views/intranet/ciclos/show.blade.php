@@ -37,7 +37,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
                         <h5 class="card-title fw-semibold">{{ $ciclo->descripcion }}</h5>
-                        <p class="card-subtitle">Detalles el ciclo académico</p>
+                        <p class="card-subtitle">Detalles del ciclo académico</p>
                     </div>
                     <div>
                         @if($ciclo->estado == 1)
@@ -107,15 +107,29 @@
                     <div>
                         <h5 class="card-title fw-semibold">Opciones</h5>
                     </div>
-                    <div>
-                        <span class="badge fw-semibold py-1 bg-primary-subtle text-primary">
-                            <small>{{ count($ciclo->dias_lectivos) }}</small>
-                        </span>
-                    </div>
                 </div>
             </div>
             <div class="card-body p-4 pt-0">
-                <a class="btn btn-outline-primary d-block" href={{ route('ciclos.matricula', $ciclo->id) }}>Matrícular</a>
+                <div class="d-flex flex-column gap-2">
+                    <div>
+                        <a class="btn btn-primary d-block" href={{ route('ciclos.matricula', $ciclo->id) }}>Matricular estudiante</a>
+                    </div>
+                    <div>
+                        <a class="btn btn-outline-primary d-block" href={{ route('ciclos.asignar_carreras', $ciclo->id) }}>
+                            <span>Carreras del ciclo</span>
+                            <span>[{{ count($ciclo->carreras) }}]</span>
+                        </a>
+                    </div>
+                    <div>
+                        <a class="btn btn-outline-primary d-block" href={{ route('ciclos.asignar_asignaturas', $ciclo->id) }}>
+                            <span>Asignaturas del ciclo</span>
+                            <span>[{{ count($ciclo->asignaturas) }}]</span>
+                        </a>
+                    </div>
+                    <div>
+                        <a class="btn btn-outline-primary d-block" href={{ route('ciclos.create_precios', $ciclo->id) }}>Configurar precios</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
