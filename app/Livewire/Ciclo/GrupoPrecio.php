@@ -23,14 +23,31 @@ class GrupoPrecio extends Component
     public $sedes = [];
     public $sedeId;
 
+    public $gruposPrecios;
+
+
+    protected $listeners = ['asignacionCarreraActualizada' => 'actualizarDatos'];
+
+
     public function mount($cicloId)
     {
         $this->cicloId = $cicloId;
         $this->formasDePago = FormaDePago::all();
         $this->bancos = Banco::all();
-        $this->carreras = Carrera::all();
+        // $this->carreras = Carrera::all();
+        $this->carreras = $this->getCarrerasDisponibles();
         $this->sedes = Sede::all();
         $this->precios = $this->initializePrecios();
+
+
+
+        $this->gruposPrecios = IntranetGrupoPrecio::where('ciclo_id', $this->cicloId)
+            ->with(['carreras', 'precios.banco', 'precios.forma_de_pago']) 
+            ->get();
+    }
+
+    public function actualizarDatos(){
+        $this->carreras = $this->getCarrerasDisponibles();
     }
 
     public function initializePrecios()
@@ -85,13 +102,17 @@ class GrupoPrecio extends Component
                 }
             }
         }
-
-        // return redirect()->route('grupos_precios.index');
     }
 
-    /**
-     * Método para seleccionar/deseleccionar todas las carreras
-     */
+    public function getCarrerasDisponibles()
+    {
+        return Carrera::whereHas('carrera_ciclo', function($query){
+            $query->where('ciclo_id', $this->cicloId);
+        })->whereDoesntHave('grupo_precios', function ($query) {
+            $query->where('ciclo_id', $this->cicloId);
+        })->get();
+    }
+
     public function seleccionarTodas($seleccionar)
     {
         if ($seleccionar) {
@@ -105,6 +126,7 @@ class GrupoPrecio extends Component
 
     public function render()
     {
+        $this->mount($this->cicloId);
         return view('livewire.ciclo.grupo-precio');
     }
 }

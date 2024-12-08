@@ -24,7 +24,7 @@ return new class extends Migration
     {
         Schema::table('precios', function (Blueprint $table) {
             $table->unsignedBigInteger('area_id');
-            $table->foreign('area_id')->references('id')->on('areas');
+            $table->foreign('area_id')->references('id')->on('areas')->onDelete('set null');
         });
     }
 };

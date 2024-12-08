@@ -115,19 +115,21 @@
                         <a class="btn btn-primary d-block" href={{ route('ciclos.matricula', $ciclo->id) }}>Matricular estudiante</a>
                     </div>
                     <div>
-                        <a class="btn btn-outline-primary d-block" href={{ route('ciclos.asignar_carreras', $ciclo->id) }}>
-                            <span>Carreras del ciclo</span>
-                            <span>[{{ count($ciclo->carreras) }}]</span>
-                        </a>
+                        <button type="button" class="btn btn-outline-primary w-100 d-block" data-bs-toggle="modal"
+                            data-bs-target="#modalCarreras">
+                            <span>Carreras</span>
+                        </button>
                     </div>
                     <div>
-                        <a class="btn btn-outline-primary d-block" href={{ route('ciclos.asignar_asignaturas', $ciclo->id) }}>
-                            <span>Asignaturas del ciclo</span>
-                            <span>[{{ count($ciclo->asignaturas) }}]</span>
-                        </a>
+                        <button type="button" class="btn btn-outline-primary w-100 d-block" data-bs-toggle="modal"
+                            data-bs-target="#modalAsignaturas">
+                            <span>Asignaturas</span>
+                        </button>
                     </div>
                     <div>
-                        <a class="btn btn-outline-primary d-block" href={{ route('ciclos.create_precios', $ciclo->id) }}>Configurar precios</a>
+                        <button type="button" class="btn btn-outline-primary w-100 d-block" data-bs-toggle="modal" data-bs-target="#modalPrecios">
+                            Precios
+                        </button>
                     </div>
                 </div>
             </div>
@@ -135,64 +137,6 @@
     </div>
 
 </div>
-
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalPrecios">
-    Precios
-</button>
-
-<!-- Modal Precios -->
-<div class="modal fade" id="modalPrecios" tabindex="-1" aria-labelledby="modalPreciosLabel" aria-hidden="true">
-<div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content">
-    <div class="modal-header">
-        <h1 class="modal-title fs-5" id="modalPreciosLabel">Precios del ciclo</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-    </div>
-    <div class="modal-body pt-0">
-        @foreach ($ciclo->grupo_precios as $grupo)
-            <div class="p-2 rounded-2 border">
-                <div>
-                    <p class="fw-bolder mb-0">Carreras</p>
-                    <ol>
-                        @foreach ($grupo->carreras as $carrera)
-                            <li>
-                                <span>
-                                    {{ $carrera->descripcion }}
-                                </span>
-                            </li>
-                        @endforeach
-                    </ol>
-                </div>
-                <div>
-                    <p class="fw-bolder mb-0">Formas de pago X precios</p>
-
-                    @foreach ($preciosAgrupados as $precio)
-                        <div class="d-flex">
-
-                            @foreach ($precios as $item)
-                                <div class="m-2 border p-1">
-                                    {{ $item->forma_de_pago->descripcion }} - {{ $item->monto }}
-                                </div>
-                            @endforeach
-
-                        </div>
-                    @endforeach
-
-                </div>
-            </div>
-
-        @endforeach
-    </div>
-    <div class="modal-footer">
-        <div>
-            <a class="btn btn-outline-primary" href={{ route('ciclos.create_precios', $ciclo->id) }}>Configurar precios</a>
-        </div>
-    </div>
-    </div>
-</div>
-</div>
-
 
 <div class="row">
     <div class="col-12">
@@ -373,6 +317,62 @@
         </div>
     </div>
 </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="modalCarreras" tabindex="-1" aria-labelledby="modalCarrerasLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modalCarrerasLabel">Carreras del ciclo</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @livewire('ciclo.asignar-carreras-a-ciclo', ['cicloId' => $ciclo->id])
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalAsignaturas" tabindex="-1" aria-labelledby="modalAsignaturasLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modalAsignaturasLabel">Asignaturas del ciclo</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @livewire('ciclo.asignar-asignaturas-a-ciclo', ['cicloId' => $ciclo->id])
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalPrecios" tabindex="-1" aria-labelledby="modalPreciosLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modalPreciosLabel">Precios del ciclo</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @livewire('ciclo.grupo-precio', ['cicloId' => $ciclo->id])
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {{-- content|end --}}
 
 @endsection

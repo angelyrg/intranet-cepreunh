@@ -12,4 +12,9 @@ class Banco extends Model
     function precios(){
         return $this->HasMany(Precio::class);
     }
+
+    public function grupos_precios()
+    {
+        return $this->belongsToMany(GrupoPrecio::class, 'precios', 'banco_id', 'grupo_id');
+    }
 }

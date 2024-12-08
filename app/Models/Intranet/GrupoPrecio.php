@@ -30,5 +30,10 @@ class GrupoPrecio extends Model
     {
         return $this->belongsToMany(FormaDePago::class, 'precios', 'grupo_id', 'forma_de_pago_id');
     }
+    
+    public function bancos()
+    {
+        return $this->belongsToMany(Banco::class, 'precios', 'grupo_id', 'banco_id');
+    }
 
 }
