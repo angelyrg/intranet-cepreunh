@@ -4,6 +4,7 @@ namespace App\Livewire\Ciclo;
 
 use App\Models\Intranet\Banco;
 use App\Models\Intranet\Carrera;
+use App\Models\Intranet\Ciclo;
 use App\Models\Intranet\FormaDePago;
 use App\Models\Intranet\GrupoPrecio as IntranetGrupoPrecio;
 use App\Models\Intranet\Precio;
@@ -34,15 +35,17 @@ class GrupoPrecio extends Component
         $this->cicloId = $cicloId;
         $this->formasDePago = FormaDePago::all();
         $this->bancos = Banco::all();
-        // $this->carreras = Carrera::all();
         $this->carreras = $this->getCarrerasDisponibles();
         $this->sedes = Sede::all();
         $this->precios = $this->initializePrecios();
 
-
-
         $this->gruposPrecios = IntranetGrupoPrecio::where('ciclo_id', $this->cicloId)
-            ->with(['carreras', 'precios.banco', 'precios.forma_de_pago']) 
+            ->with([
+                'carreras',
+                'precios',
+                'precios.banco:id,descripcion',
+                'precios.forma_de_pago'
+            ])
             ->get();
     }
 
@@ -74,7 +77,7 @@ class GrupoPrecio extends Component
             'cicloId' => 'required',
             'sedeId' => 'required',
             'carrerasSeleccionadas' => 'required|array',
-            'precios.*.bancos.*.monto' => 'required|numeric|min:0',
+            'precios.*.bancos.*.monto' => 'numeric|min:0',
         ]);
 
         // Crear el grupo de precios
@@ -102,11 +105,14 @@ class GrupoPrecio extends Component
                 }
             }
         }
+
+        $this->carrerasSeleccionadas = [];
     }
 
     public function getCarrerasDisponibles()
     {
-        return Carrera::whereHas('carrera_ciclo', function($query){
+        return Carrera::with(['area', 'carrera_ciclo'])
+        ->whereHas('carrera_ciclo', function($query){
             $query->where('ciclo_id', $this->cicloId);
         })->whereDoesntHave('grupo_precios', function ($query) {
             $query->where('ciclo_id', $this->cicloId);
@@ -127,6 +133,7 @@ class GrupoPrecio extends Component
     public function render()
     {
         $this->mount($this->cicloId);
-        return view('livewire.ciclo.grupo-precio');
+        $ciclo = Ciclo::findOrFail($this->cicloId);
+        return view('livewire.ciclo.grupo-precio', compact('ciclo'));
     }
 }

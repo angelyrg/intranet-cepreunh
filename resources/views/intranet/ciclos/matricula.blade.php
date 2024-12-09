@@ -14,6 +14,9 @@
                             <li class="breadcrumb-item">
                                 <a class="text-muted text-decoration-none" href="{{ route('ciclos.index') }}">Ciclos</a>
                             </li>
+                            <li class="breadcrumb-item">
+                                <a class="text-muted text-decoration-none" href="{{ route('ciclos.show', $ciclo->id) }}">{{ $ciclo->descripcion }}</a>
+                            </li>
                             <li class="breadcrumb-item active" aria-current="page">{{ $page }}</li>
                         </ol>
                     </nav>
@@ -34,11 +37,17 @@
         <div id="validacion_dni">
             {{-- TODO: Usar JS para llada asincrona --}}
             <form action="{{ route('matricula.buscar_dni') }}" method="GET">
-                <input type="hidden" name="ciclo" value="{{ $ciclo }}">
-                <div class="form-group mb-4">
-                    <label for="">DNI del estudiante<span class="text-danger">*</span> </label>
-                    <input name="estudiante_dni" type="text" maxlength="8" class="form-control" required>
+                <input type="hidden" name="ciclo" value="{{ $ciclo->id }}">
+                @if(session()->has('warning'))
+                <div class="alert alert-warning">
+                    {{ session('warning') }}
                 </div>
+                @endif
+
+                <div class="form-group mb-4">
+                    <label for="estudiante_dni">DNI del estudiante <span class="text-danger">*</span></label>
+                    <input name="estudiante_dni" type="text" maxlength="8" class="form-control" value="{{ old('estudiante_dni') }}" required>
+                </div>                
 
                 <button class="btn btn-primary" type="submit">
                     Continuar

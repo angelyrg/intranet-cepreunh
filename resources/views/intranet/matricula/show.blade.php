@@ -230,7 +230,7 @@
 
                 <div class="row mt-5">
                     <div class="d-flex justify-content-end">
-                        <a href="{{ route('ciclos.show', $matricula->ciclo->id) }}" class="btn btn-primary">Finalizar</a>
+                        <a href="{{ route('matricula.descargar', $matricula->ciclo->id) }}" class="btn btn-primary">Descargar ficha de inscripción</a>
                     </div>
                 </div>
             </div>

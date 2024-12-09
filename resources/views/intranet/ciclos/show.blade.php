@@ -112,7 +112,9 @@
             <div class="card-body p-4 pt-0">
                 <div class="d-flex flex-column gap-2">
                     <div>
-                        <a class="btn btn-primary d-block" href={{ route('ciclos.matricula', $ciclo->id) }}>Matricular estudiante</a>
+                        @if($ciclo->estado == 1)
+                            <a class="btn btn-primary d-block" href={{ route('ciclos.matricula', $ciclo->id) }}>Matricular estudiante</a>
+                        @endif
                     </div>
                     <div>
                         <button type="button" class="btn btn-outline-primary w-100 d-block" data-bs-toggle="modal"
@@ -141,178 +143,64 @@
 <div class="row">
     <div class="col-12">
         <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Matrículas</h5>
+            </div>
             <div class="card-body">
-                <div>
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link d-flex active" data-bs-toggle="tab" href="#home2" role="tab"
-                                aria-selected="true">
-                                <span><i class="ti ti-school fs-4"></i></span>
-                                <span class="d-none d-md-block ms-2">Estudiantes</span>
-                            </a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link d-flex" data-bs-toggle="tab" href="#cicloCarreras" role="tab" aria-selected="false"
-                                tabindex="-1">
-                                <span><i class="ti ti-network fs-4"></i></span>
-                                <span class="d-none d-md-block ms-2">Carreras</span>
-                            </a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link d-flex" data-bs-toggle="tab" href="#asignaturasTab" role="tab" aria-selected="false"
-                                tabindex="-1">
-                                <span><i class="ti ti-books"></i></span>
-                                <span class="d-none d-md-block ms-2">Asignaturas</span>
-                            </a>
-                        </li>
-                    </ul>
-                    <!-- Tab panes -->
-                    <div class="tab-content">
-                        <div class="tab-pane active show" id="home2" role="tabpanel">
-                            <div class="p-3">
-
-                                <div class="table-responsive">
-                                    <table class="table search-table align-middle text-nowrap table-striped">
-                                        <thead class="header-item">
-                                            <tr>
-                                                <th>Nro Documento</th>
-                                                <th>Nombres</th>
-                                                <th>Apellidos</th>
-                                                <th>Género</th>
-                                                <th>Estado Civil</th>
-                                                <th>Area</th>
-                                                <th>Carrera</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @if ($ciclo->matriculas->isNotEmpty())
-                                                @foreach ($ciclo->matriculas as $matricula)
-                                                <tr class="search-items">
-                                                    <td>
-                                                        {{ $matricula->estudiante->nro_documento }}
-                                                    </td>
-                                                    <td>
-                                                        {{ $matricula->estudiante->nombres }}
-                                                    </td>
-                                                    <td>
-                                                        {{ $matricula->estudiante->apellido_paterno." ".$matricula->estudiante->apellido_materno }}
-                                                    </td>
-                                                    <td>
-                                                        {{ $matricula->estudiante->genero->descripcion }}
-                                                    </td>
-                                                    <td>
-                                                        {{ $matricula->estudiante->estado_civil->descripcion }}
-                                                    </td>
-                                                    <td>
-                                                        {{ $matricula->area->descripcion }}
-                                                    </td>
-                                                    <td>
-                                                        {{ $matricula->carrera->descripcion }}
-                                                    </td>
-                                                    <td>
-                                                        <div class="action-btn">
-                                                            <a href="javascript:void(0)" class="text-info edit">
-                                                                <i class="ti ti-eye fs-5"></i>
-                                                            </a>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                @endforeach
-                                            @else
-                                                <tr>
-                                                    <td colspan="8" class="text-center">No hay matrículas disponibles.</td>
-                                                </tr>
-                                            @endif
-                                        </tbody>
-                                    </table>
-                                </div>
-                                
-                            </div>
-                        </div>
-                        <div class="tab-pane p-3" id="cicloCarreras" role="tabpanel">
-                            <div>
-                                <div class="table-responsive">
-                                    <table class="table search-table align-middle text-nowrap table-striped">
-                                        <thead class="header-item">
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Carrera</th>
-                                                <th>Área</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($ciclo->carreras as $index => $carrera )   
-                                            <tr class="search-items">
-                                                <td>
-                                                    {{ ($index+1) }}
-                                                </td>
-                                                <td>
-                                                    {{ $carrera->descripcion }}
-                                                </td>
-                                                <td>
-                                                    {{ $carrera->area->descripcion }}
-                                                </td>
-                                                
-                                                <td>
-                                                    <div class="action-btn">
-                                                        <a href="javascript:void(0)" class="text-info edit">
-                                                            <i class="ti ti-eye fs-5"></i>
-                                                        </a>
-                                                        <a href="javascript:void(0)" class="text-dark delete ms-2">
-                                                            <i class="ti ti-trash fs-5"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            @endforeach
-
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane p-3" id="asignaturasTab" role="tabpanel">
-                            <div>
-                                <div class="table-responsive">
-                                    {{ $ciclo->asignaturas }}
-                                    <table class="table search-table align-middle text-nowrap table-striped">
-                                        <thead class="header-item">
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Asignatura</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {{-- @foreach ($ciclo->asignaturas as $index => $asignatura )   
-                                            <tr class="search-items">
-                                                <td>
-                                                    {{ ($index+1) }}
-                                                </td>
-                                                <td>
-                                                    {{ $asignatura->descripcion }}
-                                                </td>
-                                                <td>
-                                                    <div class="action-btn">
-                                                        <a href="javascript:void(0)" class="text-info edit">
-                                                            <i class="ti ti-eye fs-5"></i>
-                                                        </a>
-                                                        <a href="javascript:void(0)" class="text-dark delete ms-2">
-                                                            <i class="ti ti-trash fs-5"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            @endforeach --}}
-
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="table-responsive">
+                    <table class="table search-table align-middle text-nowrap table-striped">
+                        <thead class="header-item">
+                            <tr>
+                                <th>#</th>
+                                <th>Nro Documento</th>
+                                <th>Nombres</th>
+                                <th>Apellidos</th>
+                                <th>Género</th>
+                                <th>Estado Civil</th>
+                                <th>Area</th>
+                                <th>Carrera</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if ($ciclo->matriculas->isNotEmpty())
+                            @foreach ($ciclo->matriculas as $index => $matricula)
+                            <tr class="search-items">
+                                <td>
+                                    {{ ($index+1) }}
+                                </td>
+                                <td>
+                                    {{ $matricula->estudiante->nro_documento }}
+                                </td>
+                                <td>
+                                    {{ $matricula->estudiante->nombres }}
+                                </td>
+                                <td>
+                                    {{ $matricula->estudiante->apellido_paterno." ".$matricula->estudiante->apellido_materno }}
+                                </td>
+                                <td>
+                                    {{ $matricula->estudiante->genero->descripcion }}
+                                </td>
+                                <td>
+                                    {{ $matricula->estudiante->estado_civil->descripcion }}
+                                </td>
+                                <td>
+                                    {{ $matricula->area->descripcion }}
+                                </td>
+                                <td>
+                                    {{ $matricula->carrera->descripcion }}
+                                </td>
+                            </tr>
+                            @endforeach
+                            @else
+                            <tr>
+                                <td colspan="8" class="text-center">No hay matrículas disponibles.</td>
+                            </tr>
+                            @endif
+                        </tbody>
+                    </table>
                 </div>
+                <hr>
+                {{-- @livewire('ciclo.matriculas-table', ['cicloId' => $ciclo->id]) --}}
             </div>
         </div>
     </div>

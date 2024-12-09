@@ -8,11 +8,13 @@ use App\Http\Requests\Ciclos\UpdateCicloRequest;
 use App\Http\Requests\Matricula\MatriculaEstudianteRequest;
 use App\Http\Requests\Matricula\MatriculaRequest;
 use App\Models\Intranet\Area;
+use App\Models\Intranet\Banco;
 use App\Models\Intranet\Ciclo;
 use App\Models\Intranet\Discapacidad;
 use App\Models\Intranet\Docente;
 use App\Models\Intranet\EstadoCivil;
 use App\Models\Intranet\Estudiante;
+use App\Models\Intranet\FormaDePago;
 use App\Models\Intranet\Genero;
 use App\Models\Intranet\IdentidadEtnica;
 use App\Models\Intranet\Matricula;
@@ -26,6 +28,8 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class MatriculaController extends Controller
 {
@@ -41,8 +45,13 @@ class MatriculaController extends Controller
         $dni = $request->estudiante_dni;
         $estudiante = Estudiante::where('nro_documento', $dni)->first();
 
+        if($estudiante){
+            $matricula = Matricula::where('estudiante_id', $estudiante->id)->where('ciclo_id', $ciclo_id)->first();
 
-        if ($estudiante && $estudiante->discapacidades) {
+            if ($matricula) {
+                return back()->with('warning', "El estudiante con dni $dni ya está matriculado en este ciclo.")->withInput();
+            }
+
             $estudiante->discapacidades = explode(',', $estudiante->discapacidades);
         }
 
@@ -1495,8 +1504,6 @@ class MatriculaController extends Controller
 
         $estudiante_id = $estudiante->id;
 
-        // session()->flash('ciclo_id', $ciclo_id);
-        // session()->flash('estudiante_id', $estudiante_id);
         session()->put('ciclo_id', $ciclo_id);
         session()->put('estudiante_id', $estudiante_id);
 
@@ -1512,14 +1519,18 @@ class MatriculaController extends Controller
 
         $areas = Area::all();
         $sedes = Sede::all();
-        $ciclo = Ciclo::findOrFail($ciclo_id);
+        $bancos = Banco::all();
+        $formasDePago = FormaDePago::all();
+        $ciclo = Ciclo::with(['precios.forma_de_pago'])->findOrFail($ciclo_id);
 
         return view('intranet.matricula.create', compact(
             'ciclo_id',
             'ciclo',
             'estudiante_id',
             'areas',
-            'sedes'
+            'sedes',
+            'bancos',
+            'formasDePago'
         ));
     }
 
@@ -1545,6 +1556,21 @@ class MatriculaController extends Controller
         $matricula = Matricula::findOrFail($id);
         return view('intranet.matricula.show', compact('matricula'));
     }
+    
+    public function descargar($id)
+    {
+        $matricula = Matricula::findOrFail($id);
+        $unh_logo_icon = public_path('assets/images/logos/cepreunh-logo.png');
+
+        // return view ('intranet.matricula.descargar_pdf', ['matricula' => $matricula, 'unh_logo' => $unh_logo_icon]);
+
+        $pdf = PDF::loadView('intranet.matricula.descargar_pdf', ['matricula'=>$matricula, 'unh_logo' => $unh_logo_icon])->setPaper('A4', 'portrait');
+        return $pdf->download('FICHA-' . $matricula->estudiante->nro_documento . '.pdf');
+
+    }
+
+
+
 
 
 }

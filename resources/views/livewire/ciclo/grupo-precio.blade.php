@@ -69,6 +69,7 @@
         </div>
     </div>
 
+    @if($ciclo->estado == 1)
     <div class="card shadow">
         <div class="card-body">
             <form wire:submit.prevent="crearGrupo">
@@ -156,11 +157,11 @@
                                                         </div>
                                 
                                                         <!-- Checkbox para desasociar el banco -->
-                                                        {{-- <div class="form-check">
+                                                        <!-- <div class="form-check">
                                                             <input type="checkbox" class="form-check-input"
                                                                 wire:model="precios.{{ $formaDePago->id }}.bancos.{{ $banco->id }}.desasociado">
                                                             <label class="form-check-label">No disponible</label>
-                                                        </div> --}}
+                                                        </div> -->
                                                     </td>
                                                     @endforeach
                                                     @else
@@ -183,4 +184,5 @@
             </form>
         </div>
     </div>
+    @endif
 </div>

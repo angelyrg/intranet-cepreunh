@@ -109,7 +109,7 @@ class CicloController extends Controller
         $ciclo = Ciclo::with([
             'asignaturaCiclos',
             'tipo_ciclo',
-            'carreras',
+            'carreras.area',
             'asignaturas',
             'matriculas',
             'precios',
@@ -130,7 +130,7 @@ class CicloController extends Controller
         $preciosAgrupados = $precios->groupBy('forma_de_pago_id');
 
 
-        $carreras = Carrera::with('grupo_precios.precios.banco', 'grupo_precios.precios.forma_de_pago')->get();
+        $carreras = Carrera::with('area', 'grupo_precios.precios.banco', 'grupo_precios.precios.forma_de_pago')->get();
 
 
         return view('intranet.ciclos.show', compact('ciclo', 'precios', 'preciosAgrupados', 'bancos', 'formasDePago', 'carreras'));
@@ -139,7 +139,7 @@ class CicloController extends Controller
 
     private function getData()
     {
-        $ciclos = Ciclo::all();
+        $ciclos = Ciclo::with('tipo_ciclo')->get();
 
         $html = "";
         foreach ($ciclos as $item) {
@@ -220,6 +220,7 @@ class CicloController extends Controller
 
     public function matricula($ciclo)
     {
+        $ciclo = Ciclo::findOrFail($ciclo);
         $page = 'Matrícula';
         $title = 'Matrícula';
         $slug = 'Matricula';

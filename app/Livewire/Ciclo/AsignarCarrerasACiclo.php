@@ -17,9 +17,9 @@ class AsignarCarrerasACiclo extends Component
     public function mount($cicloId)
     {
         $this->cicloId = $cicloId;
-        $this->ciclos = Ciclo::all(); // Obtener todos los ciclos
-        $this->carreras = Carrera::all(); // Obtener todas las carreras
-        $this->carrerasAsignadas = Ciclo::find($this->cicloId)->carreras->pluck('id')->toArray(); // Obtener las carreras asignadas
+        $this->ciclos = Ciclo::all();
+        $this->carreras = Carrera::with(['area'])->get();
+        $this->carrerasAsignadas = Ciclo::find($this->cicloId)->carreras->pluck('id')->toArray();
     }
 
     // Asignar una carrera al ciclo
@@ -62,6 +62,7 @@ class AsignarCarrerasACiclo extends Component
 
     public function render()
     {
-        return view('livewire.ciclo.asignar-carreras-a-ciclo');
+        $ciclo = Ciclo::findOrFail($this->cicloId);
+        return view('livewire.ciclo.asignar-carreras-a-ciclo', compact('ciclo'));
     }
 }
