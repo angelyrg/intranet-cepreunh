@@ -1,5 +1,5 @@
 <div>
-    <x-modal-bt modalSize="modal-lg" :modalNombre="$id ? 'Editar rol' : 'Agregar rol'">        
+    <x-modal-bt modalSize="modal-lg" :modalNombre="$id ? 'Editar rol' : 'Agregar rol'" btnClose="closeModal">        
         <form wire:submit.prevent="save">
             @csrf
             <div class="modal-body">

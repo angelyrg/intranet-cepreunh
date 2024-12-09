@@ -707,44 +707,9 @@
   <script src="{{ asset('modernize/js/extra-libs/jqbootstrapvalidation/validation.js') }}"></script>
   <script src="{{ asset('modernize/js/forms/custom-validation-init.js') }}"></script>
 
-  @yield('scripts')
   @livewireScripts
-  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script>
-    document.addEventListener('livewire:initialized', () => {
-        Livewire.on('show-alert', (event) => {
-            Swal.fire({
-                title: '¡Éxito!',
-                text: event.message,
-                icon: 'success',
-                confirmButtonText: 'OK'
-            });
-        });
-    });
 
-    function initializeTooltips() {
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[title]'))
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl)
-        });
-    }
-
-    // Inicializar tooltips cuando la página carga
-    document.addEventListener('DOMContentLoaded', function () {
-        initializeTooltips();
-    });
-
-    // Volver a inicializar tooltips después de una actualización de Livewire
-    document.addEventListener('livewire:load', function () {
-        initializeTooltips();
-    });
-
-    // Volver a inicializar tooltips después de cada actualización de Livewire
-    document.addEventListener('livewire:update', function () {
-        initializeTooltips();
-    });
-
-  </script>
+  @yield('scripts')  
 
 </body>
 

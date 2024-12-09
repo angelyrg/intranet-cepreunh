@@ -13,9 +13,11 @@ class RolList extends Component
 
     use WithPagination;
 
-    public $title = 'Roles y permisos';
-    public $showModal = false;
     public $id;
+    public $title = 'Roles y permisos';
+
+    public $showModal = false;
+    public $showModalAsignarPermiso = false;
 
     #[On('role-saved')]
     public function refreshList()
@@ -54,5 +56,25 @@ class RolList extends Component
     {
         $this->showModal = false;
     }
+
+    // jneskenz => permisos|start
+
+    #[On('modal-closed-asignar-permiso')]
+    public function hideModalAsignarPermiso()
+    {
+        $this->showModalAsignarPermiso = false;
+    }
+
+    public function showFormPermisos($roleId = null)
+    {
+
+        Log::error('data id ====> ', [$roleId]);
+        $this->id = $roleId;
+        $this->showModalAsignarPermiso = true;
+        Log::error('data id 2 ====> ', [$this->id ]);
+
+    }
+
+    // jneskenz => permisos|end
 
 }

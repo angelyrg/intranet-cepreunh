@@ -13,16 +13,16 @@
     {{-- Content|start --}}
     <div class="card w-100 position-relative overflow-hidden">
         <div class="px-4 py-3 border-bottom">
-        <h4 class="card-title mb-0">Lista de {{ $title }}</h4>
+        <h4 class="card-title mb-0">Lista de {{ $title }} {{ $id }}</h4>
         </div>
         <div class="card-body p-4">
             <div class="table-responsive table-xs mb-2 border rounded-1">
-                <table class="table text-nowrap table-borderless table-bordered table-hover table-striped mb-0 align-middle" id="tblUsuarios">
+                <table class="table text-nowrap table-sm table-borderless table-bordered table-hover table-striped mb-0 align-middle" id="tblUsuarios">
                     <thead class="text-dark fs-4">
                         <tr>
-                            <th><h6 class="fs-4 fw-semibold mb-0">ACCIONES</h6></th>
-                            <th><h6 class="fs-4 fw-semibold mb-0">ESTADO</h6></th>
-                            <th><h6 class="fs-4 fw-semibold mb-0">ROLES</h6></th>
+                            <th width="10%"><h6 class="fs-4 fw-semibold mb-0">ACCIONES</h6></th>
+                            <th width="10%"><h6 class="fs-4 fw-semibold mb-0">ESTADO</h6></th>
+                            <th><h6 class="fs-4 fw-semibold mb-0">PERMISOS</h6></th>
                             <th><h6 class="fs-4 fw-semibold mb-0">APLICACIÓN</h6></th>
                         </tr>
                     </thead>

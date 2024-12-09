@@ -295,8 +295,7 @@ $(document).ready(function() {
    document.body.addEventListener('change', async function(event) {
       if (event.target.id === 'ciclo_idCarreraciclo') {
             const idCiclo = event.target.value;
-            console.log(idCiclo);
-
+            
             try {
 
                const formData = new FormData();
@@ -312,6 +311,7 @@ $(document).ready(function() {
                } else {
                   showAlertSimple('Error', 'Hubo un problema al eliminar el registro', 'error');
                }
+               
             } catch (error) {
                console.error('Error al eliminar:', error);
                showToastr('No se pudo completar la operación','warning');

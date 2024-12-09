@@ -18,11 +18,13 @@ class PermisoForm extends Component
 
     public $guard_name = 'web';
 
-    public function mount($roleId = null)
+    public function mount($permisoId = null)
     {
 
-        if ($roleId) {
-            $rules = Permission::find($roleId);
+        // dd($permisoId);
+
+        if ($permisoId) {
+            $rules = Permission::find($permisoId);
 
             $this->id = $rules->id;
             $this->name = $rules->name;

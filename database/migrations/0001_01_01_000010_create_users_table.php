@@ -16,7 +16,14 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+            $table->string('username')->nullable();
             $table->string('password');
+            $table->unsignedBigInteger('tipos_usuarios_id');
+            $table->foreign('tipos_usuarios_id')->references('id')->on('tipos_usuarios')->onDelete('cascade');
+
+            $table->unsignedBigInteger('sede_id');
+            $table->foreign('sede_id')->references('id')->on('sedes')->onDelete('cascade');
+            
             $table->rememberToken();
             $table->timestamps();
             $table->integer('estado')->default(1);
@@ -36,6 +43,8 @@ return new class extends Migration
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
+        
+        
     }
 
     /**

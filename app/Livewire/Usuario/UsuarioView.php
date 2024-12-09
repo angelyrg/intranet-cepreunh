@@ -23,7 +23,7 @@ class UsuarioView extends Component
         $this->resetPage();
     }
 
-    #[On('usuario-seved')]
+    #[On('usuario-saved')]
     public function refreshList(){
 
     }
