@@ -4,6 +4,7 @@ namespace App\Livewire\Ciclo;
 
 use App\Models\Intranet\Banco;
 use App\Models\Intranet\Carrera;
+use App\Models\Intranet\Ciclo;
 use App\Models\Intranet\FormaDePago;
 use App\Models\Intranet\GrupoPrecio as IntranetGrupoPrecio;
 use App\Models\Intranet\Precio;
@@ -23,14 +24,33 @@ class GrupoPrecio extends Component
     public $sedes = [];
     public $sedeId;
 
+    public $gruposPrecios;
+
+
+    protected $listeners = ['asignacionCarreraActualizada' => 'actualizarDatos'];
+
+
     public function mount($cicloId)
     {
         $this->cicloId = $cicloId;
         $this->formasDePago = FormaDePago::all();
         $this->bancos = Banco::all();
-        $this->carreras = Carrera::all();
+        $this->carreras = $this->getCarrerasDisponibles();
         $this->sedes = Sede::all();
         $this->precios = $this->initializePrecios();
+
+        $this->gruposPrecios = IntranetGrupoPrecio::where('ciclo_id', $this->cicloId)
+            ->with([
+                'carreras',
+                'precios',
+                'precios.banco:id,descripcion',
+                'precios.forma_de_pago'
+            ])
+            ->get();
+    }
+
+    public function actualizarDatos(){
+        $this->carreras = $this->getCarrerasDisponibles();
     }
 
     public function initializePrecios()
@@ -54,8 +74,10 @@ class GrupoPrecio extends Component
     {
         // Validación de los campos
         $this->validate([
+            'cicloId' => 'required',
+            'sedeId' => 'required',
             'carrerasSeleccionadas' => 'required|array',
-            'precios.*.bancos.*.monto' => 'required|numeric|min:0',
+            'precios.*.bancos.*.monto' => 'numeric|min:0',
         ]);
 
         // Crear el grupo de precios
@@ -71,7 +93,7 @@ class GrupoPrecio extends Component
         foreach ($this->precios as $formaDePagoId => $formaDePagoPrecios) {
             foreach ($formaDePagoPrecios['bancos'] as $bancoId => $precio) {
                 // Solo guardar si el banco no está desasociado
-                if (!$precio['desasociado']) {
+                if (!$precio['desasociado'] && $precio['monto'] > 0) {
                     Precio::create([
                         'grupo_id' => $grupo->id,
                         'sede_id' => $this->sedeId,
@@ -84,12 +106,19 @@ class GrupoPrecio extends Component
             }
         }
 
-        // return redirect()->route('grupos_precios.index');
+        $this->carrerasSeleccionadas = [];
     }
 
-    /**
-     * Método para seleccionar/deseleccionar todas las carreras
-     */
+    public function getCarrerasDisponibles()
+    {
+        return Carrera::with(['area', 'carrera_ciclo'])
+        ->whereHas('carrera_ciclo', function($query){
+            $query->where('ciclo_id', $this->cicloId);
+        })->whereDoesntHave('grupo_precios', function ($query) {
+            $query->where('ciclo_id', $this->cicloId);
+        })->get();
+    }
+
     public function seleccionarTodas($seleccionar)
     {
         if ($seleccionar) {
@@ -103,6 +132,8 @@ class GrupoPrecio extends Component
 
     public function render()
     {
-        return view('livewire.ciclo.grupo-precio');
+        $this->mount($this->cicloId);
+        $ciclo = Ciclo::findOrFail($this->cicloId);
+        return view('livewire.ciclo.grupo-precio', compact('ciclo'));
     }
 }

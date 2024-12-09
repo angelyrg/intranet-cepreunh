@@ -83,40 +83,52 @@
 
                 <div class="row">
                     <div class="col-md-4 mb-3">
-                            <label for="sede_id" class="form-label">Modalidad de pago</label>
-                        <select name="sede_id" id="sede_id" class="form-select @error('sede_id') is-invalid @enderror" required>
-                            @foreach ($ciclo->precios as $precio)
-                            <option value="{{ $precio->id }}">
-                                {{ $precio->forma_de_pago->descripcion }} - S/{{ number_format($precio->monto, 2) }}
+                        <label for="forma_de_pago_id" class="form-label">Modalidad de pago</label>
+                        <select name="forma_de_pago_id" id="forma_de_pago_id" class="form-select @error('forma_de_pago_id') is-invalid @enderror" required>
+                            @foreach ($formasDePago as $modalidad)
+                            <option value="{{ $modalidad->id }}">
+                                {{ $modalidad->descripcion }}
                             </option>
                             @endforeach
                         </select>
-                        @error('sede_id')
+                        @error('forma_de_pago_id')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                        <div class="monto"></div>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="banco_id" class="form-label">Banco</label>
+                        <select name="banco_id" id="banco_id" class="form-select @error('banco_id') is-invalid @enderror" required>
+                            @foreach ($bancos as $banco)
+                            <option value="{{ $banco->id }}">
+                                {{ $banco->descripcion }}
+                            </option>
+                            @endforeach
+                        </select>
+                        @error('banco_id')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
 
                     <div class="col-md-4 mb-3">
                         <label for="monto" class="form-label">Monto</label>
-                        <input name="monto" id="monto" class="form-control @error('monto') is-invalid @enderror" required autocomplete="off" />
+                        <input name="monto" type="number" id="monto" class="form-control @error('monto') is-invalid @enderror" required
+                            autocomplete="off" />
                         @error('monto')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="col-md-4 mb-3">
-                        <label for="banco" class="form-label">Banco</label>
-                        <input name="banco" id="banco" class="form-control @error('banco') is-invalid @enderror" required  />
-                        @error('banco')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
 
                 </div>
 
+                <div class="row">
+                    <div class="col text-end">
+                        <button type="submit" class="btn btn-primary px-8">Continuar</button>
+                    </div>
+                </div>
             </div>
 
-            <button type="submit" class="btn btn-primary px-8">Continuar</button>
         </form>
 
         <!-- Mostrar todos los errores -->

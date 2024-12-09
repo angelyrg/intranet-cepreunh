@@ -5,9 +5,14 @@ namespace App\Http\Controllers\Intranet;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Ciclos\StoreCicloRequest;
 use App\Http\Requests\Ciclos\UpdateCicloRequest;
+use App\Livewire\Ciclo\GrupoPrecio;
 use App\Models\Intranet\Area;
+use App\Models\Intranet\Banco;
+use App\Models\Intranet\Carrera;
 use App\Models\Intranet\Ciclo;
 use App\Models\Intranet\Docente;
+use App\Models\Intranet\FormaDePago;
+use App\Models\Intranet\Precio;
 use App\Models\Intranet\TiposCiclos;
 use Carbon\Carbon;
 use DateTime;
@@ -104,7 +109,7 @@ class CicloController extends Controller
         $ciclo = Ciclo::with([
             'asignaturaCiclos',
             'tipo_ciclo',
-            'carreras',
+            'carreras.area',
             'asignaturas',
             'matriculas',
             'precios',
@@ -119,14 +124,22 @@ class CicloController extends Controller
             return $diasDeLaSemana[$dia] ?? '';
         }, $ciclo->dias_lectivos);
 
+        $bancos = Banco::all();
+        $formasDePago = FormaDePago::all();
+        $precios = Precio::where('ciclo_id', $ciclo->id)->get();
+        $preciosAgrupados = $precios->groupBy('forma_de_pago_id');
 
-        return view('intranet.ciclos.show', compact('ciclo'));
+
+        $carreras = Carrera::with('area', 'grupo_precios.precios.banco', 'grupo_precios.precios.forma_de_pago')->get();
+
+
+        return view('intranet.ciclos.show', compact('ciclo', 'precios', 'preciosAgrupados', 'bancos', 'formasDePago', 'carreras'));
     }
 
 
     private function getData()
     {
-        $ciclos = Ciclo::all();
+        $ciclos = Ciclo::with('tipo_ciclo')->get();
 
         $html = "";
         foreach ($ciclos as $item) {
@@ -207,6 +220,7 @@ class CicloController extends Controller
 
     public function matricula($ciclo)
     {
+        $ciclo = Ciclo::findOrFail($ciclo);
         $page = 'Matrícula';
         $title = 'Matrícula';
         $slug = 'Matricula';

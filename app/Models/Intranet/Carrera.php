@@ -15,7 +15,7 @@ class Carrera extends Model
         return $this->belongsTo(Area::class);
     }
 
-    function CarreraCiclo(){
+    function carrera_ciclo(){
         return $this->HasMany(CarreraCiclo::class);
     }
 

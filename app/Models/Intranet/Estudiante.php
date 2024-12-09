@@ -67,4 +67,8 @@ class Estudiante extends Model
         return $this->hasMany(Matricula::class);
     }
 
+    public function ciclos(){
+        return $this->belongsToMany(Ciclo::class);
+    }
+
 }
