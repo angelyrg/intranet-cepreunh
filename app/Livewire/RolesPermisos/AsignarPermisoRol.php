@@ -9,78 +9,95 @@ use Livewire\WithPagination;
 
 class AsignarPermisoRol extends Component
 {
-
-    public $id;
-
-    public $permisosDisponibles = [];
-
-    public $permisosAsignados = [];
-
-    // tabala 1 permisos disponibles
     use WithPagination;
-    protected $paginationTheme = 'bootstrap';
-    public $search = '';
 
-    public function updatingSearch(){
+    public $roleId;
+    public $search = '';
+    protected $paginationTheme = 'bootstrap';
+
+    public function updatingSearch()
+    {
         $this->resetPage();
     }
 
-    // tabla 2 permisos asignados
-
-
     public function mount($roleId = null)
     {
-
-        // roles disponibles
         if ($roleId) {
-            $rules = Role::find($roleId);
-
-            $this->id = $rules->id;
+            $role = Role::findOrFail($roleId);
+            $this->roleId = $role->id;
+            
+            // Fetch assigned permissions
+            $this->permisosAsignados = $role->permissions()->pluck('id')->toArray();
         }
-        // roles asignados
-
     }
 
-    public function save(){
+    public function assignPermission($permissionId)
+    {
+        if (!$this->roleId) {
+            $this->dispatch('error', message: 'Debe seleccionar un rol primero');
+            return;
+        }
 
+        $role = Role::findOrFail($this->roleId);
+        $permission = Permission::findOrFail($permissionId);
 
-        dd('permiso');
+        // Check if permission is not already assigned
+        if (!$role->permissions->contains($permission->id)) {
+            $role->permissions()->attach($permission->id);
+            
+            // Refresh assigned permissions
+            $this->permisosAsignados = $role->permissions()->pluck('id')->toArray();
+            
+            $this->dispatch('success', message: 'Permiso asignado correctamente');
+        }
+    }
 
+    public function removePermission($permissionId)
+    {
+        if (!$this->roleId) {
+            $this->dispatch('error', message: 'Debe seleccionar un rol primero');
+            return;
+        }
+
+        $role = Role::findOrFail($this->roleId);
+        $permission = Permission::findOrFail($permissionId);
+
+        $role->permissions()->detach($permission->id);
         
+        // Refresh assigned permissions
+        $this->permisosAsignados = $role->permissions()->pluck('id')->toArray();
+        
+        $this->dispatch('success', message: 'Permiso removido correctamente');
     }
 
-    public function savePermisosAsignados($permisos){
-        // foreach ($permisos as $permiso) {
-        //     if (($key = array_search($permiso, $this->permisosDisponibles)) !== false) {
-        //         unset($this->permisosDisponibles[$key]);
-        //         $this->permisosAsignados[] = $permiso;
-        //     }
-        // }
-        //TODO: MEJORAR ESTO
-    }
+    public function render()
+    {
+        // Fetch available permissions (not yet assigned to the role)
+        $query = Permission::query();
+        
+        if ($this->search) {
+            $query->where("name", "LIKE", "%{$this->search}%");
+        }
 
-    public function removePermisosAsignados(){
+        // If a role is selected, exclude already assigned permissions
+        if ($this->roleId) {
+            $assignedPermissionIds = Role::findOrFail($this->roleId)->permissions()->pluck('id');
+            $query->whereNotIn('id', $assignedPermissionIds);
+        }
 
-    }
+        $permisosDisponibles = $query->paginate(20);
 
-    public function back(){
-        dd('back');
+        // Fetch assigned permissions
+        $permisosAsignados = $this->roleId ? Role::findOrFail($this->roleId)->permissions()->get() : collect();
+
+        return view('livewire.roles-permisos.asignar-permiso-rol', [
+            'permisosDisponibles' => $permisosDisponibles,
+            'permisosAsignados' => $permisosAsignados,
+        ]);
     }
 
     public function closeModal()
     {
         $this->dispatch('modal-closed-asignar-permiso');
-    }
-    
-    public function render()
-    {
-        $permisos = Permission::where("name", "LIKE", "%{$this->search}%")->paginate(20);
-
-        // $permisosAsignados = Permission::where('role_id', $this->id)->get();
-
-        $this->permisosDisponibles = $permisos;
-        // $this->permisosAsignados = $permisos; //TODO:
-
-        return view('livewire.roles-permisos.asignar-permiso-rol');
     }
 }

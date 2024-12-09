@@ -44,7 +44,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($permisos as $permiso)
+                                            @foreach ($permisosDisponibles as $permiso)
                                             <tr>
                                                 <td class="text-center">
                                                     <input wire:model="permisosDisponibles" type="checkbox" name="permiso[]" class="form-check-input me-1" data-id="{{ $permiso->id }}" value="check">
@@ -56,7 +56,7 @@
                                     </table>
                                 </div>
                                 <div class="py-2">
-                                    {{ $permisos->links() }}
+                                    {{ $permisosDisponibles->links() }}
                                 </div>
                             </div>
                         </div>                        
@@ -76,9 +76,9 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="py-2">
-                                    <input wire:model.lazy="search" class="form-control" placeholder="Buscar permisos asignados">
+                                    {{-- <input wire:model.lazy="search" class="form-control" placeholder="Buscar permisos asignados"> --}}
                                 </div>
-                                <div class="py-2">
+                                <div class="py-2"><
                                     <table class="table table-sm table-bordered table-hover ">
                                         <thead class="text-center">
                                             <tr>
@@ -87,12 +87,10 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($permisos as $permiso)
+                                            @foreach ($permisosAsignados as $permiso)
                                                 <tr>
                                                     <td class="text-center">
-                                                        <input type="checkbox" name="permiso[]"
-                                                            class="form-check-input me-1" data-id="{{ $permiso->id }}"
-                                                            value="check">
+                                                        <input type="checkbox" name="permiso[]" class="form-check-input me-1" data-id="{{ $permiso->id }}" value="check">
                                                     </td>
                                                     <td>{{ $permiso->name }}</td>
                                                 </tr>
@@ -101,7 +99,7 @@
                                     </table>
                                 </div>
                                 <div class="py-2">
-                                    {{ $permisos->links() }}
+                                    {{-- {{ $permisosAsignados->links() }} --}}
                                 </div>                                
                             </div>
                         </div>
