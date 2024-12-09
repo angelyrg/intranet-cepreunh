@@ -12,7 +12,7 @@
                     <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a class="text-muted text-decoration-none" href="../main/index.html">Administración</a>
+                            <a class="text-muted text-decoration-none" href="#">Administración</a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">Carreras</li>
                     </ol>

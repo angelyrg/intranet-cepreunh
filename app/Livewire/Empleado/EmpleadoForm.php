@@ -10,7 +10,6 @@ use Livewire\Component;
 
 class EmpleadoForm extends Component
 {
-
     public $title = 'Empleados';
     public $id;
 

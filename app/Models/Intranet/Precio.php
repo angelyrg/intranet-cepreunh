@@ -17,5 +17,22 @@ class Precio extends Model
         'forma_de_pago_id',
         'monto',
         'fraccionado',
+        'grupo_id',
+        'banco_id'
     ];
+
+    public function forma_de_pago()
+    {
+        return $this->belongsTo(FormaDePago::class);
+    }
+
+    public function banco()
+    {
+        return $this->belongsTo(Banco::class);
+    }
+
+    public function grupo_precio()
+    {
+        return $this->belongsTo(GrupoPrecio::class, 'forma_de_pago_id');
+    }
 }

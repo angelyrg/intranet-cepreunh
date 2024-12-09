@@ -14,17 +14,17 @@ return new class extends Migration
         Schema::create('precios', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('forma_de_pago_id');
-            $table->foreign('forma_de_pago_id')->references('id')->on('formas_de_pago');
+            $table->unsignedBigInteger('forma_de_pago_id')->nullable();
+            $table->foreign('forma_de_pago_id')->references('id')->on('formas_de_pago')->onDelete('set null');
 
             $table->unsignedBigInteger('ciclo_id');
-            $table->foreign('ciclo_id')->references('id')->on('ciclos');
+            $table->foreign('ciclo_id')->references('id')->on('ciclos')->onDelete('cascade');
 
             $table->unsignedBigInteger('sede_id');
-            $table->foreign('sede_id')->references('id')->on('sedes');
+            $table->foreign('sede_id')->references('id')->on('sedes')->onDelete('cascade');
 
-            $table->unsignedBigInteger('area_id');
-            $table->foreign('area_id')->references('id')->on('areas');
+            $table->unsignedBigInteger('area_id')->nullable();
+            $table->foreign('area_id')->references('id')->on('areas')->onDelete('set null');
 
             $table->decimal('monto', 10, 2);
             $table->boolean('fraccionado')->default(false);

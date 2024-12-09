@@ -27,8 +27,8 @@ class Estudiante extends Model
         'whatsapp',
         'correo_personal',
         'correo_institucional',
-        'discapacidad',
-        'discapacid_detalle',
+        'tiene_discapacidad',
+        'discapacidades',
         'identidad_etnica_id',
         'nacimiento_ubigeodepartamento_id',
         'nacimiento_ubigeoprovincia_id',
@@ -65,6 +65,10 @@ class Estudiante extends Model
 
     public function matriculas(){
         return $this->hasMany(Matricula::class);
+    }
+
+    public function ciclos(){
+        return $this->belongsToMany(Ciclo::class);
     }
 
 }

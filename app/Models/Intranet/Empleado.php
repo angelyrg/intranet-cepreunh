@@ -22,7 +22,7 @@ class Empleado extends Model
         'correo_personal',
         'correo_institucional',
         'departamento_id',
-        
+        'sede_id',
         'estado',
         'created_at',
         'updated_at'

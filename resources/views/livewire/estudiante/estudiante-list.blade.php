@@ -11,7 +11,7 @@
                     <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a class="text-muted text-decoration-none" href="../main/index.html">Administración</a>
+                            <a class="text-muted text-decoration-none" href="#">Administración</a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">Estudiantes</li>
                     </ol>
@@ -47,6 +47,7 @@
                         <th><h6 class="fs-4 fw-semibold mb-0">NOMBRES</h6></th>
                         <th><h6 class="fs-4 fw-semibold mb-0">AP. PATERNO</h6></th>
                         <th><h6 class="fs-4 fw-semibold mb-0">AP. MATERNO</h6></th>
+                        <th><h6 class="fs-4 fw-semibold mb-0">N° DOC</h6></th>
                         <th><h6 class="fs-4 fw-semibold mb-0">CORREO INSTITUCIONAL</h6></th>
                         <th><h6 class="fs-4 fw-semibold mb-0">TELÉFONO</h6></th>
                     </tr>
@@ -72,6 +73,7 @@
                             <td>{{ $student->nombres }}</td>
                             <td>{{ $student->apellido_paterno }}</td>
                             <td>{{ $student->apellido_materno }}</td>
+                            <td>{{ $student->nro_documento }}</td>
                             <td>{{ $student->correo_institucional }}</td>
                             <td>{{ $student->telefono_personal }}</td>                            
                         </tr>

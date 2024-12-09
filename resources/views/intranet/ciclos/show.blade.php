@@ -37,7 +37,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
                         <h5 class="card-title fw-semibold">{{ $ciclo->descripcion }}</h5>
-                        <p class="card-subtitle">Detalles el ciclo académico</p>
+                        <p class="card-subtitle">Detalles del ciclo académico</p>
                     </div>
                     <div>
                         @if($ciclo->estado == 1)
@@ -58,15 +58,9 @@
                             </div>
                         </div>
                         <div class="row">
-                            <label class="control-label text-end col-md-7">Días lectivos:</label>
+                            <label class="control-label text-end col-md-7">Duración:</label>
                             <div class="col-md-5">
-                                <p class="form-control-static mb-0">{{ $ciclo->id }}</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label class="control-label text-end col-md-7">Ficha socioeconómica:</label>
-                            <div class="col-md-5">
-                                <p class="form-control-static mb-0">{{ $ciclo->id }}</p>
+                                <p class="form-control-static mb-0">{{ $ciclo->duracion }} semanas</p>
                             </div>
                         </div>
                     </div>
@@ -84,31 +78,24 @@
                                 <p class="form-control-static mb-0">{{ $ciclo->fecha_fin }}</p>
                             </div>
                         </div>
-                        <div class="row">
-                            <label class="control-label text-end col-md-7">Duración:</label>
-                            <div class="col-md-5">
-                                <p class="form-control-static mb-0">{{ $ciclo->duracion }} semanas</p>
-                            </div>
-                        </div>
                     </div>
                     
                 </div>
 
-                {{-- <div class="position-relative">
-                    <div class="d-flex align-items-center justify-content-between mb-4">
-                        <div class="d-flex">
-                            <div class="p-8 bg-primary-subtle rounded-2 d-flex align-items-center justify-content-center me-6">
-                                <img src="#" alt="" class="img-fluid" width="24" height="24">
-                            </div>
-                            <div>
-                                <h6 class="mb-1 fs-4 fw-semibold">PayPal</h6>
-                                <p class="fs-3 mb-0">Big Brands</p>
+                <div class="row mt-4">
+                    <div class="col d-flex align-items-center">
+                        <label class="control-label text-end me-3">Días lectivos: </label>
+                        <div>
+                            <div class="d-flex gap-3 flex-wrap">
+                                @foreach ($ciclo->dias_lectivos_texto as $dia)
+                                <div class="bg-primary-subtle rounded-2 py-2 px-3 d-flex align-items-center justify-content-center">
+                                    <small>{{ $dia }}</small>
+                                </div>
+                                @endforeach
                             </div>
                         </div>
-                        <h6 class="mb-0 fw-semibold">+$6,235</h6>
                     </div>
                 </div>
-                <button class="btn btn-outline-primary w-100">View all transactions</button> --}}
             </div>
         </div>
     </div>
@@ -118,155 +105,162 @@
             <div class="card-header">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <h5 class="card-title fw-semibold">Carreras</h5>
-                    </div>
-                    <div>
-                        <span class="badge fw-semibold py-1 bg-primary-subtle text-primary">
-                            <small>{{ count($ciclo->carreras) }}</small>
-                        </span>
+                        <h5 class="card-title fw-semibold">Opciones</h5>
                     </div>
                 </div>
             </div>
-            <div class="card-body p-4">
-                {{-- {{ $ciclo->carreras }}
-                <div class="position-relative">
-                    <div class="d-flex align-items-center justify-content-between mb-4">
-                        <div class="d-flex">
-                            <div
-                                class="p-8 bg-primary-subtle rounded-2 d-flex align-items-center justify-content-center me-6">
-                                <img src="#" alt="" class="img-fluid" width="24" height="24">
-                            </div>
-                            <div>
-                                <h6 class="mb-1 fs-4 fw-semibold">PayPal</h6>
-                                <p class="fs-3 mb-0">Big Brands</p>
-                            </div>
-                        </div>
-                        <h6 class="mb-0 fw-semibold">+$6,235</h6>
+            <div class="card-body p-4 pt-0">
+                <div class="d-flex flex-column gap-2">
+                    <div>
+                        @if($ciclo->estado == 1)
+                            <a class="btn btn-primary d-block" href={{ route('ciclos.matricula', $ciclo->id) }}>Matricular estudiante</a>
+                        @endif
                     </div>
-                </div> --}}
-                <button class="btn btn-outline-primary w-100">Ver carreras</button>
+                    <div>
+                        <button type="button" class="btn btn-outline-primary w-100 d-block" data-bs-toggle="modal"
+                            data-bs-target="#modalCarreras">
+                            <span>Carreras</span>
+                        </button>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-outline-primary w-100 d-block" data-bs-toggle="modal"
+                            data-bs-target="#modalAsignaturas">
+                            <span>Asignaturas</span>
+                        </button>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-outline-primary w-100 d-block" data-bs-toggle="modal" data-bs-target="#modalPrecios">
+                            Precios
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
 </div>
-
 
 <div class="row">
     <div class="col-12">
         <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Matrículas</h5>
+            </div>
             <div class="card-body">
-                <div>
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link d-flex active" data-bs-toggle="tab" href="#home2" role="tab"
-                                aria-selected="true">
-                                <span><i class="ti ti-school fs-4"></i></span>
-                                <span class="d-none d-md-block ms-2">Estudiantes</span>
-                            </a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link d-flex" data-bs-toggle="tab" href="#profile2" role="tab" aria-selected="false"
-                                tabindex="-1">
-                                <span><i class="ti ti-network fs-4"></i></span>
-                                <span class="d-none d-md-block ms-2">Carreras</span>
-                            </a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link d-flex" data-bs-toggle="tab" href="#messages2" role="tab" aria-selected="false"
-                                tabindex="-1">
-                                <span><i class="ti ti-books"></i></span>
-                                <span class="d-none d-md-block ms-2">Asignaturas</span>
-                            </a>
-                        </li>
-                    </ul>
-                    <!-- Tab panes -->
-                    <div class="tab-content">
-                        <div class="tab-pane active show" id="home2" role="tabpanel">
-                            <div class="p-3">
-
-                                <div class="table-responsive">
-                                    <table class="table search-table align-middle text-nowrap table-striped">
-                                        <thead class="header-item">
-                                            <tr>
-                                                <th>Nro Documento</th>
-                                                <th>Nombres</th>
-                                                <th>Apellidos</th>
-                                                <th>Género</th>
-                                                <th>Estado Civil</th>
-                                                <th>Area</th>
-                                                <th>Carrera</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($ciclo->matriculas as $matricula)   
-                                            <tr class="search-items">
-                                                <td>
-                                                    {{ $matricula->estudiante->nro_documento }}
-                                                </td>
-                                                <td>
-                                                    {{ $matricula->estudiante->nombres }}
-                                                </td>
-                                                <td>
-                                                    {{ $matricula->estudiante->apellido_paterno." ".$matricula->estudiante->apellido_materno }}
-                                                </td>
-                                                <td>
-                                                    {{ $matricula->estudiante->genero->descripcion }}
-                                                </td>
-                                                <td>
-                                                    {{ $matricula->estudiante->estado_civil->descripcion }}
-                                                </td>
-                                                <td>
-                                                    {{ $matricula->area->descripcion }}
-                                                </td>
-                                                <td>
-                                                    {{ $matricula->carrera->descripcion }}
-                                                </td>
-                                                <td>
-                                                    <div class="action-btn">
-                                                        <a href="javascript:void(0)" class="text-info edit">
-                                                            <i class="ti ti-eye fs-5"></i>
-                                                        </a>
-                                                        <a href="javascript:void(0)" class="text-dark delete ms-2">
-                                                            <i class="ti ti-trash fs-5"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            @endforeach
-
-                                        </tbody>
-                                    </table>
-                                </div>
-                                
-                            </div>
-                        </div>
-                        <div class="tab-pane p-3" id="profile2" role="tabpanel">
-                            <h3>Carreras</h3>
-                            <h4>you can use it with the small code</h4>
-                            <p>
-                                Donec pede justo, fringilla vel, aliquet nec,
-                                vulputate eget, arcu. In enim justo, rhoncus ut,
-                                imperdiet a.
-                            </p>
-                        </div>
-                        <div class="tab-pane p-3" id="messages2" role="tabpanel">
-                            <h3>Asignaturas</h3>
-                            <h4>you can use it with the small code</h4>
-                            <p>
-                                Donec pede justo, fringilla vel, aliquet nec,
-                                vulputate eget, arcu. In enim justo, rhoncus ut,
-                                imperdiet a.
-                            </p>
-                        </div>
-                    </div>
+                <div class="table-responsive">
+                    <table class="table search-table align-middle text-nowrap table-striped">
+                        <thead class="header-item">
+                            <tr>
+                                <th>#</th>
+                                <th>Nro Documento</th>
+                                <th>Nombres</th>
+                                <th>Apellidos</th>
+                                <th>Género</th>
+                                <th>Estado Civil</th>
+                                <th>Area</th>
+                                <th>Carrera</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if ($ciclo->matriculas->isNotEmpty())
+                            @foreach ($ciclo->matriculas as $index => $matricula)
+                            <tr class="search-items">
+                                <td>
+                                    {{ ($index+1) }}
+                                </td>
+                                <td>
+                                    {{ $matricula->estudiante->nro_documento }}
+                                </td>
+                                <td>
+                                    {{ $matricula->estudiante->nombres }}
+                                </td>
+                                <td>
+                                    {{ $matricula->estudiante->apellido_paterno." ".$matricula->estudiante->apellido_materno }}
+                                </td>
+                                <td>
+                                    {{ $matricula->estudiante->genero->descripcion }}
+                                </td>
+                                <td>
+                                    {{ $matricula->estudiante->estado_civil->descripcion }}
+                                </td>
+                                <td>
+                                    {{ $matricula->area->descripcion }}
+                                </td>
+                                <td>
+                                    {{ $matricula->carrera->descripcion }}
+                                </td>
+                            </tr>
+                            @endforeach
+                            @else
+                            <tr>
+                                <td colspan="8" class="text-center">No hay matrículas disponibles.</td>
+                            </tr>
+                            @endif
+                        </tbody>
+                    </table>
                 </div>
+                <hr>
+                {{-- @livewire('ciclo.matriculas-table', ['cicloId' => $ciclo->id]) --}}
             </div>
         </div>
     </div>
 </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="modalCarreras" tabindex="-1" aria-labelledby="modalCarrerasLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modalCarrerasLabel">Carreras del ciclo</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @livewire('ciclo.asignar-carreras-a-ciclo', ['cicloId' => $ciclo->id])
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalAsignaturas" tabindex="-1" aria-labelledby="modalAsignaturasLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modalAsignaturasLabel">Asignaturas del ciclo</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @livewire('ciclo.asignar-asignaturas-a-ciclo', ['cicloId' => $ciclo->id])
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalPrecios" tabindex="-1" aria-labelledby="modalPreciosLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modalPreciosLabel">Precios del ciclo</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @livewire('ciclo.grupo-precio', ['cicloId' => $ciclo->id])
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {{-- content|end --}}
 
 @endsection

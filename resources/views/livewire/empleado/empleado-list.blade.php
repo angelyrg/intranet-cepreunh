@@ -67,7 +67,14 @@
                                     <td>{{ $empleado->departamento->descripcion }}</td>
                                     <td>{{ $empleado->nombres }}</td>
                                     <td>{{ $empleado->apellido_paterno }} {{ $empleado->apellido_materno }}</td>                          
-                                    <td>{{ $empleado->telefono_personal }} | {{ $empleado->whatsapp }}</td>                          
+                                    <td>{{ $empleado->telefono_personal }} | {{ $empleado->whatsapp }}</td>
+                                    <td>
+                                        @if($empleado->sede_id)
+                                            {{ $empleado->sede->descripcion }}
+                                        @else
+                                            <small class="fst-italic">Sin sede</small>
+                                        @endif
+                                    </td>                         
                                     <td>
                                         <a role="button" wire:click="copyCorreo('{{ $empleado->correo_personal }}')" title="{{ $empleado->correo_personal }}">
                                             {{Str::limit($empleado->correo_personal, 15) ?? '' }}
@@ -93,13 +100,13 @@
 
     
 
-    {{-- Modal|docentes|atart --}}
+    {{-- Modal|empleados|atart --}}
     @if($showModal)
         <livewire:empleado.empleado-form :empleado-id="$id" wire:key="{{ $id ?? 'create' }}" />
     @endif
     @if($showModalAsignarRolUsuario)
         <livewire:empleado.asignar-rol-usuario :empleado-id="$id" wire:key="{{ $id ?? 'create' }}" />
     @endif
-    {{-- Modal|docentes|end --}}
+    {{-- Modal|empleados|end --}}
     
 </div>
