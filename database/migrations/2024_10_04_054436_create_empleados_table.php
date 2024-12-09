@@ -31,6 +31,13 @@ return new class extends Migration
             $table->unsignedBigInteger('departamento_id')->default(1);
             $table->foreign('departamento_id')->references('id')->on('departamentos');
 
+            
+            // user
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users');
+            
+            $table->boolean('estado')->default(true);
+
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable();
         });

@@ -21,18 +21,18 @@ class EmpleadoFactory extends Factory
     public function definition(): array
     {
         return [
-            'tipo_documento_id' => $this->faker->randomElement([1, 2, 3]), // IDs que correspondan a los tipos de documento
-            'nro_documento' => $this->faker->unique()->numerify('########'), // 8 dígitos de documento
+            'tipo_documento_id' => $this->faker->randomElement([1, 2, 3]),
+            'nro_documento' => $this->faker->unique()->numerify('########'),
             'nombres' => $this->faker->firstName . ' ' . $this->faker->lastName,
             'apellido_paterno' => $this->faker->lastName,
             'apellido_materno' => $this->faker->lastName,
-            'fecha_nacimiento' => $this->faker->date('Y-m-d', '2000-01-01'), // Fecha en formato Y-m-d
-            'pais_nacimiento' => $this->faker->randomElement([140, 141, 142]), // IDs que correspondan a los países
-            'telefono_personal' => $this->faker->phoneNumber,
-            'whatsapp' => $this->faker->phoneNumber,
+            'fecha_nacimiento' => $this->faker->date('Y-m-d', '2000-01-01'),
+            'pais_nacimiento' => $this->faker->randomElement([140, 141, 142]),
+            'telefono_personal' => $this->faker->numerify('##########'), 
+            'whatsapp' => $this->faker->numerify('##########'),
             'correo_personal' => $this->faker->unique()->safeEmail,
             'correo_institucional' => $this->faker->optional()->safeEmail,
-            'departamento_id' => $this->faker->randomElement([1]), // IDs de departamentos
+            'departamento_id' => $this->faker->randomElement([1,2,3,4]),
         ];
     }
 }

@@ -65,9 +65,13 @@
       <li class="sidebar-item">
         <a class="sidebar-link" href="{{ route('roles.index') }}" aria-expanded="false">
           <span>
+<<<<<<< HEAD
+            <i class="ti ti-clipboard-list"></i>
+=======
             <i class="ti ti-user-shield"></i>
+>>>>>>> 66cb1c25b2fa7e7e3408bdffb0beda7230156fab
           </span>
-          <span class="hide-menu">Roles</span>
+          <span class="hide-menu">Roles y permisos</span>
         </a>
       </li>
       <li class="sidebar-item">

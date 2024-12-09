@@ -3,7 +3,7 @@
 @section('content')
     @livewire('roles-permisos.permiso-view')
 @endsection
-    
+
 @section('scripts')
 
 @endsection

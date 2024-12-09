@@ -24,7 +24,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = ['name','username','password','email','estado'];
+    protected $fillable = ['name','username','password','email','estado','sede_id','tipos_usuarios_id'];
 
     
     /**
@@ -48,6 +48,14 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function tiposUsuarios(){
+        return $this->belongsTo(TiposUsuarios::class, 'tipo_usuario_id');
+    }
+
+    public function empleados(){
+        return $this->hasMany(Empleado::class, 'usuario_id');
     }
 
     // public function role(){

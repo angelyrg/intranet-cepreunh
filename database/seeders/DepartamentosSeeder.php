@@ -13,8 +13,22 @@ class DepartamentosSeeder extends Seeder
      */
     public function run(): void
     {
-        Departamento::create([
-            'descripcion' => 'Gerente',
-        ]);
+
+        $campos = [
+            [
+                'descripcion' => 'Gerente',
+            ],
+            [
+                'descripcion' => 'Administrativo',
+            ],
+            [
+                'descripcion' => 'Contabilidad',
+            ],
+            [
+                'descripcion' => 'Taller',
+            ],
+        ];
+
+        Departamento::insert($campos);
     }
 }
