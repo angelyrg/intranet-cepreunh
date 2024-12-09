@@ -159,6 +159,7 @@
                                 <th>Estado Civil</th>
                                 <th>Area</th>
                                 <th>Carrera</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -189,6 +190,13 @@
                                 <td>
                                     {{ $matricula->carrera->descripcion }}
                                 </td>
+                                <th>
+                                    <div class="action-btn">
+                                        <a href="{{ route('matricula.show', $matricula->id) }}" class="text-info edit">
+                                            <i class="ti ti-eye fs-5"></i>
+                                        </a>
+                                    </div>
+                                </th>
                             </tr>
                             @endforeach
                             @else
