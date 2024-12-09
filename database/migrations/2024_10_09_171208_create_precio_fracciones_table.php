@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
 
             $table->unsignedBigInteger('precio_id');
-            $table->foreign('precio_id')->references('id')->on('precios');
+            $table->foreign('precio_id')->references('id')->on('precios')->onDelete('cascade');
 
             $table->decimal('monto', 10, 2);
             $table->date('fecha_limite')->nullable();

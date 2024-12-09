@@ -59,6 +59,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('matricula/create', [MatriculaController::class, 'create'])->name('matricula.create');
     Route::post('matricula/store', [MatriculaController::class, 'store'])->name('matricula.store');
     Route::get('matricula/{matricula}/show', [MatriculaController::class, 'show'])->name('matricula.show');
+    Route::get('matricula/{matricula}/descargar', [MatriculaController::class, 'descargar'])->name('matricula.descargar');
 
     // Route::resource('matriculas', MatriculaController::class)->names('matriculas');
 

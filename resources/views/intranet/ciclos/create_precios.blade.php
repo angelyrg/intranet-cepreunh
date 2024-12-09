@@ -9,7 +9,7 @@
         <div class="card-body px-4 py-3">
             <div class="row align-items-center">
                 <div class="col-12">
-                    <h4 class="fw-semibold mb-8">Selecionar carreas</h4>
+                    <h4 class="fw-semibold mb-8">Precios del ciclo</h4>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
@@ -21,7 +21,7 @@
                             <li class="breadcrumb-item">
                                 <a class="text-muted text-decoration-none" href="{{ route('ciclos.show', $ciclo->id) }}">{{ $ciclo->descripcion }}</a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Configurar precios</li>
+                            <li class="breadcrumb-item active" aria-current="page">Precios</li>
                         </ol>
                     </nav>
                 </div>
