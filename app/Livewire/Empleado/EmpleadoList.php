@@ -32,7 +32,8 @@ class EmpleadoList extends Component
     public function render()
     {
 
-        $empleados = Empleado::where("nombres", "LIKE", "%{$this->search}%")->paginate(10);
+        // order by empleaos.id desc
+        $empleados = Empleado::with(['departamento', 'sede'])->where("nombres", "LIKE", "%{$this->search}%")->orderBy('id', 'desc')->paginate(10);
 
         return view('livewire.empleado.empleado-list', compact('empleados'));
     }

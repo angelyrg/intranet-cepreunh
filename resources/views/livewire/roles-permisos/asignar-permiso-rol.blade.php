@@ -28,12 +28,12 @@
                     </div> --}}
                 </div>
                 <div class="col-lg-5">
-                    <form wire:submit.prevent="save" id="formPermisosDisponibles">
+                    <form wire:submit.prevent="savePermisosAsignados" id="formPermisosDisponibles">
                         @csrf
                         <div class="card">
                             <div class="card-body">
                                 <div class="py-2">
-                                    <input wire:model.lazy="search" class="form-control" placeholder="Buscar registro de permisos">
+                                    {{-- <input wire:model.lazy="search" class="form-control" placeholder="Buscar registro de permisos"> --}}
                                 </div>                                
                                 <div class="py-2">
                                     <table class="table table-sm table-bordered table-hover ">
@@ -44,26 +44,26 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($permisosDisponibles as $permiso)
+                                            @foreach ($listPermisosDisponibles as $permiso)
                                             <tr>
                                                 <td class="text-center">
-                                                    <input wire:model="permisosDisponibles" type="checkbox" name="permiso[]" class="form-check-input me-1" data-id="{{ $permiso->id }}" value="check">
+                                                    <input type="checkbox" wire:model="permisosDisponiblesSelect"  name="permiso[]" class="form-check-input me-1" data-id="{{ $permiso->id }}" value="{{ $permiso->name }}">
                                                 </td>
                                                 <td>{{ $permiso->name }}</td>
                                             </tr>
                                             @endforeach
-                                        </tbody>
-                                    </table>
+                                        </tbody>                                        
+                                    </table>                                
                                 </div>
                                 <div class="py-2">
-                                    {{ $permisosDisponibles->links() }}
+                                    {{-- {{ $listPermisosDisponibles->links() }} --}}
                                 </div>
                             </div>
                         </div>                        
                     </form>
                 </div>
                 <div class="col-lg-1 d-flex flex-column justify-content-center align-items-center">
-                    <button type="submit" wire:click="savePermisosAsignados" class="btn btn-success btn-sm my-2">
+                    <button wire:click="assignPermission" class="btn btn-success btn-sm my-2">
                         <i class="fa fa-arrow-right"></i>
                     </button>
                     <button type="submit" wire:click="removePermisosAsignados" form="formPermisosAsignados" class="btn btn-danger btn-sm my-2">
@@ -78,7 +78,7 @@
                                 <div class="py-2">
                                     {{-- <input wire:model.lazy="search" class="form-control" placeholder="Buscar permisos asignados"> --}}
                                 </div>
-                                <div class="py-2"><
+                                <div class="py-2">
                                     <table class="table table-sm table-bordered table-hover ">
                                         <thead class="text-center">
                                             <tr>
@@ -87,10 +87,10 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($permisosAsignados as $permiso)
+                                            @foreach ($listPermisosAsignados as $permiso)
                                                 <tr>
                                                     <td class="text-center">
-                                                        <input type="checkbox" name="permiso[]" class="form-check-input me-1" data-id="{{ $permiso->id }}" value="check">
+                                                        <input type="checkbox" name="permiso[]" class="form-check-input me-1" data-id="{{ $permiso->id }}" value="{{ $permiso->id }}">
                                                     </td>
                                                     <td>{{ $permiso->name }}</td>
                                                 </tr>
@@ -107,7 +107,6 @@
                 </div>
             </div>
         </div>
-        <script src="{{ asset('assets/libs/treeview/tree.min.js') }}"></script>
     </x-modal-bt>
 
 </div>

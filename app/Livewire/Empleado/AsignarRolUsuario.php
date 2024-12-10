@@ -93,12 +93,43 @@ class AsignarRolUsuario extends Component
         
     }
 
-
     public function save(){
         
         logger('id: ' . $this->id);
-
         dd($this->id);
+    }
+
+    public function update(){
+        
+        logger('id: ' . $this->id);
+        // dd($this->id);
+
+        try {
+            
+            $empleado = Empleado::find($this->id);
+
+            $usuario = User::find($empleado->user_id);
+
+            if(!$usuario->id) throw new \Exception('Usuario no encontrado');
+
+            $usuario->update([
+                'sede_id' => $this->sede_id,
+                'email' => $this->correo_personal,
+                'username' => $this->username,
+                'password' => Hash::make($this->password),
+            ]);
+
+            $empleado->update([
+                'sede_id' => $this->sede_id,
+            ]);
+
+            $this->dispatch('empleado-saved');
+
+
+        } catch (\Exception $e) {
+            $this->addError('usuario', 'Error al actualizar la cuenta: ' . $e->getMessage());
+            return;
+        }
     }
 
     public function closeModalAsignarRolUsuario()

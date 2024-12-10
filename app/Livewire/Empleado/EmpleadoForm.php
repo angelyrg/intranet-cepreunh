@@ -128,7 +128,7 @@ class EmpleadoForm extends Component
 
     public function closeModal()
     {
-        $this->dispatch('modal-closed');
+        $this->dispatch('empleados-modal-closed');
         $this->reset([
             'id',
             'nombres',

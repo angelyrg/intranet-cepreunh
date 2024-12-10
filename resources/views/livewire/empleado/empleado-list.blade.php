@@ -30,6 +30,7 @@
                                 <th><h6 class="fs-2 fw-bold py-1 mb-0">NOMBRES</h6></th>
                                 <th><h6 class="fs-2 fw-bold py-1 mb-0">APELLIDOS</h6></th>
                                 <th><h6 class="fs-2 fw-bold py-1 mb-0">TELÉFONO | WHATSAPP</h6></th>
+                                <th><h6 class="fs-2 fw-bold py-1 mb-0">SEDE</h6></th>
                                 <th><h6 class="fs-2 fw-bold py-1 mb-0">CORREO</h6></th>
                                 <th><h6 class="fs-2 fw-bold py-1 mb-0">CORREO INSTITUCIONAL</h6></th>
                             </tr>
@@ -69,20 +70,21 @@
                                     <td>{{ $empleado->apellido_paterno }} {{ $empleado->apellido_materno }}</td>                          
                                     <td>{{ $empleado->telefono_personal }} | {{ $empleado->whatsapp }}</td>
                                     <td>
-                                        @if($empleado->sede_id)
+                                        {{ $empleado->sede->descripcion }}
+                                        {{-- @if($empleado->sede_id)
                                             {{ $empleado->sede->descripcion }}
                                         @else
                                             <small class="fst-italic">Sin sede</small>
-                                        @endif
+                                        @endif --}}
                                     </td>                         
                                     <td>
                                         <a role="button" wire:click="copyCorreo('{{ $empleado->correo_personal }}')" title="{{ $empleado->correo_personal }}">
-                                            {{Str::limit($empleado->correo_personal, 15) ?? '' }}
+                                            {{Str::limit($empleado->correo_personal ?? '', 15) }}
                                         </a>
                                     </td>                          
                                     <td>
                                         <a role="button" wire:click="copyCorreo('{{ $empleado->correo_institucional }}')" title="{{ $empleado->correo_institucional }}">
-                                            {{Str::limit($empleado->correo_institucional, 15) ?? '' }}
+                                            {{Str::limit($empleado->correo_institucional ?? '', 15) }}
                                         </a>
                                     </td>                    
                                 </tr>
