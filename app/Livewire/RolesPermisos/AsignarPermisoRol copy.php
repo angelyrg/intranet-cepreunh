@@ -51,6 +51,8 @@ class AsignarPermisoRol extends Component
 
     public function savePermisosAsignados($permisos){
 
+        dd($permisos);
+
     }
 
     public function removePermisosAsignados(){

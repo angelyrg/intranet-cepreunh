@@ -24,7 +24,7 @@ class GenerarCuentaEmpleadoRequest extends FormRequest
         $rules = [
             'username' => 'required|unique:users,username',
             'password' => 'required',
-            // 'sede_id' => 'required',
+            'sede_id' => 'required',
             'correo_personal' => 'required|email|unique:users,email',
         ];
 
@@ -37,7 +37,7 @@ class GenerarCuentaEmpleadoRequest extends FormRequest
             'username.required' => 'El campo usuario es requerido',
             'username.unique' => 'Ya existe un usuario con este nombre de usuario, intente con otro',
             'password.required' => 'El campo contraseña es requerido',
-            // 'sede_id.required' => 'El campo sede es requerido',
+            'sede_id.required' => 'El campo sede es requerido',
             'correo_personal.required' => 'El campo correo es requerido',
             'correo_personal.email' => 'El campo correo debe ser un email válido',
             'correo_personal.unique' => 'Ya existe un usuario con este correo, intente con otro',

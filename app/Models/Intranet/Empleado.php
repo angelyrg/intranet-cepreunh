@@ -26,8 +26,7 @@ class Empleado extends Model
         'estado',
         'created_at',
         'updated_at'
-    ];      
-
+    ];
     public function tipo_documento()
     {
         return $this->belongsTo(TipoDocumento::class, 'tipo_documento_id');
@@ -36,6 +35,11 @@ class Empleado extends Model
     public function departamento()
     {
         return $this->belongsTo(Departamento::class, 'departamento_id');
+    }
+
+    public function sede()
+    {
+        return $this->belongsTo(Sede::class, 'sede_id')->withDefault(['descripcion' => 'Sin sede']);
     }
 
     // public function provincia()
