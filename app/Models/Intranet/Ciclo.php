@@ -50,9 +50,11 @@ class Ciclo extends Model
         return $this->hasMany(GrupoPrecio::class);
     }
 
+    public function aulas()
+    {
+        return $this->belongsToMany(Aula::class);
+    }
 
- 
-
-    // TODO: Agregar las relaciones: Aulas, Semanas
+    // TODO: Agregar las relaciones:  Semanas
 
 }

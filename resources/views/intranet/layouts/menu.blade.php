@@ -65,11 +65,7 @@
       <li class="sidebar-item">
         <a class="sidebar-link" href="{{ route('roles.index') }}" aria-expanded="false">
           <span>
-<<<<<<< HEAD
-            <i class="ti ti-clipboard-list"></i>
-=======
             <i class="ti ti-user-shield"></i>
->>>>>>> 66cb1c25b2fa7e7e3408bdffb0beda7230156fab
           </span>
           <span class="hide-menu">Roles y permisos</span>
         </a>
@@ -103,8 +99,6 @@
         <span class="hide-menu">ADMINISTRACIÓN</span>
       </li>
 
-      
-
       <li class="sidebar-item">
         <a class="sidebar-link" href="{{ route('sedes.index') }}" aria-expanded="false">
           <span>
@@ -113,6 +107,21 @@
           <span class="hide-menu">Sedes</span>
         </a>
       </li>
+      <li class="sidebar-item">
+        <a class="sidebar-link" href="{{ route('aulas.index') }}" aria-expanded="false">
+          <span>
+            <i class="ti ti-door"></i>
+          </span>
+          <span class="hide-menu">Aulas</span>
+        </a>
+      </li>
+
+
+      <li class="nav-small-cap">
+          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+        <span class="hide-menu">GESTIÓN CURRICULAR</span>
+      </li>
+
       <li class="sidebar-item">
         <a class="sidebar-link" href="{{ route('areas.index') }}" aria-expanded="false">
           <span>
@@ -153,11 +162,6 @@
           <span class="hide-menu">Asignaturas</span>
         </a>
       </li>
-      <li class="nav-small-cap">
-        <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-        <span class="hide-menu">GESTIÓN CURRICULAR</span>
-      </li>
-
       <li class="sidebar-item">
         <a class="sidebar-link" href="{{ route('ciclos.index') }}" aria-expanded="false">
           <span>
@@ -211,10 +215,10 @@
       <!-- ---------------------------------- -->
       <!-- Home -->
       <!-- ---------------------------------- -->
-      <li class="nav-small-cap">
+      {{-- <li class="nav-small-cap">
         <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
         <span class="hide-menu">OTROS</span>
-      </li>
+      </li> --}}
       <!-- ---------------------------------- -->
       <!-- Dashboard -->
       <!-- ---------------------------------- -->
