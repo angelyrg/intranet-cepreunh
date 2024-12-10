@@ -5,6 +5,7 @@ use App\Http\Controllers\Intranet\CarreraController;
 use App\Http\Controllers\Intranet\AreaController;
 use App\Http\Controllers\Intranet\AsignaturaCicloController;
 use App\Http\Controllers\Intranet\AsignaturaController;
+use App\Http\Controllers\Intranet\AulaController;
 use App\Http\Controllers\Intranet\CarreraCicloController;
 use App\Http\Controllers\Intranet\CicloController;
 use App\Http\Controllers\Intranet\DocenteController;
@@ -60,6 +61,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('matricula/store', [MatriculaController::class, 'store'])->name('matricula.store');
     Route::get('matricula/{matricula}/show', [MatriculaController::class, 'show'])->name('matricula.show');
     Route::get('matricula/{matricula}/descargar', [MatriculaController::class, 'descargar'])->name('matricula.descargar');
+    Route::get('matricula/{matricula}/imprimir', [MatriculaController::class, 'imprimir'])->name('matricula.imprimir');
 
     // Route::resource('matriculas', MatriculaController::class)->names('matriculas');
 
@@ -75,5 +77,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('asignaturaciclo/asignaturas', [AsignaturaCicloController::class, 'asignaturas'])->name('asignaturaciclo.asignaturas');
 
     Route::resource('precios', PrecioController::class)->names('precios');
+
+    Route::resource('aulas', AulaController::class)->except(['create', 'show', 'destroy'])->names('aulas');
+    Route::delete('aulas/{aula}/eliminar', [AulaController::class, 'eliminar'])->name('aulas.eliminar');
 
 });

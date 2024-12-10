@@ -112,11 +112,6 @@
             <div class="card-body p-4 pt-0">
                 <div class="d-flex flex-column gap-2">
                     <div>
-                        @if($ciclo->estado == 1)
-                            <a class="btn btn-primary d-block" href={{ route('ciclos.matricula', $ciclo->id) }}>Matricular estudiante</a>
-                        @endif
-                    </div>
-                    <div>
                         <button type="button" class="btn btn-outline-primary w-100 d-block" data-bs-toggle="modal"
                             data-bs-target="#modalCarreras">
                             <span>Carreras</span>
@@ -126,6 +121,12 @@
                         <button type="button" class="btn btn-outline-primary w-100 d-block" data-bs-toggle="modal"
                             data-bs-target="#modalAsignaturas">
                             <span>Asignaturas</span>
+                        </button>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-outline-primary w-100 d-block" data-bs-toggle="modal"
+                            data-bs-target="#modalAulas">
+                            <span>Aulas</span>
                         </button>
                     </div>
                     <div>
@@ -144,7 +145,17 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h5 class="card-title">Matrículas</h5>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="card-title">Matrículas</h5>
+                    <div>
+                        @if($ciclo->estado == 1)
+                        <a class="btn btn-primary d-block" href={{ route('ciclos.matricula', $ciclo->id) }}>
+                            <span><i class="ti ti-user-plus"></i></span>
+                            <span>Matricular estudiante</span>
+                        </a>
+                        @endif
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -152,13 +163,13 @@
                         <thead class="header-item">
                             <tr>
                                 <th>#</th>
-                                <th>Nro Documento</th>
+                                <th>N° Doc</th>
                                 <th>Nombres</th>
                                 <th>Apellidos</th>
                                 <th>Género</th>
-                                <th>Estado Civil</th>
                                 <th>Area</th>
                                 <th>Carrera</th>
+                                <th>Sede</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -182,13 +193,13 @@
                                     {{ $matricula->estudiante->genero->descripcion }}
                                 </td>
                                 <td>
-                                    {{ $matricula->estudiante->estado_civil->descripcion }}
-                                </td>
-                                <td>
                                     {{ $matricula->area->descripcion }}
                                 </td>
                                 <td>
                                     {{ $matricula->carrera->descripcion }}
+                                </td>
+                                <td>
+                                    {{ $matricula->sede->descripcion }}
                                 </td>
                                 <th>
                                     <div class="action-btn">
@@ -261,6 +272,24 @@
             </div>
             <div class="modal-body">
                 @livewire('ciclo.grupo-precio', ['cicloId' => $ciclo->id])
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Aulas -->
+<div class="modal fade" id="modalAulas" tabindex="-1" aria-labelledby="modalAulasLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modalAulasLabel">Aulas</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @livewire('ciclo.asignar-aulas-a-ciclo', ['cicloId' => $ciclo->id])
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cerrar</button>
