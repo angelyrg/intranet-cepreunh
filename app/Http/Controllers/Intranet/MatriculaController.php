@@ -8,6 +8,7 @@ use App\Http\Requests\Ciclos\UpdateCicloRequest;
 use App\Http\Requests\Matricula\MatriculaEstudianteRequest;
 use App\Http\Requests\Matricula\MatriculaRequest;
 use App\Models\Intranet\Area;
+use App\Models\Intranet\AulaMatricula;
 use App\Models\Intranet\Banco;
 use App\Models\Intranet\Ciclo;
 use App\Models\Intranet\Discapacidad;
@@ -18,6 +19,7 @@ use App\Models\Intranet\FormaDePago;
 use App\Models\Intranet\Genero;
 use App\Models\Intranet\IdentidadEtnica;
 use App\Models\Intranet\Matricula;
+use App\Models\Intranet\Pago;
 use App\Models\Intranet\Precio;
 use App\Models\Intranet\Sede;
 use App\Models\Intranet\TipoDocumento;
@@ -61,6 +63,7 @@ class MatriculaController extends Controller
         $identidades_etnicas = IdentidadEtnica::all();
         $discapacidades = Discapacidad::all();
 
+        // TODO: crear tabla para países
         $paises = [
             [
                 "name" => "Peru",
@@ -1494,10 +1497,33 @@ class MatriculaController extends Controller
         $tieneDiscapacidad = $request->has('tiene_discapacidad');
         $ciclo_id = $request->validated()['ciclo_id'];
 
+        // Obtener los datos validados pero solo seleccionar algunos campos
+        $validatedData = $request->validated();
+        $estudianteValidatedData = collect($validatedData)->only([
+            'tipo_documento_id',
+            'nro_documento',
+            'nombres',
+            'apellido_paterno',
+            'apellido_materno',
+            'genero_id',
+            'estado_civil_id',
+            'fecha_nacimiento',
+            'pais_nacimiento',
+            'nacionalidad',
+            'telefono_personal',
+            'whatsapp',
+            'correo_personal',
+            'correo_institucional',
+            'identidad_etnica_id',
+            'direccion',
+            'year_culminacion',
+            ])->toArray();
+
+        // Combinar los campos seleccionados con 'tiene_discapacidad'
         $estudiante = Estudiante::updateOrCreate(
             ['id' => $request->id],
             array_merge(
-                $request->validated(),
+                $estudianteValidatedData,
                 ['tiene_discapacidad' => $tieneDiscapacidad]
             )
         );
@@ -1521,7 +1547,7 @@ class MatriculaController extends Controller
         $sedes = Sede::all();
         $bancos = Banco::all();
         $formasDePago = FormaDePago::all();
-        $ciclo = Ciclo::with(['precios.forma_de_pago'])->findOrFail($ciclo_id);
+        $ciclo = Ciclo::with(['precios.forma_de_pago', 'aulas'])->findOrFail($ciclo_id);
 
         return view('intranet.matricula.create', compact(
             'ciclo_id',
@@ -1547,6 +1573,23 @@ class MatriculaController extends Controller
             'sede_id' => $validatedData['sede_id'],
         ]);
 
+        $pago = Pago::create([
+            'matricula_id' => $matricula->id,
+            'banco_id' => $validatedData['banco_id'],
+            'cod_operacion' => $validatedData['cod_operacion'],
+            'descripcion_pago' => $validatedData['descripcion_pago'],
+            'n_transaccion' => $validatedData['n_transaccion'],
+            'monto' => $validatedData['monto'],
+            'comision' => $validatedData['comision'],
+            'monto_neto' => $validatedData['monto_neto'],
+            'fecha_pago' => $validatedData['fecha_pago'],
+        ]);
+        
+        $pago = AulaMatricula::create([
+            'matricula_id' => $matricula->id,
+            'aula_ciclo_id' => $validatedData['aula_ciclo_id'],
+        ]);
+
         return redirect()->route('matricula.show', [$matricula]);
     }
 
@@ -1556,6 +1599,72 @@ class MatriculaController extends Controller
         $matricula = Matricula::findOrFail($id);
         return view('intranet.matricula.show', compact('matricula'));
     }
+
+    public function edit(string $id)
+    {
+        $matricula = Matricula::findOrFail($id);
+
+        $ciclo_id = $matricula->ciclo_id;
+        $estudiante_id = $matricula->estudiante_id;
+
+        $areas = Area::all();
+        $sedes = Sede::all();
+        $bancos = Banco::all();
+        $formasDePago = FormaDePago::all();
+        $ciclo = Ciclo::with(['precios.forma_de_pago', 'aulas'])->findOrFail($ciclo_id);
+
+        return view('intranet.matricula.edit', compact(
+            'matricula',
+            'ciclo_id',
+            'ciclo',
+            'estudiante_id',
+            'areas',
+            'sedes',
+            'bancos',
+            'formasDePago'
+        ));
+    }
+
+    public function update(MatriculaRequest $request, string $id)
+    {
+        // Validar los datos del formulario
+        $validatedData = $request->validated();
+
+        // Obtener la matrícula
+        $matricula = Matricula::findOrFail($id);
+
+        // Actualizar la matrícula
+        $matricula->update([
+            'ciclo_id' => $validatedData['ciclo_id'],
+            'estudiante_id' => $validatedData['estudiante_id'],
+            'area_id' => $validatedData['area_id'],
+            'carrera_id' => $validatedData['carrera_id'],
+            'sede_id' => $validatedData['sede_id'],
+        ]);
+
+        // Actualizar el pago asociado
+        $pago = Pago::where('matricula_id', $matricula->id)->first();
+        $pago->update([
+            'banco_id' => $validatedData['banco_id'],
+            'cod_operacion' => $validatedData['cod_operacion'],
+            'descripcion_pago' => $validatedData['descripcion_pago'],
+            'n_transaccion' => $validatedData['n_transaccion'],
+            'monto' => $validatedData['monto'],
+            'comision' => $validatedData['comision'],
+            'monto_neto' => $validatedData['monto_neto'],
+            'fecha_pago' => $validatedData['fecha_pago'],
+        ]);
+
+        // Actualizar el aula matriculada
+        $aulaMatricula = AulaMatricula::where('matricula_id', $matricula->id)->first();
+        $aulaMatricula->update([
+            'aula_ciclo_id' => $validatedData['aula_ciclo_id'],
+        ]);
+
+        // Redirigir a la vista de la matrícula actualizada
+        return redirect()->route('matricula.show', [$matricula->id])->with('success', 'Matrícula actualizada correctamente');
+    }
+
     
     public function descargar($id)
     {

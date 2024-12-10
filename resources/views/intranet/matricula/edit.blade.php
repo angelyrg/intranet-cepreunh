@@ -14,7 +14,7 @@
                             <li class="breadcrumb-item">
                                 <a class="text-muted text-decoration-none" href="{{ route('ciclos.index') }}">Ciclos</a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Nueva matrícula</li>
+                            <li class="breadcrumb-item active" aria-current="page">Editar Matrícula</li>
                         </ol>
                     </nav>
                 </div>
@@ -29,22 +29,23 @@
 <div class="card shadow w-100 position-relative overflow-hidden">
     <div class="card-body p-4">
 
-        <form action="{{ route('matricula.store') }}" method="POST" class="mx-auto bg-white p-8 px-10 shadow-md">
+        <form action="{{ route('matricula.update', $matricula->id) }}" method="POST" class="mx-auto bg-white p-8 px-10 shadow-md">
             @csrf
-
+            @method('PUT')
+        
             <div class="row g-4">
                 <!-- Datos personales -->
                 <div class="row">
-
+        
                     <input type="hidden" name="ciclo_id" value="{{ $ciclo_id }}">
                     <input type="hidden" name="estudiante_id" value="{{ $estudiante_id }}">
-
+        
                     <div class="col-md-4 mb-3">
                         <label for="area_id" class="form-label">Área</label>
                         <select name="area_id" id="area_id" class="form-select @error('area_id') is-invalid @enderror" required>
                             <option value="">Seleccionar Área</option>
                             @foreach ($areas as $item)
-                            <option value="{{ $item->id }}">
+                            <option value="{{ $item->id }}" {{ $item->id == old('area_id', $matricula->area_id) ? 'selected' : '' }}>
                                 {{ $item->descripcion }}
                             </option>
                             @endforeach
@@ -53,7 +54,7 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    
+        
                     <div class="col-md-4 mb-3">
                         <label for="carrera_id" class="form-label">Carrera</label>
                         <select name="carrera_id" id="carrera_id" class="form-select @error('carrera_id') is-invalid @enderror" required>
@@ -63,12 +64,12 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-
+        
                     <div class="col-md-4 mb-3">
                         <label for="sede_id" class="form-label">Sede</label>
                         <select name="sede_id" id="sede_id" class="form-select @error('sede_id') is-invalid @enderror" required>
                             @foreach ($sedes as $sede)
-                            <option value="{{ $sede->id }}">
+                            <option value="{{ $sede->id }}" {{ $sede->id == old('sede_id', $matricula->sede_id) ? 'selected' : '' }}>
                                 {{ $sede->descripcion }}
                             </option>
                             @endforeach
@@ -77,11 +78,13 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+        
                     <div class="col-md-4 mb-3">
                         <label for="aula_ciclo_id" class="form-label">Aula</label>
                         <select name="aula_ciclo_id" id="aula_ciclo_id" class="form-select @error('aula_ciclo_id') is-invalid @enderror" required>
+                            {{-- TODO: MOSTRAR AULAS --}}
                             @foreach ($ciclo->aulas as $aula)
-                            <option value="{{ $aula->id }}">
+                            <option value="{{ $aula->id }}" {{ $aula->id == old('aula_ciclo_id', $matricula->aulas[0]->id) ? 'selected' : '' }}>
                                 {{ $aula->descripcion }}
                             </option>
                             @endforeach
@@ -91,15 +94,16 @@
                         @enderror
                     </div>
                 </div>
-
+        
                 <hr>
-
+        
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <label for="forma_de_pago_id" class="form-label">Modalidad de pago</label>
+                        {{-- TODO: NO USAR [0] --}}
                         <select name="forma_de_pago_id" id="forma_de_pago_id" class="form-select @error('forma_de_pago_id') is-invalid @enderror" required>
                             @foreach ($formasDePago as $modalidad)
-                            <option value="{{ $modalidad->id }}">
+                            <option value="{{ $modalidad->id }}" {{ $modalidad->id == old('forma_de_pago_id', $matricula->pagos[0]->id) ? 'selected' : '' }}>
                                 {{ $modalidad->descripcion }}
                             </option>
                             @endforeach
@@ -108,12 +112,12 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-
+        
                     <div class="col-md-4 mb-3">
                         <label for="banco_id" class="form-label">Banco</label>
                         <select name="banco_id" id="banco_id" class="form-select @error('banco_id') is-invalid @enderror" required>
                             @foreach ($bancos as $banco)
-                            <option value="{{ $banco->id }}">
+                            <option value="{{ $banco->id }}" {{ $banco->id == old('banco_id', $matricula->banco_id) ? 'selected' : '' }}>
                                 {{ $banco->descripcion }}
                             </option>
                             @endforeach
@@ -122,79 +126,79 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+        
                     <div class="col-md-4 mb-3">
                         <label for="fecha_pago" class="form-label">Fecha de pago</label>
-                        <input name="fecha_pago" type="date" id="fecha_pago" class="form-control @error('fecha_pago') is-invalid @enderror" required value="{{ date('Y-m-d') }}" />
+                        {{-- <input name="fecha_pago" type="date" id="fecha_pago" class="form-control @error('fecha_pago') is-invalid @enderror" required value="{{ old('fecha_pago', $matricula->fecha_pago->format('Y-m-d')) }}" /> --}}
+                        <input name="fecha_pago" type="date" id="fecha_pago" 
+                            class="form-control @error('fecha_pago') is-invalid @enderror" 
+                            value="{{ old('fecha_pago', $matricula->fecha_pago ? $matricula->fecha_pago->format('Y-m-d') : '') }}" />
+
                         @error('fecha_pago')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
-
+        
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <label for="cod_operacion" class="form-label">Código de operación</label>
-                        <input name="cod_operacion" type="text" id="cod_operacion" class="form-control @error('cod_operacion') is-invalid @enderror" required
-                            autocomplete="off" />
+                        <input name="cod_operacion" type="text" id="cod_operacion" class="form-control @error('cod_operacion') is-invalid @enderror" required value="{{ old('cod_operacion', $matricula->cod_operacion) }}" autocomplete="off" />
                         @error('cod_operacion')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-
+        
                     <div class="col-md-4 mb-3">
                         <label for="descripcion_pago" class="form-label">Descripción del pago</label>
-                        <input name="descripcion_pago" type="text" id="descripcion_pago" class="form-control @error('descripcion_pago') is-invalid @enderror" required
-                            autocomplete="off" />
+                        <input name="descripcion_pago" type="text" id="descripcion_pago" class="form-control @error('descripcion_pago') is-invalid @enderror" required value="{{ old('descripcion_pago', $matricula->descripcion_pago) }}" autocomplete="off" />
                         @error('descripcion_pago')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-
+        
                     <div class="col-md-4 mb-3">
                         <label for="n_transaccion" class="form-label">Número de transacción</label>
-                        <input name="n_transaccion" type="text" id="n_transaccion" class="form-control @error('n_transaccion') is-invalid @enderror" required
-                            autocomplete="off" />
+                        <input name="n_transaccion" type="text" id="n_transaccion" class="form-control @error('n_transaccion') is-invalid @enderror" required value="{{ old('n_transaccion', $matricula->n_transaccion) }}" autocomplete="off" />
                         @error('n_transaccion')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
-
+        
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <label for="monto" class="form-label">Monto</label>
-                        <input name="monto" type="number" id="monto" class="form-control @error('monto') is-invalid @enderror" required
-                            autocomplete="off" />
+                        <input name="monto" type="number" id="monto" class="form-control @error('monto') is-invalid @enderror" required value="{{ old('monto', $matricula->monto) }}" autocomplete="off" />
                         @error('monto')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="comision" class="form-label">Comisión</label>
-                        <input name="comision" type="number" id="comision" class="form-control @error('comision') is-invalid @enderror" required
-                            autocomplete="off" />
+                        <input name="comision" type="number" id="comision" class="form-control @error('comision') is-invalid @enderror" required value="{{ old('comision', $matricula->comision) }}" autocomplete="off" />
                         @error('comision')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-
+        
                     <div class="col-md-4 mb-3">
                         <label for="monto_neto" class="form-label">Monto neto</label>
-                        <input name="monto_neto" type="number" id="monto_neto" class="form-control @error('monto_neto') is-invalid @enderror" required
-                            autocomplete="off" />
+                        <input name="monto_neto" type="number" id="monto_neto" class="form-control @error('monto_neto') is-invalid @enderror" required value="{{ old('monto_neto', $matricula->monto_neto) }}" autocomplete="off" />
                         @error('monto_neto')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
-
+        
                 <div class="row">
                     <div class="col text-end">
-                        <button type="submit" class="btn btn-primary px-8">Continuar</button>
+                        <button type="submit" class="btn btn-primary px-8">Actualizar</button>
                     </div>
                 </div>
             </div>
         </form>
+           
 
         <!-- Mostrar todos los errores -->
         @if ($errors->any())
