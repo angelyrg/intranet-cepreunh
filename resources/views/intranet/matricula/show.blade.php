@@ -236,7 +236,7 @@
                 <div class="row mt-5">
                     <div class="d-flex justify-content-between align-items-center gap-2">
                         <div>
-                            <a href={{ route('ciclos.matricula', $matricula->ciclo->id) }} class="btn btn-primary">
+                            <a href="{{ route('ciclos.matricula', $matricula->ciclo->id) }}" class="btn btn-primary">
                                 <span><i class="ti ti-user-plus"></i></span>
                                 <span>Nuevo matrícula</span>
                             </a>
