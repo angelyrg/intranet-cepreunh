@@ -1569,8 +1569,15 @@ class MatriculaController extends Controller
 
     }
 
+    public function imprimir($id)
+    {
+        $matricula = Matricula::findOrFail($id);
+        $unh_logo_icon = public_path('assets/images/logos/cepreunh-logo.png');
 
+        $pdf = PDF::loadView('intranet.matricula.descargar_pdf', ['matricula' => $matricula, 'unh_logo' => $unh_logo_icon])
+            ->setPaper('A4', 'portrait');
 
-
+        return $pdf->stream('FICHA-' . $matricula->estudiante->nro_documento . '.pdf');
+    }
 
 }

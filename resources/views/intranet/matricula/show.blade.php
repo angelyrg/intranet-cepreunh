@@ -18,6 +18,11 @@
                             <li class="breadcrumb-item">
                                 <a class="text-muted text-decoration-none" href="{{ route('ciclos.index') }}">Ciclos</a>
                             </li>
+                            <li class="breadcrumb-item">
+                                <a class="text-muted text-decoration-none" href="{{ route('ciclos.show', $matricula->ciclo->id) }}">
+                                    {{ $matricula->ciclo->descripcion }}
+                                </a>
+                            </li>
                             <li class="breadcrumb-item active" aria-current="page">Matrícula</li>
                         </ol>
                     </nav>
@@ -33,8 +38,45 @@
     <div class="col-12">
         <div class="card shadow rounded-3">
             <div class="card-body">
-                <h5 class="text-center">RESUMEN DE LA MATRÍCULA</h5>
+                <h5 class="text-center">MATRÍCULA</h5>
                 <hr class="mt-0 mb-2">
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="row">
+                            <label class="control-label text-end col-md-7">Ciclo:</label>
+                            <div class="col-md-5 ">
+                                <p class="form-control-static mb-0 text-uppercase fw-bold">{{ $matricula->ciclo->descripcion }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="row">
+                            <label class="control-label text-end col-md-7">Duración:</label>
+                            <div class="col-md-5 ">
+                                <p class="form-control-static mb-0 text-uppercase">{{ $matricula->ciclo->duracion }} semanas</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="row">
+                            <label class="control-label text-end col-md-7">Fecha de Inicio:</label>
+                            <div class="col-md-5 ">
+                                <p class="form-control-static mb-0 text-uppercase">{{ $matricula->ciclo->fecha_inicio }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="row">
+                            <label class="control-label text-end col-md-7">Fecha de finalización:</label>
+                            <div class="col-md-5 ">
+                                <p class="form-control-static mb-0 text-uppercase">{{ $matricula->ciclo->fecha_fin }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="my-2">
+
                 <div class="row">
 
                     <div class="col-12 col-md-6">
@@ -150,43 +192,6 @@
                 </div>
 
                 <hr class="my-2">
-
-                <div class="row">
-                    <div class="col-12 col-md-6">
-                        <div class="row">
-                            <label class="control-label text-end col-md-7">Ciclo:</label>
-                            <div class="col-md-5 ">
-                                <p class="form-control-static mb-0 text-uppercase">{{ $matricula->ciclo->descripcion }}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6">
-                        <div class="row">
-                            <label class="control-label text-end col-md-7">Duración:</label>
-                            <div class="col-md-5 ">
-                                <p class="form-control-static mb-0 text-uppercase">{{ $matricula->ciclo->duracion }} semanas</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6">
-                        <div class="row">
-                            <label class="control-label text-end col-md-7">Fecha de Inicio:</label>
-                            <div class="col-md-5 ">
-                                <p class="form-control-static mb-0 text-uppercase">{{ $matricula->ciclo->fecha_inicio }}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6">
-                        <div class="row">
-                            <label class="control-label text-end col-md-7">Fecha de finalización:</label>
-                            <div class="col-md-5 ">
-                                <p class="form-control-static mb-0 text-uppercase">{{ $matricula->ciclo->fecha_fin }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <hr class="my-2">
                 
                 <div class="row">
                     <div class="col-12 col-md-6">
@@ -229,8 +234,23 @@
                 </div>
 
                 <div class="row mt-5">
-                    <div class="d-flex justify-content-end">
-                        <a href="{{ route('matricula.descargar', $matricula->id) }}" class="btn btn-primary">Descargar ficha de inscripción</a>
+                    <div class="d-flex justify-content-between align-items-center gap-2">
+                        <div>
+                            <a href="{{ route('matricula.buscar_dni') }}" class="btn btn-primary">
+                                <span><i class="ti ti-user-plus"></i></span>
+                                <span>Nuevo matrícula</span>
+                            </a>
+                        </div>
+                        <div>
+                            <a href="{{ route('matricula.imprimir', $matricula->id) }}" class="btn btn-primary" target="_blank">
+                                <span><i class="ti ti-printer"></i></span>
+                                <span>Imprimir ficha</span>
+                            </a>
+                            <a href="{{ route('matricula.descargar', $matricula->id) }}" class="btn btn-primary">
+                                <span><i class="ti ti-file-download"></i></span>
+                                <span>Descargar ficha de matrícula</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
