@@ -231,6 +231,16 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-12 col-md-6">
+                        <div class="row">
+                            <label class="control-label text-end col-md-7">Aula <small>(Hasta examen de ubicación)</small>:</label>
+                            <div class="col-md-5 ">
+                                {{-- TODO: void use [0] --}}
+                                <p class="form-control-static mb-0 text-uppercase">{{ $matricula->aulas[0]->aula->descripcion }}</p>
+                            </div>
+                        </div>
+                    </div>
                     
                     <div class="col-12 col-md-6">
                         <div class="row">

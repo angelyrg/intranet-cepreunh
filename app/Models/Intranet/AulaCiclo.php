@@ -10,4 +10,9 @@ class AulaCiclo extends Model
     use HasFactory;
 
     protected $table = 'aula_ciclo';
+
+    public function aula()
+    {
+        return $this->belongsTo(Aula::class);
+    }
 }
