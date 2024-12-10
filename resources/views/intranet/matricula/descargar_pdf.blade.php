@@ -150,6 +150,20 @@
                     <strong class="text-uppercase">{{ $matricula->sede->descripcion; }}</strong>
                 </td>
             </tr>
+            <tr>
+                <td class="text-end">CONCEPTO DE PAGO:</td>
+                <td>
+                    {{-- TODO: AVOID USE [0] --}}
+                    <strong class="text-uppercase">{{ $matricula->pagos[0]->descripcion_pago }}</strong>
+                </td>
+            </tr>
+            <tr>
+                <td class="text-end">MONTO NETO:</td>
+                <td>
+                    {{-- TODO: AVOID USE [0] --}}
+                    <strong class="text-uppercase">S/{{ $matricula->pagos[0]->monto_neto }}</strong>
+                </td>
+            </tr>
 
         </table>
 
