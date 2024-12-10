@@ -35,9 +35,6 @@ class MatriculaEstudianteRequest extends FormRequest
                     $query->where('estado', 1); // Solo tipos de documentos activos
                 }),
             ],
-
-            // Número de documento
-            'nro_documento' => 'required|string|max:20|unique:estudiantes,nro_documento',  // Ajustar el nombre de la tabla según corresponda
             'nro_documento' => [
                 'required',
                 'string',
@@ -57,6 +54,11 @@ class MatriculaEstudianteRequest extends FormRequest
             // Género
             'genero_id' => 'required|integer|exists:generos,id',
 
+            'telefono_personal' => 'nullable|string|max:15',
+            'whatsapp' => 'nullable|string|max:15',
+            'correo_personal' => 'nullable|email|max:200',
+            'correo_institucional' => 'nullable|email|max:200',
+
             // Estado civil
             'estado_civil_id' => 'required|integer|exists:estados_civiles,id',
 
@@ -73,13 +75,18 @@ class MatriculaEstudianteRequest extends FormRequest
             'identidad_etnica_id' => 'nullable|integer|exists:identidades_etnicas,id',
 
             // ¿Tiene discapacidad?
-            'tiene_discapacidad' => 'nullable',
+            'tiene_discapacidad' => 'nullable|boolean', // Se asegura que sea un valor booleano (true/false)
 
             // Discapacidades seleccionadas (solo si "tiene_discapacidad" es verdadero)
             'discapacidades' => 'nullable|array|min:1',
             'discapacidades.*' => 'integer|exists:discapacidades,id',
+
+            'direccion' => 'nullable|string|max:255',
+            // 'colegio_id' => 'nullable|exists:colegios,id',
+            'year_culminacion' => 'nullable|integer|min:1900|max:2099',
         ];
     }
+
 
     public function messages(): array
     {

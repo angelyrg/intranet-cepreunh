@@ -230,7 +230,27 @@
                                 @endif
                             </div>
                         </div>
-                    </div> 
+                    </div>
+                    
+                    <div class="col-12 col-md-6">
+                        <div class="row">
+                            <label class="control-label text-end col-md-7">Concepto de pago:</label>
+                            <div class="col-md-5 ">
+                                {{-- TODO: avoid use [0] --}}
+                                <p class="form-control-static mb-0 text-uppercase">{{ $matricula->pagos[0]->descripcion_pago }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="row">
+                            <label class="control-label text-end col-md-7">MONTO NETO:</label>
+                            <div class="col-md-5 ">
+                                {{-- TODO: avoid use [0] --}}
+                                <p class="form-control-static mb-0 text-uppercase">S/{{ $matricula->pagos[0]->monto_neto }}</p>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class="row mt-5">

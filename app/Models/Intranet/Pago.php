@@ -18,8 +18,13 @@ class Pago extends Model
         'descripcion_pago',
         'fecha_pago',
         'n_transaccion',
-        'banco',
+        'banco_id',
         'comision',
         'monto_neto',
     ];
+
+    public function banco()
+    {
+        return $this->belongsTo(Banco::class);
+    }
 }
