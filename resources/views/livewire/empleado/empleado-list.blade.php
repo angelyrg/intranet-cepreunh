@@ -13,7 +13,9 @@
     {{-- Content|start --}}
     <div class="card w-100 position-relative overflow-hidden">
         <div class="px-4 py-3 border-bottom">
+            @if(auth()->user()->can('empleados.index'))
             <h4 class="card-title mb-0">Lista de {{ $title }}</h4>
+            @endif
         </div>
         <div class="card-header">
             <input wire:model.lazy="search" class="form-control" placeholder="Buscar registros">

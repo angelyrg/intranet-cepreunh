@@ -38,7 +38,7 @@
                                     </a>
                                 </td>
                                 <td>
-                                    <a class="badge fw-semibold py-1 bg-primary-subtle text-primary" role="button"><small>{{ __('ACTIVO') }}</small></a>
+                                    <a class="badge fw-semibold py-1 fs-1 bg-primary-subtle text-primary" role="button"><small>{{ __('ACTIVO') }}</small></a>
                                     {{-- @if($role->estado == 1)
                                     <a class="badge fw-semibold py-1 bg-primary-subtle text-primary" role="button"><small>{{ __('ACTIVO') }}</small></a>
                                     @elseif($role->estado == 0)

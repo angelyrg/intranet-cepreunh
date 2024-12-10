@@ -96,14 +96,14 @@ class SedeController extends Controller
             $id = $item->id;
             $descripcion = $item->descripcion;
             $estado = $item->estado;
-            $fecha_creacion = (new DateTime($item->created_at))->format('d/m/Y');
+            $fecha_creacion = (new DateTime($item->created_at))->format('d-m-Y');
 
             $acciones = "
             <div class='btnActionCarrera'>
-                <a class='btn btn-sm btn-outline-primary btnEdit' data-id='$id' role='button'>
+                <a class='btn badge fw-semibold py-1 bg-primary-subtle text-primary btnEdit' data-id='$id' role='button'>
                     <i class='ti ti-edit'></i>                                        
                 </a>
-                <a class='btn btn-sm btn-outline-danger btnDelete' data-id='$id' role='button'>
+                <a class='btn badge fw-semibold py-1 bg-danger-subtle text-danger btnDelete' data-id='$id' role='button'>
                     <i class='ti ti-trash'></i>                                        
                 </a>
             </div>
@@ -112,8 +112,8 @@ class SedeController extends Controller
             $estado = ($estado > 0) ? 'ACTIVO' : 'INACTIVO';
 
             $html .= "<tr>
-                <td>$acciones</td>
-                <td><span class='badge fw-semibold bg-primary-subtle text-primary'>$estado</span></td>
+                <td style='width:10%'>$acciones</td>
+                <td style='width:10%'><span class='badge fw-semibold fs-1 bg-primary-subtle text-primary'>$estado</span></td>
                 <td>$descripcion</td>
                 <td>$fecha_creacion</td>
             </tr>";

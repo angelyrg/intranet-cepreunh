@@ -63,14 +63,6 @@
                 </table>
             </div>
         </div>
-        <div class="card-body">
-            <div class="py-2">
-                <div class="col-md-4 col-12">
-                    <h4 class="card-title">Collapsed</h4>
-                    <div class="containertreewview"></div>
-                </div>
-            </div>
-        </div>
     </div>
     {{-- Content|end --}}
 

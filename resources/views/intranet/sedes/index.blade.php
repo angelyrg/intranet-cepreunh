@@ -20,9 +20,11 @@
                 </div>
                 <div class="col-3">
                     <div class="text-center" id="btnActionGeneral">
+                        @can('sedes.create')
                         <button type="button" class="btn btn-primary btnAdd{{ $slug }}">
                             <i class="ti ti-books fs-4"></i> NUEVO REGISTRO
                         </button>
+                        @endcan
                     </div>
                 </div>
             </div>
@@ -38,20 +40,20 @@
     </div>
     <div class="card-body p-4">
         <div class="table-responsive mb-4 border rounded-1">
-            <table class="table text-nowrap mb-0 align-middle" id="tbl{{ $slug }}">
+            <table class="table text-nowrap table-sm mb-0 align-middle" id="tbl{{ $slug }}">
                 <thead class="text-dark fs-4">
                     <tr>
                         <th>
-                            <h6 class="fs-4 fw-semibold mb-0">ACCIONES</h6>
+                            <h6 class="fs-1 fw-semibold mb-0">ACCIONES</h6>
                         </th>
                         <th>
-                            <h6 class="fs-4 fw-semibold mb-0">ESTADO</h6>
+                            <h6 class="fs-1 fw-semibold mb-0">ESTADO</h6>
                         </th>
                         <th>
-                            <h6 class="fs-4 fw-semibold mb-0">DESCRIPCIÓN</h6>
+                            <h6 class="fs-1 fw-semibold mb-0">DESCRIPCIÓN</h6>
                         </th>
                         <th>
-                            <h6 class="fs-4 fw-semibold mb-0">FECHA CREACCIÓN</h6>
+                            <h6 class="fs-1 fw-semibold mb-0">FECHA CREACCIÓN</h6>
                         </th>
                     </tr>
                 </thead>
