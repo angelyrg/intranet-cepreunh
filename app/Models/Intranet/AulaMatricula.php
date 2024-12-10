@@ -12,4 +12,9 @@ class AulaMatricula extends Model
     protected $table = 'aula_matricula';
 
     protected $fillable = ['matricula_id', 'aula_ciclo_id', 'estado'];
+
+    public function aula_ciclo()
+    {
+        return $this->belongsTo(AulaCiclo::class, 'aula_ciclo_id');
+    }
 }

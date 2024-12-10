@@ -151,6 +151,12 @@
                 </td>
             </tr>
             <tr>
+                <td class="text-end">Aula <small>(Hasta examen de ubicación)</small>:</td>
+                <td>
+                    <strong class="text-uppercase">{{ $matricula->aulas[0]->aula->descripcion }}</strong>
+                </td>
+            </tr>
+            <tr>
                 <td class="text-end">CONCEPTO DE PAGO:</td>
                 <td>
                     {{-- TODO: AVOID USE [0] --}}
