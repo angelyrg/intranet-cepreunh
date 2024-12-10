@@ -48,7 +48,7 @@
                                             <div class="col-lg-3">
                                                 <label for="password"
                                                     class="form-label fw-semibold text-muted fs-2 mb-0">Contraseña</label>
-                                                <input type="password" wire:model="password" class="form-control"
+                                                <input type="text" wire:model="password" class="form-control"
                                                     id="password" value="{{ $empleado->nro_documento }}">
                                             </div>
                                         </div>
@@ -72,7 +72,7 @@
                     </div>
                 </div>
             @else
-                <form wire:submit.prevent="save">
+                <form wire:submit.prevent="update">
                     <div class="row">
                         <div class="col-lg-6 d-flex align-items-stretch">
                             <div class="card w-100 position-relative overflow-hidden mb-0">

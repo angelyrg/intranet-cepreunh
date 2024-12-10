@@ -4,6 +4,7 @@ namespace App\Livewire\RolesPermisos;
 
 use App\Models\Intranet\Permission;
 use App\Models\Intranet\Role;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -12,6 +13,13 @@ class AsignarPermisoRol extends Component
     use WithPagination;
 
     public $roleId;
+
+    // public $permisosDisponibles = [];
+
+    public $permisosAsignados = [];
+
+    public $permisosDisponiblesSelect = [];
+
     public $search = '';
     protected $paginationTheme = 'bootstrap';
 
@@ -25,31 +33,36 @@ class AsignarPermisoRol extends Component
         if ($roleId) {
             $role = Role::findOrFail($roleId);
             $this->roleId = $role->id;
-            
-            // Fetch assigned permissions
+
             $this->permisosAsignados = $role->permissions()->pluck('id')->toArray();
         }
     }
 
-    public function assignPermission($permissionId)
+    public function updatedPermisosDisponiblesSelect($value)
     {
+
+        Log::info("Permisos seleccionados: {$value}", $this->permisosDisponiblesSelect );
+    }
+
+    public function assignPermission()
+    {
+        // Validar que se haya seleccionado un rol
         if (!$this->roleId) {
-            $this->dispatch('error', message: 'Debe seleccionar un rol primero');
+            $this->dispatch('error', 'Debe seleccionar un rol primero');
             return;
         }
 
+        // Obtener el rol
         $role = Role::findOrFail($this->roleId);
-        $permission = Permission::findOrFail($permissionId);
 
-        // Check if permission is not already assigned
-        if (!$role->permissions->contains($permission->id)) {
-            $role->permissions()->attach($permission->id);
-            
-            // Refresh assigned permissions
-            $this->permisosAsignados = $role->permissions()->pluck('id')->toArray();
-            
-            $this->dispatch('success', message: 'Permiso asignado correctamente');
-        }
+        // Sincronizar permisos
+        $role->syncPermissions($this->permisosDisponiblesSelect);
+
+        // Mensaje de éxito
+        $this->dispatch('success', 'Permisos actualizados correctamente');
+
+        // Opcional: limpiar selección
+        $this->permisosDisponiblesSelect = [];
     }
 
     public function removePermission($permissionId)
@@ -63,36 +76,52 @@ class AsignarPermisoRol extends Component
         $permission = Permission::findOrFail($permissionId);
 
         $role->permissions()->detach($permission->id);
-        
-        // Refresh assigned permissions
+
+
         $this->permisosAsignados = $role->permissions()->pluck('id')->toArray();
-        
+
         $this->dispatch('success', message: 'Permiso removido correctamente');
     }
 
     public function render()
     {
-        // Fetch available permissions (not yet assigned to the role)
-        $query = Permission::query();
-        
-        if ($this->search) {
-            $query->where("name", "LIKE", "%{$this->search}%");
+        // Validar que se haya seleccionado un rol
+        if (!$this->roleId) {
+            return view('livewire.roles-permisos.asignar-permiso-rol', [
+                'listPermisosAsignados' => collect(),
+                'listPermisosAsignados' => collect(),
+            ]);
         }
 
-        // If a role is selected, exclude already assigned permissions
-        if ($this->roleId) {
-            $assignedPermissionIds = Role::findOrFail($this->roleId)->permissions()->pluck('id');
-            $query->whereNotIn('id', $assignedPermissionIds);
-        }
+        // Buscar el rol actual
+        $role = Role::findOrFail($this->roleId);
 
-        $permisosDisponibles = $query->paginate(20);
+        // Obtener los permisos ya asignados al rol
+        $assignedPermissionIds = $role->permissions()->pluck('id');
 
-        // Fetch assigned permissions
-        $permisosAsignados = $this->roleId ? Role::findOrFail($this->roleId)->permissions()->get() : collect();
+        // Consulta de permisos disponibles
+        $listPermisosDisponibles = Permission::query()
+            // Filtrar por búsqueda si existe
+            ->when($this->search, function ($query) {
+                return $query->where("name", "LIKE", "%{$this->search}%");
+            })
+            // Excluir permisos ya asignados
+            ->whereNotIn('id', $assignedPermissionIds)
+            // Paginar resultados
+            ->get(); // Cambiado de paginate() a get()
+
+        // Obtener permisos asignados al rol
+        $listPermisosAsignados = $role->permissions;
+
+        // Log para depuración (opcional)
+        Log::info("Rol seleccionado: {$this->roleId}", [
+            'Permisos disponibles' => $listPermisosDisponibles,
+            'Permisos asignados' => $listPermisosAsignados->pluck('name'),
+        ]);
 
         return view('livewire.roles-permisos.asignar-permiso-rol', [
-            'permisosDisponibles' => $permisosDisponibles,
-            'permisosAsignados' => $permisosAsignados,
+            'listPermisosDisponibles' => $listPermisosDisponibles,
+            'listPermisosAsignados' => $listPermisosAsignados,
         ]);
     }
 

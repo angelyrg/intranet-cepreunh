@@ -12,4 +12,10 @@ class Sede extends Model
     use SoftDeletes;
 
     protected $fillable = ['descripcion', 'estado', 'deleted_at'];
+
+    public function empleados()
+    {
+        return $this->hasMany(Empleado::class);
+    }
+    
 }
