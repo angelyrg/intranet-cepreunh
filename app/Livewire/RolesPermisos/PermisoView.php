@@ -23,7 +23,7 @@ class PermisoView extends Component
 
     public function render(){
         return view('livewire.roles-permisos.permiso-view', [
-            'permisos' => Permission::paginate(10)
+            'permisos' => Permission::paginate(20)
         ]);
     }
 

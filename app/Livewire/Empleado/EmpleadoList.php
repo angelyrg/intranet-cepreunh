@@ -6,6 +6,7 @@ use App\Models\Intranet\Empleado;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Auth;
 
 class EmpleadoList extends Component
 {

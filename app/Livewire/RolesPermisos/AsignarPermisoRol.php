@@ -56,7 +56,9 @@ class AsignarPermisoRol extends Component
         $role = Role::findOrFail($this->roleId);
 
         // Sincronizar permisos
-        $role->syncPermissions($this->permisosDisponiblesSelect);
+        // $role->syncPermissions($this->permisosDisponiblesSelect);
+        $role->givePermissionTo($this->permisosDisponiblesSelect);
+
 
         // Mensaje de éxito
         $this->dispatch('success', 'Permisos actualizados correctamente');
