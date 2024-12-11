@@ -71,4 +71,7 @@ class Estudiante extends Model
         return $this->belongsToMany(Ciclo::class);
     }
 
+    public function discapacidades(){
+        return $this->belongsToMany(Discapacidad::class, 'estudiante_discapacidad');
+    }
 }

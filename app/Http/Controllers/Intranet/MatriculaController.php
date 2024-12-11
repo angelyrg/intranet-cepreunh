@@ -7,6 +7,7 @@ use App\Http\Requests\Ciclos\StoreCicloRequest;
 use App\Http\Requests\Ciclos\UpdateCicloRequest;
 use App\Http\Requests\Matricula\MatriculaEstudianteRequest;
 use App\Http\Requests\Matricula\MatriculaRequest;
+use App\Models\Intranet\Apoderado;
 use App\Models\Intranet\Area;
 use App\Models\Intranet\AulaMatricula;
 use App\Models\Intranet\Banco;
@@ -20,6 +21,7 @@ use App\Models\Intranet\Genero;
 use App\Models\Intranet\IdentidadEtnica;
 use App\Models\Intranet\Matricula;
 use App\Models\Intranet\Pago;
+use App\Models\Intranet\Parentesco;
 use App\Models\Intranet\Precio;
 use App\Models\Intranet\Sede;
 use App\Models\Intranet\TipoDocumento;
@@ -62,6 +64,7 @@ class MatriculaController extends Controller
         $estados_civiles = EstadoCivil::all();
         $identidades_etnicas = IdentidadEtnica::all();
         $discapacidades = Discapacidad::all();
+        $parentescos = Parentesco::all();
 
         // TODO: crear tabla para países
         $paises = [
@@ -1486,6 +1489,7 @@ class MatriculaController extends Controller
             'paises',
             'identidades_etnicas',
             'discapacidades',
+            'parentescos',
             'ciclo_id'
         ));
     }
@@ -1495,41 +1499,63 @@ class MatriculaController extends Controller
 
     public function store_estudiante(MatriculaEstudianteRequest $request)
     {
-        $tieneDiscapacidad = $request->has('tiene_discapacidad');
         $ciclo_id = $request->validated()['ciclo_id'];
+        $estudiante_id = $request->validated()['estudiante_id'];
 
-        // Obtener los datos validados pero solo seleccionar algunos campos
         $validatedData = $request->validated();
-        $estudianteValidatedData = collect($validatedData)->only([
-            'tipo_documento_id',
-            'nro_documento',
-            'nombres',
-            'apellido_paterno',
-            'apellido_materno',
-            'genero_id',
-            'estado_civil_id',
-            'fecha_nacimiento',
-            'pais_nacimiento',
-            'nacionalidad',
-            'telefono_personal',
-            'whatsapp',
-            'correo_personal',
-            'correo_institucional',
-            'identidad_etnica_id',
-            'direccion',
-            'year_culminacion',
-            ])->toArray();
 
-        // Combinar los campos seleccionados con 'tiene_discapacidad'
+        $datosApoderado = [
+            'telefono_apoderado' => $validatedData['telefono_apoderado'],
+            'correo_apoderado' => $validatedData['correo_apoderado'],
+            'parentesco_id' => $validatedData['parentesco_id'],
+        ];
+
+        if ($estudiante_id){
+            $apoderado = Apoderado::create($datosApoderado);
+        }else{
+            $estudiante_old =  Estudiante::findOrFail($estudiante_id);
+            $apoderado = $estudiante_old->apoderados()[0];
+        }
+        
+        $datosEstudiante = [
+            'tipo_documento_id' => $validatedData['tipo_documento_id'],
+            'nro_documento' => $validatedData['nro_documento'],
+            'nombres' => $validatedData['nombres'],
+            'apellido_paterno' => $validatedData['apellido_paterno'],
+            'apellido_materno' => $validatedData['apellido_materno'],
+            'genero_id' => $validatedData['genero_id'],
+            'estado_civil_id' => $validatedData['estado_civil_id'],
+            'fecha_nacimiento' => $validatedData['fecha_nacimiento'],
+            'pais_nacimiento' => $validatedData['pais_nacimiento'],
+            'nacionalidad' => $validatedData['nacionalidad'],
+            'telefono_personal' => $validatedData['telefono_personal'],
+            'whatsapp' => $validatedData['whatsapp'],
+            'correo_personal' => $validatedData['correo_personal'],
+            'correo_institucional' => $validatedData['correo_institucional'],
+            'tiene_discapacidad' => $validatedData['tiene_discapacidad'],
+            //dispacidades
+            'identidad_etnica_id' => $validatedData['identidad_etnica_id'],
+            'nacimiento_ubigeodistrito_id' => $validatedData['nacimiento_ubigeodistrito_id'],
+            'direccion_ubigeodistrito_id' => $validatedData['direccion_ubigeodistrito_id'],
+            'direccion' => $validatedData['direccion'],
+
+            'colegio_ubigeodistrito_id ' => $validatedData['colegio_ubigeodistrito_id '],
+            'colegio_id' => $validatedData['colegio_id'],
+            'year_culminacion' => $validatedData['year_culminacion'],
+
+            'apoderado_id' => $apoderado->id,
+            //Apoderado
+        ];
+
         $estudiante = Estudiante::updateOrCreate(
-            ['id' => $request->id],
-            array_merge(
-                $estudianteValidatedData,
-                ['tiene_discapacidad' => $tieneDiscapacidad]
-            )
+            ['id' => $estudiante_id],
+            $datosEstudiante
         );
-
-        $estudiante_id = $estudiante->id;
+        
+        // Sync discapacidades
+        if ($validatedData['tiene_discapacidad'] == 1) {
+            $estudiante->discapacidades()->sync($validatedData['discapacidades']);
+        }
 
         session()->put('ciclo_id', $ciclo_id);
         session()->put('estudiante_id', $estudiante_id);
