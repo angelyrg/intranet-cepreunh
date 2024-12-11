@@ -1479,6 +1479,7 @@ class MatriculaController extends Controller
 
         return view('intranet.matricula.datos-personales', compact(
             'estudiante',
+            'dni',
             'tipos_documentos',
             'generos',
             'estados_civiles',
@@ -1547,7 +1548,7 @@ class MatriculaController extends Controller
         $sedes = Sede::all();
         $bancos = Banco::all();
         $formasDePago = FormaDePago::all();
-        $ciclo = Ciclo::with(['precios.forma_de_pago', 'aulas'])->findOrFail($ciclo_id);
+        $ciclo = Ciclo::with(['precios.forma_de_pago', 'aulas', 'aulas_ciclos.aula'])->findOrFail($ciclo_id);
 
         return view('intranet.matricula.create', compact(
             'ciclo_id',
@@ -1669,7 +1670,7 @@ class MatriculaController extends Controller
     public function descargar($id)
     {
         $matricula = Matricula::findOrFail($id);
-        $unh_logo_icon = public_path('assets/images/logos/cepreunh-logo.png');
+        $unh_logo_icon = public_path('assets/images/logos/CepreUNH.webp');
 
         // return view ('intranet.matricula.descargar_pdf', ['matricula' => $matricula, 'unh_logo' => $unh_logo_icon]);
 
@@ -1681,7 +1682,7 @@ class MatriculaController extends Controller
     public function imprimir($id)
     {
         $matricula = Matricula::findOrFail($id);
-        $unh_logo_icon = public_path('assets/images/logos/cepreunh-logo.png');
+        $unh_logo_icon = public_path('assets/images/logos/CepreUNH.webp');
 
         $pdf = PDF::loadView('intranet.matricula.descargar_pdf', ['matricula' => $matricula, 'unh_logo' => $unh_logo_icon])
             ->setPaper('A4', 'portrait');
