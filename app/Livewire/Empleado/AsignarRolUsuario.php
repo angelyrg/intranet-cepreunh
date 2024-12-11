@@ -4,6 +4,7 @@ namespace App\Livewire\Empleado;
 
 use App\Http\Requests\Intranet\GenerarCuentaEmpleadoRequest;
 use App\Models\Intranet\Empleado;
+use App\Models\Intranet\Permission;
 use App\Models\Intranet\Role;
 use App\Models\Intranet\Sede;
 use App\Models\Intranet\User;
@@ -25,8 +26,12 @@ class AsignarRolUsuario extends Component
     public $password = '';
     
     public $user_id;
-
     public $sedes = [];
+
+    // public $roles = [];
+    #[Rule('required')]
+    public $role_id;
+    public $permisos = [];
 
     public function mount($empleadoId){
         
@@ -36,12 +41,18 @@ class AsignarRolUsuario extends Component
 
         if($this->user_id){
             $usuario = User::where('id', $this->user_id)->first();
-            logger('usuario: ' . $usuario);
+
+            logger('usuario: ' . $usuario->roles);
+            
+            $this->role_id = $usuario->roles->first()->id;
+            $this->permisos = Role::find($this->role_id)->permissions;
+            
             $this->sede_id = $usuario->sede_id;
             $this->correo_personal = $usuario->email;
             $this->username = $usuario->username;
             $this->password = '';
         }else{
+            $this->role_id = '';
             $this->sede_id = '';
             $this->correo_personal = $empleado->correo_personal;
             $this->username = $empleado->nro_documento;
@@ -49,6 +60,8 @@ class AsignarRolUsuario extends Component
         }
 
         $this->sedes = Sede::all()->pluck('descripcion', 'id')->toArray();
+
+        // $this->roles = Role::all();
 
     }
 
@@ -80,6 +93,7 @@ class AsignarRolUsuario extends Component
             // Logging
             Log::info("Cuenta creada para el empleado ID: {$empleado->id}", ['usuario_id' => $usuario->id]);
 
+            $this->dispatch('showNotify', ['type' => 'success', 'msg' => 'La cuenta del empleado ha sido registrada correctamente.']);
             
             // $this->emit('cuentaCreada');
             
@@ -101,7 +115,9 @@ class AsignarRolUsuario extends Component
 
     public function update(){
         
-        logger('id: ' . $this->id);
+        logger('Método update ejecutado');
+
+        logger('id ===>  ' . $this->id);
         // dd($this->id);
 
         try {
@@ -123,12 +139,29 @@ class AsignarRolUsuario extends Component
                 'sede_id' => $this->sede_id,
             ]);
 
-            $this->dispatch('empleado-saved');
+            if ($this->role_id) {
+                $dataRole = Role::find($this->role_id);
+                $usuario->syncRoles([$dataRole->name]);
+            }
+
+            $this->dispatch('showNotify', ['type' => 'success', 'msg' => 'La cuenta del empleado ha sido actualizada correctamente.']);
+
+            // session()->flash('success', 'La cuenta del empleado ha sido actualizada correctamente.');
+            // $this->dispatch('empleado-saved');
 
 
         } catch (\Exception $e) {
             $this->addError('usuario', 'Error al actualizar la cuenta: ' . $e->getMessage());
             return;
+        }
+    }
+
+    public function updatedRoleId($value) {
+        // $this->permisos = Permission::where('role_id', $value)->get();
+        if ($value) {
+            $this->permisos = Role::find($value)->permissions;
+        } else {
+            $this->permisos = [];
         }
     }
 
@@ -144,6 +177,10 @@ class AsignarRolUsuario extends Component
         $nombre_completo = $empleado->nombres . ' ' . $empleado->apellido_paterno . ' ' . $empleado->apellido_materno;
         $sedes = Sede::all();
         $roles = Role::all();
+
+        
+
         return view('livewire.empleado.asignar-rol-usuario', compact('empleado', 'nombre_completo', 'sedes', 'roles'));
     }
+
 }

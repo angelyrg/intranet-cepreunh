@@ -5,7 +5,7 @@
         parent-url="#"
         parent-label="Configuración del Sistema"
         current-label="Usuarios"
-        button-label="AGREGAR USUARIO"
+        button-label=""
         action="showForm"
     />
     {{-- Breadcrumb|end  --}}
@@ -21,20 +21,20 @@
         <div class="card-body">
             @if($usuarios->count())
                 <div class="table-responsive table-xs mb-2 border rounded-1">
-                    <table class="table text-nowrap table-borderless table-bordered table-hover table-striped mb-0 align-middle" id="tblUsuarios">
+                    <table class="table text-nowrap table-sm fs-2 table-borderless table-bordered table-hover table-striped mb-0 align-middle" id="tblUsuarios">
                         <thead class="text-dark fs-4">
                             <tr>
-                                <th><h6 class="fs-4 fw-semibold mb-0">ACCIONES</h6></th>
-                                <th><h6 class="fs-4 fw-semibold mb-0">ESTADO</h6></th>
-                                <th><h6 class="fs-4 fw-semibold mb-0">NOMBRES</h6></th>
-                                <th><h6 class="fs-4 fw-semibold mb-0">EMAIL</h6></th>
-                                <th><h6 class="fs-4 fw-semibold mb-0"></h6></th>
+                                <th><h6 class="fs-2 fw-bold py-1 mb-0">ACCIONES</h6></th>
+                                <th><h6 class="fs-2 fw-bold py-1 mb-0">ESTADO</h6></th>
+                                <th><h6 class="fs-2 fw-bold py-1 mb-0">NOMBRES</h6></th>
+                                <th><h6 class="fs-2 fw-bold py-1 mb-0">EMAIL</h6></th>
+                                <th><h6 class="fs-2 fw-bold py-1 mb-0"></h6></th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($usuarios as $usuario)
                                 <tr>
-                                    <td>
+                                    <td style="width: 10%">
                                         <button type="button" class="btn badge fw-semibold p-1 bg-primary-subtle text-primary"  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Más acciones">
                                             <i class="ti ti-menu-4"></i>
                                         </button>
@@ -45,18 +45,18 @@
                                                 </a>
                                             </li>                                            
                                         </ul>                                        
-                                        <a wire:click="showForm({{ $usuario->id }})" class="btn badge fw-semibold py-1 bg-primary-subtle text-primary" title="Editar Usuarios">
+                                        {{-- <a wire:click="showForm({{ $usuario->id }})" class="btn badge fw-semibold py-1 bg-primary-subtle text-primary" title="Editar Usuarios">
                                             <i class="ti ti-edit"></i>                                        
-                                        </a>
-                                        <a wire:click="assignRole({{ $usuario->id }})" class="btn badge fw-semibold py-1 bg-primary-subtle text-primary" title="Asignar roles">
+                                        </a> --}}
+                                        {{-- <a wire:click="assignRole({{ $usuario->id }})" class="btn badge fw-semibold py-1 bg-primary-subtle text-primary" title="Asignar roles">
                                             <i class="ti ti-user-cog"></i>
-                                        </a>
+                                        </a> --}}
                                     </td>
-                                    <td>
+                                    <td style="width: 10%">
                                         @if($usuario->estado == 1)
-                                        <a class="badge fw-semibold py-1 bg-primary-subtle text-primary" role="button"><small>{{ __('ACTIVO') }}</small></a>
+                                        <a class="badge fw-semibold py-1 fs-1 bg-primary-subtle text-primary" role="button"><small>{{ __('ACTIVO') }}</small></a>
                                         @elseif($usuario->estado == 0)
-                                        <a class="badge fw-semibold py-1 bg-primary-subtle text-primary" role="button"><small>{{ __('SUSPENDIDO') }}</small></a>
+                                        <a class="badge fw-semibold py-1 fs-1 bg-primary-subtle text-primary" role="button"><small>{{ __('SUSPENDIDO') }}</small></a>
                                         @endif
                                     </td>
                                     <td>{{ $usuario->name }}</td>

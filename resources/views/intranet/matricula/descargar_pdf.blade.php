@@ -11,7 +11,7 @@
             
         }
         .img-unh{
-            width: 1.2cm;
+            width: 4cm;
             height: auto;
             margin-bottom: 10px;
         }
@@ -33,8 +33,8 @@
         }
 
         .photo_box{
-            width: 3.5cm;
-            height: 4.5cm;
+            width: 3cm;
+            height: 4cm;
             border: 1px solid #000;
             margin: 0 auto;
             margin-top: 20px;
@@ -57,7 +57,7 @@
         }
 
         .firmas-section{
-            margin-top: 10px;
+            /* margin-top: 0.3cm; */
         }
 
         .firmas-section > table{
@@ -79,8 +79,8 @@
 
 
         .firma_postulante_box{
-            width: 3cm ;
-            height: 3.5cm;
+            width: 2.5cm ;
+            height: 3cm;
             border: 1px solid #000;
             margin: 0 auto;
         }
@@ -98,7 +98,7 @@
         <div class="pdf-header text-center">
             <img class="img-unh" src="{{ $unh_logo }}" alt="" srcset="">
             <h5 class="page-title">FICHA DE INSCRIPCIÓN</h5>
-            <h5>CENTRO PRE UNIVERSITARIO DE LA UNH</h5>
+            <h5 class="text-uppercase">{{ $matricula->ciclo->tipo_ciclo->descripcion; }}</h5>
             <div class="photo_box"></div>
         </div>
         <table class="matricula-table">
@@ -124,12 +124,6 @@
                 <td class="text-end">CICLO:</td>
                 <td>
                     <strong class="text-uppercase">{{ $matricula->ciclo->descripcion; }}</strong>
-                </td>
-            </tr>
-            <tr>
-                <td class="text-end">TIPO DE CICLO:</td>
-                <td>
-                    <strong class="text-uppercase">{{ $matricula->ciclo->tipo_ciclo->descripcion; }}</strong>
                 </td>
             </tr>
             <tr>
@@ -164,7 +158,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="text-end">MONTO NETO:</td>
+                <td class="text-end">MONTO:</td>
                 <td>
                     {{-- TODO: AVOID USE [0] --}}
                     <strong class="text-uppercase">S/{{ $matricula->pagos[0]->monto_neto }}</strong>
@@ -201,21 +195,20 @@
                         <strong>DECLARO BAJO JURAMENTO QUE:</strong>
                         <ul>
                             <li>
-                                Toda la información a registrar en el formulario de inscripción es verdadera y de mi entera responsabilidad.
+                                Toda la información a registrar en el formulario de inscripción es verdadera y de mi entera responsabilidad
                             </li>
                             <li>
-                                Conozco y acepto todas las disposiciones del reglamento específico de admisión, al cual me someto.
+                                Conozco y acepto todas las disposiciones del reglamento específico de CEPRE-UNH, al cual me someto. 
                             </li>
                             <li>
                                 No soy condenado por el delito de terrorismo apología al terrorismo en cualquiera de sus modalidades.
                             </li>
                             <li>
-                                No tengo sanción de impedimento de postular u otras medidas disciplinarias en la UNH u otra universidad del
-                                pais.
+                                No tengo sanción de impedimento de postular u otras medidas disciplinarias en la UNH u otra universidad del país.
                             </li>
                             <li>
-                                Autorizo a la Universidad Nacional de Huancavelica,el uso de mis datos personales y la información
-                                proporcionada, para los fines que estime conveniente.
+                                Autorizo a la Universidad Nacional de Huancavelica, el uso de mis datos personales y la información proporcionada, para
+                                los fines que estime conveniente.
                             </li>
                         </ul>
                     </td>
@@ -230,6 +223,11 @@
                     </td>
                 </tr>
             </table>
+            <div>
+                <small>
+                    <strong>NOTA.</strong> Los estudiantes que tienen pendiente la segunda cuota, la fecha límite de pago es 15/01/2024.
+                </small>
+            </div>
         </div>
     </div>
         

@@ -80,9 +80,9 @@
                     <div class="col-md-4 mb-3">
                         <label for="aula_ciclo_id" class="form-label">Aula</label>
                         <select name="aula_ciclo_id" id="aula_ciclo_id" class="form-select @error('aula_ciclo_id') is-invalid @enderror" required>
-                            @foreach ($ciclo->aulas as $aula)
+                            @foreach ($ciclo->aulas_ciclos as $aula)
                             <option value="{{ $aula->id }}">
-                                {{ $aula->descripcion }}
+                                {{ $aula->aula->descripcion }}
                             </option>
                             @endforeach
                         </select>
@@ -143,8 +143,9 @@
 
                     <div class="col-md-4 mb-3">
                         <label for="descripcion_pago" class="form-label">Descripción del pago</label>
-                        <input name="descripcion_pago" type="text" id="descripcion_pago" class="form-control @error('descripcion_pago') is-invalid @enderror" required
-                            autocomplete="off" />
+                        <input name="descripcion_pago" type="text" id="descripcion_pago" class="form-control @error('descripcion_pago') is-invalid @enderror"
+                            value="MATRÍCULA CEPRE UNH - {{ mb_strtoupper($ciclo->descripcion) }}" required autocomplete="off"
+                            oninput="this.value = this.value.toUpperCase();" />
                         @error('descripcion_pago')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -153,7 +154,7 @@
                     <div class="col-md-4 mb-3">
                         <label for="n_transaccion" class="form-label">Número de transacción</label>
                         <input name="n_transaccion" type="text" id="n_transaccion" class="form-control @error('n_transaccion') is-invalid @enderror" required
-                            autocomplete="off" />
+                            autocomplete="off" oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
                         @error('n_transaccion')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror

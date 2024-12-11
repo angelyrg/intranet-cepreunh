@@ -55,6 +55,11 @@ class Ciclo extends Model
         return $this->belongsToMany(Aula::class);
     }
 
+    public function aulas_ciclos()
+    {
+        return $this->hasMany(AulaCiclo::class);
+    }
+
     // TODO: Agregar las relaciones:  Semanas
 
 }

@@ -1,5 +1,19 @@
 @extends('intranet.layouts.app')
 
+@section('css')
+
+<style>
+    input[readonly] {
+        background-color: #f5f5f5; /* Gris claro */
+        border: 1px solid #ccc; /* Borde gris claro */
+        color: #6c757d; /* Color gris oscuro */
+        pointer-events: none; /* Desactiva la interacción del usuario */
+        user-select: none;
+    }
+</style>
+    
+@endsection
+
 @section('content')
 
 {{-- Breadcrumb|start --}}
@@ -57,7 +71,7 @@
                         <label for="nro_documento" class="form-label">Número de documento</label>
                         <input type="text" name="nro_documento" id="nro_documento"
                             class="form-control @error('nro_documento') is-invalid @enderror"
-                            value="{{ old('nro_documento', $estudiante->nro_documento ?? '') }}" autocomplete="off">
+                            value="{{ $dni }}" autocomplete="off" readonly>
                         @error('nro_documento')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -158,6 +172,8 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+
+                    
 
                     <!-- Ubigeo de nacimiento -->
                     {{-- <div class="col-md-4 mb-3">
@@ -283,7 +299,7 @@
                         <label for="year_culminacion" class="form-label">Año de culminación de Secundaria</label>
                         <input type="number" name="year_culminacion" id="year_culminacion"
                             class="form-control @error('year_culminacion') is-invalid @enderror"
-                            value="{{ old('year_culminacion', $estudiante->year_culminacion ?? '') }}" autocomplete="off">
+                            value="{{ old('year_culminacion', $estudiante->year_culminacion ?? '') }}" autocomplete="off" maxlength="4">
                         @error('year_culminacion')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -360,6 +376,26 @@
                             @endforeach
                         </select>
                         @error('identidad_etnica_id')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="telefono_apoderado" class="form-label">Teléfono del apoderado</label>
+                        <input type="text" name="telefono_apoderado" id="telefono_apoderado"
+                            class="form-control @error('telefono_apoderado') is-invalid @enderror"
+                            value="{{ old('telefono_apoderado', $estudiante->telefono_apoderado ?? '') }}" autocomplete="off" maxlength="9">
+                        @error('telefono_apoderado')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    
+                    <div class="col-md-4 mb-3">
+                        <label for="correo_apoderado" class="form-label">Correo del apoderado</label>
+                        <input type="email" name="correo_apoderado" id="correo_apoderado"
+                            class="form-control @error('correo_apoderado') is-invalid @enderror"
+                            value="{{ old('correo_apoderado', $estudiante->correo_apoderado ?? '') }}" autocomplete="off">
+                        @error('correo_apoderado')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>

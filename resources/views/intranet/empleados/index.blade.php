@@ -11,6 +11,10 @@
 
 <script>
 
+function notifyToastr(message, type, title = '') {
+    toastr[type](message, title);    
+}
+
 document.addEventListener('livewire:initialized', () => {
     Livewire.on('show-alert', (event) => {
         Swal.fire({
@@ -20,6 +24,14 @@ document.addEventListener('livewire:initialized', () => {
             confirmButtonText: 'OK'
         });
     });
+
+    Livewire.on('showNotify', (data) => {
+        var response = data[0];
+
+        notifyToastr(response.msg, response.type, 'Empleado');
+        
+    });
+
 });
 
 function initializeTooltips() {
