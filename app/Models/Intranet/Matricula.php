@@ -19,11 +19,16 @@ class Matricula extends Model
         'area_id',
         'carrera_id',
         'sede_id',
-        // 'apoderado_id',
+        'modalidad_estudio',
+        'modalidad_matricula',
+        'condicion_academica',
+        'cantidad_matricula',
         'turno',
         'estado',
     ];
 
+    const MODALIDADES_ESTUDIO = ['Presencial', 'Virtual'];
+    const CONDICIONES_ACADEMICAS = ['Egresado', '5to Secundaria', '4to Secundaria'];
 
     public function estudiante()
     {

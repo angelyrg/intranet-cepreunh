@@ -98,6 +98,39 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="modalidad_estudio" class="form-label">Modalidad de estudio</label>
+                        <select name="modalidad_estudio" id="modalidad_estudio" class="form-select @error('modalidad_estudio') is-invalid @enderror" required>
+                            <option value="Presencial" {{ old('modalidad_estudio') == 'Presencial' ? 'selected' : '' }}>Presencial</option>
+                            <option value="Virtual" {{ old('modalidad_estudio') == 'Virtual' ? 'selected' : '' }}>Virtual</option>
+                        </select>
+                        @error('modalidad_estudio')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="condicion_academica" class="form-label">Modalidad académica</label>
+                        <select name="condicion_academica" id="condicion_academica" class="form-select @error('condicion_academica') is-invalid @enderror" required>
+                            <option value="Egresado" {{ old('condicion_academica') == 'Egresado' ? 'selected' : '' }}>Egresado</option>
+                            <option value="5to Secundaria" {{ old('condicion_academica') == '5to Secundaria' ? 'selected' : '' }}>5to Secundaria</option>
+                            <option value="4to Secundaria" {{ old('condicion_academica') == '4to Secundaria' ? 'selected' : '' }}>4to Secundaria</option>
+                        </select>
+                        @error('condicion_academica')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="cantidad_matricula" class="form-label">Veces matriculados en Cepre</label>
+                        <input name="cantidad_matricula" type="text" id="cantidad_matricula" class="form-control @error('cantidad_matricula') is-invalid @enderror"
+                            value="{{ old('cantidad_matricula', 1) }}" autocomplete="off" />
+                        @error('cantidad_matricula')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
                 </div>
 
                 <div class="col-12 mt-3">
@@ -201,14 +234,17 @@
                     </div>
 
                     <div class="col-md-4 mb-3">
-                        <label for="condicion_pago" class="form-label">Condición de pago</label>
-                        <select name="condicion_pago" id="condicion_pago" class="form-select @error('condicion_pago') is-invalid @enderror"
-                            required>
-                            <option value="Cancelado" {{ old('condicion_pago')=='Cancelado' ? 'selected' : '' }}>Cancelado</option>
-                            <option value="Parcial" {{ old('condicion_pago')=='Parcial' ? 'selected' : '' }}>Parcial</option>
+                        <label for="condicion_pago" class="form-label">Modalidad de estudio</label>
+                        <select name="condicion_pago" id="condicion_pago" class="form-select @error('condicion_pago') is-invalid @enderror" required>
+                            <option value="Cancelado" {{ old('condicion_pago') == 'Cancelado' ? 'selected' : '' }}>
+                                Cancelado
+                            </option>
+                            <option value="Parcial" {{ old('condicion_pago') == 'Parcial' ? 'selected' : '' }}>
+                                Parcial
+                            </option>
                         </select>
                         @error('condicion_pago')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                            <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
 
@@ -216,7 +252,7 @@
 
                 <div class="row">
                     <div class="col text-end">
-                        <button type="submit" class="btn btn-primary px-8">Continuar</button>
+                        <button type="submit" class="btn btn-primary px-8">Guardar y continuar</button>
                     </div>
                 </div>
             </div>

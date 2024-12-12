@@ -41,13 +41,14 @@ class MatriculaController extends Controller
 
     public function buscar_dni(Request $request)
     {
-        $ciclo_id = $request->query('ciclo');
-
         $request->validate([
+            'ciclo_id' => 'required|numeric|exists:ciclos,id',
             'estudiante_dni' => 'required|numeric|min:8',
         ]);
 
+        $ciclo_id = $request->ciclo_id;
         $dni = $request->estudiante_dni;
+        
         $estudiante = Estudiante::where('nro_documento', $dni)->first();
 
         if($estudiante){
@@ -56,8 +57,6 @@ class MatriculaController extends Controller
             if ($matricula) {
                 return back()->with('warning', "El estudiante con dni $dni ya está matriculado en este ciclo.")->withInput();
             }
-
-            $estudiante->discapacidades = explode(',', $estudiante->discapacidades);
         }
 
         $tipos_documentos = TipoDocumento::all();
@@ -1607,6 +1606,10 @@ class MatriculaController extends Controller
             'area_id' => $validatedData['area_id'],
             'carrera_id' => $validatedData['carrera_id'],
             'sede_id' => $validatedData['sede_id'],
+            'modalidad_estudio' => $validatedData['modalidad_estudio'],
+            'condicion_academica' => $validatedData['condicion_academica'],
+            'cantidad_matricula' => $validatedData['cantidad_matricula'],
+            'modalidad_matricula' => 1, //1: Presencial, 2: Virtual
         ]);
 
         $pago = Pago::create([
@@ -1707,11 +1710,14 @@ class MatriculaController extends Controller
     {
         $matricula = Matricula::findOrFail($id);
         $unh_logo_icon = public_path('assets/images/logos/CepreUNH.webp');
+        $document_header_img = public_path('assets/images/document-header.jpg');
 
-        // return view ('intranet.matricula.descargar_pdf', ['matricula' => $matricula, 'unh_logo' => $unh_logo_icon]);
-
-        $pdf = PDF::loadView('intranet.matricula.descargar_pdf', ['matricula'=>$matricula, 'unh_logo' => $unh_logo_icon])->setPaper('A4', 'portrait');
-        return $pdf->download('FICHA-' . $matricula->estudiante->nro_documento . '.pdf');
+        $pdf = PDF::loadView('intranet.matricula.descargar_pdf', [
+                'matricula'=>$matricula,
+                'unh_logo' => $unh_logo_icon,
+                'document_header' => $document_header_img
+            ])->setPaper('A4', 'portrait');
+        return $pdf->download('FICHA_DE_MATRICULA_' . $matricula->estudiante->nro_documento . '.pdf');
 
     }
 
@@ -1719,11 +1725,16 @@ class MatriculaController extends Controller
     {
         $matricula = Matricula::findOrFail($id);
         $unh_logo_icon = public_path('assets/images/logos/CepreUNH.webp');
+        $document_header_img = public_path('assets/images/document-header.jpg');
 
-        $pdf = PDF::loadView('intranet.matricula.descargar_pdf', ['matricula' => $matricula, 'unh_logo' => $unh_logo_icon])
+        $pdf = PDF::loadView('intranet.matricula.descargar_pdf', [
+                'matricula' => $matricula,
+                'unh_logo' => $unh_logo_icon,
+                'document_header' => $document_header_img
+            ])
             ->setPaper('A4', 'portrait');
 
-        return $pdf->stream('FICHA-' . $matricula->estudiante->nro_documento . '.pdf');
+        return $pdf->stream('FICHA_DE_MATRICULA_' . $matricula->estudiante->nro_documento . '.pdf');
     }
 
 }

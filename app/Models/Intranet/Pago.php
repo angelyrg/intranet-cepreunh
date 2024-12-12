@@ -24,6 +24,8 @@ class Pago extends Model
         'condicion_pago',
     ];
 
+    const CONDICIONES_PAGO = ['Cancelado', 'Parcial'];
+
     public function banco()
     {
         return $this->belongsTo(Banco::class);

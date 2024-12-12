@@ -36,8 +36,9 @@
     <div class="card-body p-4">
         <div id="validacion_dni">
             {{-- TODO: Usar JS para llada asincrona --}}
-            <form action="{{ route('matricula.buscar_dni') }}" method="GET">
-                <input type="hidden" name="ciclo" value="{{ $ciclo->id }}">
+            <form action="{{ route('matricula.buscar_dni') }}" method="POST">
+                @csrf
+                <input type="hidden" name="ciclo_id" value="{{ $ciclo->id }}">
                 @if(session()->has('warning'))
                 <div class="alert alert-warning">
                     {{ session('warning') }}
