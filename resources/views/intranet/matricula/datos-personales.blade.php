@@ -15,6 +15,7 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 @endsection
 
+
 @section('content')
 
 {{-- Breadcrumb|start --}}
@@ -507,7 +508,7 @@
 
 @section('scripts')
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script>
@@ -746,7 +747,7 @@
         // Función para obtener colegios según la distrito
         function getColegios(distritoId) {
             const colegioSelect = document.getElementById('colegio_id');
-            colegioSelect.innerHTML = '<option value="">Seleccione colegio</option>'; // Limpiar colegios
+            colegioSelect.innerHTML = '<option value="">Seleccione un colegio</option>'; // Limpiar colegios
 
             fetch(`/api/common/colegios?ubigeo=${distritoId}`)
                 .then(response => response.json())

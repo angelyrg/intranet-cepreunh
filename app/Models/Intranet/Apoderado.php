@@ -24,4 +24,10 @@ class Apoderado extends Model
     public function tipo_documento(){
         return $this->belongsTo(TipoDocumento::class);
     }
+
+    public function parentesco()
+    {
+        return $this->belongsTo(Parentesco::class);
+    }
+
 }

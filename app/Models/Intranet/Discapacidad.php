@@ -11,4 +11,9 @@ class Discapacidad extends Model
     use HasFactory, SoftDeletes;
 
     protected $table = 'discapacidades';
+
+    public function estudiantes()
+    {
+        return $this->belongsToMany(Estudiante::class, 'estudiante_discapacidad', 'estudiante_id', 'discapacidad_id');
+    }
 }

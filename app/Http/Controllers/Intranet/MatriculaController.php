@@ -9,6 +9,7 @@ use App\Http\Requests\Matricula\MatriculaEstudianteRequest;
 use App\Http\Requests\Matricula\MatriculaRequest;
 use App\Models\Intranet\Apoderado;
 use App\Models\Intranet\Area;
+use App\Models\Intranet\Aula;
 use App\Models\Intranet\AulaMatricula;
 use App\Models\Intranet\Banco;
 use App\Models\Intranet\Ciclo;
@@ -1511,12 +1512,20 @@ class MatriculaController extends Controller
         ];
 
         if ($estudiante_id){
-            $apoderado = Apoderado::create($datosApoderado);
-        }else{
             $estudiante_old =  Estudiante::findOrFail($estudiante_id);
-            $apoderado = $estudiante_old->apoderados()[0];
+            $apoderado = $estudiante_old->apoderado()->first();
+            if ($apoderado) {
+                $apoderado->telefono_apoderado = $datosApoderado['telefono_apoderado'];
+                $apoderado->correo_apoderado = $datosApoderado['correo_apoderado'];
+                $apoderado->parentesco_id = $datosApoderado['parentesco_id'];
+                $apoderado->save();
+            } else {
+                $apoderado = Apoderado::create($datosApoderado);
+            }
+        }else{
+            $apoderado = Apoderado::create($datosApoderado);
         }
-        
+         
         $datosEstudiante = [
             'tipo_documento_id' => $validatedData['tipo_documento_id'],
             'nro_documento' => $validatedData['nro_documento'],
@@ -1539,7 +1548,7 @@ class MatriculaController extends Controller
             'direccion_ubigeodistrito_id' => $validatedData['direccion_ubigeodistrito_id'],
             'direccion' => $validatedData['direccion'],
 
-            'colegio_ubigeodistrito_id ' => $validatedData['colegio_ubigeodistrito_id '],
+            'colegio_ubigeodistrito_id' => $validatedData['colegio_ubigeodistrito_id'],
             'colegio_id' => $validatedData['colegio_id'],
             'year_culminacion' => $validatedData['year_culminacion'],
 
@@ -1558,7 +1567,7 @@ class MatriculaController extends Controller
         }
 
         session()->put('ciclo_id', $ciclo_id);
-        session()->put('estudiante_id', $estudiante_id);
+        session()->put('estudiante_id', $estudiante->id);
 
 
         return redirect()->route('matricula.create');
@@ -1609,6 +1618,7 @@ class MatriculaController extends Controller
             'monto' => $validatedData['monto'],
             'comision' => $validatedData['comision'],
             'monto_neto' => $validatedData['monto_neto'],
+            'condicion_pago' => $validatedData['condicion_pago'],
             'fecha_pago' => $validatedData['fecha_pago'],
         ]);
         
