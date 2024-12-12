@@ -79,7 +79,7 @@ class MatriculaRequest extends FormRequest
                 Rule::exists('bancos', 'id'),
             ],
             'cod_operacion' => [
-                'required',
+                'nullable',
                 'string',
                 'max:100',
             ],
@@ -89,7 +89,7 @@ class MatriculaRequest extends FormRequest
                 'max:100',
             ],
             'n_transaccion' => [
-                'required',
+                'nullable',
                 'string',
                 'max:100',
             ],
@@ -107,6 +107,11 @@ class MatriculaRequest extends FormRequest
                 'required',
                 'numeric',
                 'min:0',
+            ],
+            'condicion_pago' => [
+                'required',
+                'string',
+                'max:15',
             ],
             'fecha_pago' => [
                 'required',

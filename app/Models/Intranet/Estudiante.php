@@ -30,17 +30,17 @@ class Estudiante extends Model
         'tiene_discapacidad',
         'discapacidades',
         'identidad_etnica_id',
-        'nacimiento_ubigeodepartamento_id',
-        'nacimiento_ubigeoprovincia_id',
         'nacimiento_ubigeodistrito_id',
-        'direccion_ubigeodepartamento_id',
-        'direccion_ubigeoprovincia_id',
         'direccion_ubigeodistrito_id',
         'direccion',
+        'colegio_ubigeodistrito_id',
         'colegio_id',
         'year_culminacion',
         'apoderado_id',
+        'user_id',
         'estado',
+        // 'telefono_apoderado',
+        // 'correo_apoderado',
     ];
     
     public function tipo_documento(){
@@ -71,4 +71,12 @@ class Estudiante extends Model
         return $this->belongsToMany(Ciclo::class);
     }
 
+    public function discapacidades(){
+        return $this->belongsToMany(Discapacidad::class, 'estudiante_discapacidad', 'estudiante_id', 'discapacidad_id');
+    }
+
+    public function apoderado()
+    {
+        return $this->belongsTo(Apoderado::class);
+    }
 }

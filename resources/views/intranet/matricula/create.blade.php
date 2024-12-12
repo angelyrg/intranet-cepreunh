@@ -39,12 +39,19 @@
                     <input type="hidden" name="ciclo_id" value="{{ $ciclo_id }}">
                     <input type="hidden" name="estudiante_id" value="{{ $estudiante_id }}">
 
+                    <div class="col-12 mt-3">
+                        <p class="mb-0 fw-bolder text-primary">
+                            INFORMACIÓN DE MATRÍCULA
+                        </p>
+                        <hr class="mt-0">
+                    </div>
+                
                     <div class="col-md-4 mb-3">
                         <label for="area_id" class="form-label">Área</label>
                         <select name="area_id" id="area_id" class="form-select @error('area_id') is-invalid @enderror" required>
                             <option value="">Seleccionar Área</option>
                             @foreach ($areas as $item)
-                            <option value="{{ $item->id }}">
+                            <option value="{{ $item->id }}" {{ old('area_id')==$item->id ? 'selected' : '' }}>
                                 {{ $item->descripcion }}
                             </option>
                             @endforeach
@@ -68,7 +75,7 @@
                         <label for="sede_id" class="form-label">Sede</label>
                         <select name="sede_id" id="sede_id" class="form-select @error('sede_id') is-invalid @enderror" required>
                             @foreach ($sedes as $sede)
-                            <option value="{{ $sede->id }}">
+                            <option value="{{ $sede->id }}" {{ old('sede_id')==$sede->id ? 'selected' : '' }}>
                                 {{ $sede->descripcion }}
                             </option>
                             @endforeach
@@ -77,11 +84,12 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+
                     <div class="col-md-4 mb-3">
                         <label for="aula_ciclo_id" class="form-label">Aula</label>
                         <select name="aula_ciclo_id" id="aula_ciclo_id" class="form-select @error('aula_ciclo_id') is-invalid @enderror" required>
                             @foreach ($ciclo->aulas_ciclos as $aula)
-                            <option value="{{ $aula->id }}">
+                            <option value="{{ $aula->id }}" {{ old('aula_ciclo_id')==$aula->id ? 'selected' : '' }}>
                                 {{ $aula->aula->descripcion }}
                             </option>
                             @endforeach
@@ -92,14 +100,19 @@
                     </div>
                 </div>
 
-                <hr>
+                <div class="col-12 mt-3">
+                    <p class="mb-0 fw-bolder text-primary">
+                        INFORMACIÓN DE PAGO
+                    </p>
+                    <hr class="mt-0">
+                </div>
 
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <label for="forma_de_pago_id" class="form-label">Modalidad de pago</label>
                         <select name="forma_de_pago_id" id="forma_de_pago_id" class="form-select @error('forma_de_pago_id') is-invalid @enderror" required>
                             @foreach ($formasDePago as $modalidad)
-                            <option value="{{ $modalidad->id }}">
+                            <option value="{{ $modalidad->id }}" {{ old('forma_de_pago_id')==$modalidad->id ? 'selected' : '' }}>
                                 {{ $modalidad->descripcion }}
                             </option>
                             @endforeach
@@ -113,7 +126,7 @@
                         <label for="banco_id" class="form-label">Banco</label>
                         <select name="banco_id" id="banco_id" class="form-select @error('banco_id') is-invalid @enderror" required>
                             @foreach ($bancos as $banco)
-                            <option value="{{ $banco->id }}">
+                            <option value="{{ $banco->id }}" {{ old('banco_id')==$banco->id ? 'selected' : '' }}>
                                 {{ $banco->descripcion }}
                             </option>
                             @endforeach
@@ -122,20 +135,20 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+
                     <div class="col-md-4 mb-3">
                         <label for="fecha_pago" class="form-label">Fecha de pago</label>
-                        <input name="fecha_pago" type="date" id="fecha_pago" class="form-control @error('fecha_pago') is-invalid @enderror" required value="{{ date('Y-m-d') }}" />
+                        <input name="fecha_pago" type="date" id="fecha_pago" class="form-control @error('fecha_pago') is-invalid @enderror" required 
+                            value="{{ old('fecha_pago', date('Y-m-d')) }}" />
                         @error('fecha_pago')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                </div>
 
-                <div class="row">
                     <div class="col-md-4 mb-3">
                         <label for="cod_operacion" class="form-label">Código de operación</label>
-                        <input name="cod_operacion" type="text" id="cod_operacion" class="form-control @error('cod_operacion') is-invalid @enderror" required
-                            autocomplete="off" />
+                        <input name="cod_operacion" type="text" id="cod_operacion" class="form-control @error('cod_operacion') is-invalid @enderror"
+                            value="{{ old('cod_operacion') }}" autocomplete="off" />
                         @error('cod_operacion')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -153,19 +166,18 @@
 
                     <div class="col-md-4 mb-3">
                         <label for="n_transaccion" class="form-label">Número de transacción</label>
-                        <input name="n_transaccion" type="text" id="n_transaccion" class="form-control @error('n_transaccion') is-invalid @enderror" required
+                        <input name="n_transaccion" type="text" id="n_transaccion" class="form-control @error('n_transaccion') is-invalid @enderror"
+                            value="{{ old('n_transaccion') }}"
                             autocomplete="off" oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
                         @error('n_transaccion')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                </div>
 
-                <div class="row">
                     <div class="col-md-4 mb-3">
                         <label for="monto" class="form-label">Monto</label>
-                        <input name="monto" type="number" id="monto" class="form-control @error('monto') is-invalid @enderror" required
-                            autocomplete="off" />
+                        <input name="monto" type="number" id="monto" class="form-control @error('monto') is-invalid @enderror" 
+                            value="{{ old('monto') }}" required autocomplete="off" step="0.01"/>
                         @error('monto')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -173,7 +185,7 @@
                     <div class="col-md-4 mb-3">
                         <label for="comision" class="form-label">Comisión</label>
                         <input name="comision" type="number" id="comision" class="form-control @error('comision') is-invalid @enderror" required
-                            autocomplete="off" />
+                            value="{{ old('comision', 0) }}" autocomplete="off" value="0" step="0.01"/>
                         @error('comision')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -182,11 +194,24 @@
                     <div class="col-md-4 mb-3">
                         <label for="monto_neto" class="form-label">Monto neto</label>
                         <input name="monto_neto" type="number" id="monto_neto" class="form-control @error('monto_neto') is-invalid @enderror" required
-                            autocomplete="off" />
+                            value="{{ old('monto_neto') }}" autocomplete="off" step="0.01"/>
                         @error('monto_neto')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="condicion_pago" class="form-label">Condición de pago</label>
+                        <select name="condicion_pago" id="condicion_pago" class="form-select @error('condicion_pago') is-invalid @enderror"
+                            required>
+                            <option value="Cancelado" {{ old('condicion_pago')=='Cancelado' ? 'selected' : '' }}>Cancelado</option>
+                            <option value="Parcial" {{ old('condicion_pago')=='Parcial' ? 'selected' : '' }}>Parcial</option>
+                        </select>
+                        @error('condicion_pago')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
                 </div>
 
                 <div class="row">
@@ -254,6 +279,27 @@
                 });
         }        
     });
+</script>
+
+<script>
+    // Obtener los elementos por ID
+    const montoInput = document.getElementById('monto');
+    const comisionInput = document.getElementById('comision');
+    const montoNetoInput = document.getElementById('monto_neto');
+
+    // Función para actualizar el monto neto
+    function actualizarMontoNeto() {
+        const monto = parseFloat(montoInput.value) || 0;  // Si el valor no es un número, usamos 0
+        const comision = parseFloat(comisionInput.value) || 0;  // Si el valor no es un número, usamos 0
+        montoNetoInput.value = (monto + comision).toFixed(2);  // Sumar monto + comision y limitar a 2 decimales
+    }
+
+    // Escuchar los cambios en los campos de monto y comision
+    montoInput.addEventListener('input', actualizarMontoNeto);
+    comisionInput.addEventListener('input', actualizarMontoNeto);
+
+    // Ejecutar la actualización inicial para asegurarnos que el campo de monto neto esté al día
+    actualizarMontoNeto();
 </script>
 
 @endsection

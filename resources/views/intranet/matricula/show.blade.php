@@ -235,9 +235,10 @@
                     <div class="col-12 col-md-6">
                         <div class="row">
                             <label class="control-label text-end col-md-7">Aula <small>(Hasta examen de ubicación)</small>:</label>
-                            <div class="col-md-5 ">
-                                {{-- TODO: void use [0] --}}
-                                <p class="form-control-static mb-0 text-uppercase">{{ $matricula->aulas[0]->aula->descripcion }}</p>
+                            <div class="col-md-5">
+                                <p class="form-control-static mb-0 text-uppercase">
+                                    {{ $matricula->aulas->first()?->aula->descripcion ?? '' }}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -246,21 +247,79 @@
                         <div class="row">
                             <label class="control-label text-end col-md-7">Concepto de pago:</label>
                             <div class="col-md-5 ">
-                                {{-- TODO: avoid use [0] --}}
-                                <p class="form-control-static mb-0 text-uppercase">{{ $matricula->pagos[0]->descripcion_pago }}</p>
+                                <p class="form-control-static mb-0 text-uppercase">
+                                    {{ $matricula->pagos->first()?->descripcion_pago ?? '' }}
+                                </p>
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="col-12 col-md-6">
+                        <div class="row">
+                            <label class="control-label text-end col-md-7">Monto:</label>
+                            <div class="col-md-5 ">
+                                <p class="form-control-static mb-0">
+                                    S/{{ $matricula->pagos->first()?->monto ?? '' }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-12 col-md-6">
+                        <div class="row">
+                            <label class="control-label text-end col-md-7">Comisión:</label>
+                            <div class="col-md-5 ">
+                                <p class="form-control-static mb-0">
+                                    S/{{ $matricula->pagos->first()?->comision ?? '' }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="col-12 col-md-6">
                         <div class="row">
                             <label class="control-label text-end col-md-7">MONTO NETO:</label>
                             <div class="col-md-5 ">
-                                {{-- TODO: avoid use [0] --}}
-                                <p class="form-control-static mb-0 text-uppercase">S/{{ $matricula->pagos[0]->monto_neto }}</p>
+                                <p class="form-control-static mb-0">
+                                    S/{{ $matricula->pagos->first()?->monto_neto ?? '' }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-12 col-md-6">
+                        <div class="row">
+                            <label class="control-label text-end col-md-7">Condición de pago:</label>
+                            <div class="col-md-5 ">
+                                <p class="form-control-static mb-0 text-uppercase">
+                                    {{ $matricula->pagos->first()?->condicion_pago ?? '' }}
+                                </p>
                             </div>
                         </div>
                     </div>
 
+                    <div class="col-12 col-md-6">
+                        <div class="row">
+                            <label class="control-label text-end col-md-7">Teléfono del apoderado:</label>
+                            <div class="col-md-5 ">
+                                <p class="form-control-static mb-0 text-uppercase">
+                                    {{ $matricula->estudiante->apoderado?->telefono_apoderado ?? '' }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-12 col-md-6">
+                        <div class="row">
+                            <label class="control-label text-end col-md-7">Correo del apoderado:</label>
+                            <div class="col-md-5 ">
+                                <p class="form-control-static mb-0 text-uppercase">
+                                    {{ $matricula->estudiante->apoderado?->correo_apoderado ?? '' }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
 
                 <div class="row mt-5">

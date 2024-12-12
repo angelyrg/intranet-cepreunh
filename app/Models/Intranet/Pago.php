@@ -21,6 +21,7 @@ class Pago extends Model
         'banco_id',
         'comision',
         'monto_neto',
+        'condicion_pago',
     ];
 
     public function banco()
