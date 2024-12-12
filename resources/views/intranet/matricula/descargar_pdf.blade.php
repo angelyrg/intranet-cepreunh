@@ -123,48 +123,59 @@
             <tr>
                 <td class="text-end">CICLO:</td>
                 <td>
-                    <strong class="text-uppercase">{{ $matricula->ciclo->descripcion; }}</strong>
+                    <strong class="text-uppercase">{{ $matricula->ciclo?->descripcion ?? '' }}</strong>
                 </td>
             </tr>
             <tr>
                 <td class="text-end">ÁREA:</td>
                 <td>
-                    <strong class="text-uppercase">{{ $matricula->area->descripcion; }}</strong>
+                    <strong class="text-uppercase">{{ $matricula->area?->descripcion ?? '' }}</strong>
                 </td>
             </tr>
             <tr>
                 <td class="text-end">CARRERA:</td>
                 <td>
-                    <strong class="text-uppercase">{{ $matricula->carrera->descripcion; }}</strong>
+                    <strong class="text-uppercase">{{ $matricula->carrera?->descripcion ?? '' }}</strong>
                 </td>
             </tr>
             <tr>
                 <td class="text-end">SEDE:</td>
                 <td>
-                    <strong class="text-uppercase">{{ $matricula->sede->descripcion; }}</strong>
+                    <strong class="text-uppercase">{{ $matricula->sede?->descripcion ?? '' }}</strong>
                 </td>
             </tr>
             <tr>
                 <td class="text-end">Aula <small>(Hasta examen de ubicación)</small>:</td>
                 <td>
-                    <strong class="text-uppercase">{{ $matricula->aulas[0]->aula->descripcion }}</strong>
+                    <strong class="text-uppercase">
+                        {{ $matricula->aulas->first()?->aula->descripcion ?? '' }}
+                    </strong>
                 </td>
             </tr>
             <tr>
                 <td class="text-end">CONCEPTO DE PAGO:</td>
                 <td>
-                    {{-- TODO: AVOID USE [0] --}}
-                    <strong class="text-uppercase">{{ $matricula->pagos[0]->descripcion_pago }}</strong>
+                    <strong class="text-uppercase">
+                        {{ $matricula->pagos->first()?->descripcion_pago ?? '' }}
+                    </strong>
                 </td>
             </tr>
             <tr>
                 <td class="text-end">MONTO:</td>
                 <td>
-                    {{-- TODO: AVOID USE [0] --}}
-                    <strong class="text-uppercase">S/{{ $matricula->pagos[0]->monto_neto }}</strong>
+                    <strong class="text-uppercase">
+                        S/{{ $matricula->pagos->first()?->monto_neto ?? '' }}
+                    </strong>
                 </td>
             </tr>
-
+            <tr>
+                <td class="text-end">CONDICIÓN DE PAGO:</td>
+                <td>
+                    <strong class="text-uppercase">
+                        {{ $matricula->pagos->first()?->condicion_pago ?? '' }}
+                    </strong>
+                </td>
+            </tr>
         </table>
 
         <hr>
@@ -229,6 +240,11 @@
                 </small>
             </div>
         </div>
+
+       <p>
+            Fecha de impresión: {{ now()->format('d/m/Y H:i:s') }}
+        </p>
+
     </div>
         
     </div>

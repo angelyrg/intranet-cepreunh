@@ -13,14 +13,15 @@ class Matricula extends Model
     use SoftDeletes;
 
     protected $fillable = [
+        'uuid',
         'ciclo_id',
         'estudiante_id',
         'area_id',
         'carrera_id',
         'sede_id',
+        // 'apoderado_id',
         'turno',
         'estado',
-        'uuid'
     ];
 
 
