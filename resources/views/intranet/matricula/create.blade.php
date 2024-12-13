@@ -98,6 +98,40 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="modalidad_estudio" class="form-label">Modalidad de estudio</label>
+                        <select name="modalidad_estudio" id="modalidad_estudio" class="form-select @error('modalidad_estudio') is-invalid @enderror" required>
+                            @foreach ($modalidades_estudio as $modalidad)
+                            <option value="{{ $modalidad }}" {{ old('modalidad_estudio') == $modalidad ? 'selected' : '' }}>{{ $modalidad }}</option>
+                            @endforeach
+                        </select>
+                        @error('modalidad_estudio')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="condicion_academica" class="form-label">Condición académica</label>
+                        <select name="condicion_academica" id="condicion_academica" class="form-select @error('condicion_academica') is-invalid @enderror" required>
+                            @foreach ($condiciones_acadedmicas as $condicion)
+                            <option value="{{ $condicion }}" {{ old('condicion_academica')==$condicion ? 'selected' : '' }}>{{ $condicion }}</option>
+                            @endforeach
+                        </select>
+                        @error('condicion_academica')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="cantidad_matricula" class="form-label">Veces matriculados en Cepre</label>
+                        <input name="cantidad_matricula" type="text" id="cantidad_matricula" class="form-control @error('cantidad_matricula') is-invalid @enderror"
+                            value="{{ old('cantidad_matricula', 1) }}" autocomplete="off" />
+                        @error('cantidad_matricula')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
                 </div>
 
                 <div class="col-12 mt-3">
@@ -202,13 +236,16 @@
 
                     <div class="col-md-4 mb-3">
                         <label for="condicion_pago" class="form-label">Condición de pago</label>
-                        <select name="condicion_pago" id="condicion_pago" class="form-select @error('condicion_pago') is-invalid @enderror"
-                            required>
-                            <option value="Cancelado" {{ old('condicion_pago')=='Cancelado' ? 'selected' : '' }}>Cancelado</option>
-                            <option value="Parcial" {{ old('condicion_pago')=='Parcial' ? 'selected' : '' }}>Parcial</option>
+                        <select name="condicion_pago" id="condicion_pago" class="form-select @error('condicion_pago') is-invalid @enderror" required>
+                            <option value="Cancelado" {{ old('condicion_pago') == 'Cancelado' ? 'selected' : '' }}>
+                                Cancelado
+                            </option>
+                            <option value="Parcial" {{ old('condicion_pago') == 'Parcial' ? 'selected' : '' }}>
+                                Parcial
+                            </option>
                         </select>
                         @error('condicion_pago')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                            <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
 
@@ -216,7 +253,7 @@
 
                 <div class="row">
                     <div class="col text-end">
-                        <button type="submit" class="btn btn-primary px-8">Continuar</button>
+                        <button type="submit" class="btn btn-primary px-8">Guardar y continuar</button>
                     </div>
                 </div>
             </div>
