@@ -63,7 +63,7 @@ class MatriculaRequest extends FormRequest
                     $query->where('estado', 1);
                 }),
             ],
-            'modalidad_matricula' => [
+            'modalidad_estudio' => [
                 'required',
                 'string',
                 'max:15',

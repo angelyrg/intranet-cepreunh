@@ -22,6 +22,7 @@ class Pago extends Model
         'comision',
         'monto_neto',
         'condicion_pago',
+        'forma_de_pago_id ',
     ];
 
     const CONDICIONES_PAGO = ['Cancelado', 'Parcial'];
@@ -29,5 +30,10 @@ class Pago extends Model
     public function banco()
     {
         return $this->belongsTo(Banco::class);
+    }
+
+    public function forma_de_pago()
+    {
+        return $this->belongsTo(FormaDePago::class);
     }
 }

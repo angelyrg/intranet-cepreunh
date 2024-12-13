@@ -1584,6 +1584,9 @@ class MatriculaController extends Controller
         $formasDePago = FormaDePago::all();
         $ciclo = Ciclo::with(['precios.forma_de_pago', 'aulas', 'aulas_ciclos.aula'])->findOrFail($ciclo_id);
 
+        $modalidades_estudio = Matricula::MODALIDADES_ESTUDIO;
+        $condiciones_acadedmicas = Matricula::CONDICIONES_ACADEMICAS;
+
         return view('intranet.matricula.create', compact(
             'ciclo_id',
             'ciclo',
@@ -1591,7 +1594,9 @@ class MatriculaController extends Controller
             'areas',
             'sedes',
             'bancos',
-            'formasDePago'
+            'formasDePago',
+            'modalidades_estudio',
+            'condiciones_acadedmicas'
         ));
     }
 
@@ -1623,6 +1628,7 @@ class MatriculaController extends Controller
             'monto_neto' => $validatedData['monto_neto'],
             'condicion_pago' => $validatedData['condicion_pago'],
             'fecha_pago' => $validatedData['fecha_pago'],
+            'forma_de_pago_id' => $validatedData['forma_de_pago_id'],
         ]);
         
         $pago = AulaMatricula::create([

@@ -102,8 +102,9 @@
                     <div class="col-md-4 mb-3">
                         <label for="modalidad_estudio" class="form-label">Modalidad de estudio</label>
                         <select name="modalidad_estudio" id="modalidad_estudio" class="form-select @error('modalidad_estudio') is-invalid @enderror" required>
-                            <option value="Presencial" {{ old('modalidad_estudio') == 'Presencial' ? 'selected' : '' }}>Presencial</option>
-                            <option value="Virtual" {{ old('modalidad_estudio') == 'Virtual' ? 'selected' : '' }}>Virtual</option>
+                            @foreach ($modalidades_estudio as $modalidad)
+                            <option value="{{ $modalidad }}" {{ old('modalidad_estudio') == $modalidad ? 'selected' : '' }}>{{ $modalidad }}</option>
+                            @endforeach
                         </select>
                         @error('modalidad_estudio')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -111,11 +112,11 @@
                     </div>
 
                     <div class="col-md-4 mb-3">
-                        <label for="condicion_academica" class="form-label">Modalidad académica</label>
+                        <label for="condicion_academica" class="form-label">Condición académica</label>
                         <select name="condicion_academica" id="condicion_academica" class="form-select @error('condicion_academica') is-invalid @enderror" required>
-                            <option value="Egresado" {{ old('condicion_academica') == 'Egresado' ? 'selected' : '' }}>Egresado</option>
-                            <option value="5to Secundaria" {{ old('condicion_academica') == '5to Secundaria' ? 'selected' : '' }}>5to Secundaria</option>
-                            <option value="4to Secundaria" {{ old('condicion_academica') == '4to Secundaria' ? 'selected' : '' }}>4to Secundaria</option>
+                            @foreach ($condiciones_acadedmicas as $condicion)
+                            <option value="{{ $condicion }}" {{ old('condicion_academica')==$condicion ? 'selected' : '' }}>{{ $condicion }}</option>
+                            @endforeach
                         </select>
                         @error('condicion_academica')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -234,7 +235,7 @@
                     </div>
 
                     <div class="col-md-4 mb-3">
-                        <label for="condicion_pago" class="form-label">Modalidad de estudio</label>
+                        <label for="condicion_pago" class="form-label">Condición de pago</label>
                         <select name="condicion_pago" id="condicion_pago" class="form-select @error('condicion_pago') is-invalid @enderror" required>
                             <option value="Cancelado" {{ old('condicion_pago') == 'Cancelado' ? 'selected' : '' }}>
                                 Cancelado
