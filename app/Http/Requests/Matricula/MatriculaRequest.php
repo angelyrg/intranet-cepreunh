@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Matricula;
 
+use App\Models\Intranet\Matricula;
+use App\Models\Intranet\Pago;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -61,6 +63,22 @@ class MatriculaRequest extends FormRequest
                     $query->where('estado', 1);
                 }),
             ],
+            'modalidad_estudio' => [
+                'required',
+                'string',
+                'max:15',
+                Rule::in(Matricula::MODALIDADES_ESTUDIO),
+            ],
+            'condicion_academica' => [
+                'required',
+                'string',
+                'max:15',
+                Rule::in(Matricula::CONDICIONES_ACADEMICAS),
+            ],
+            'cantidad_matricula' => [
+                'required',
+                'integer'
+            ],
             'aula_ciclo_id' => [
                 'required',
                 'integer',
@@ -112,6 +130,7 @@ class MatriculaRequest extends FormRequest
                 'required',
                 'string',
                 'max:15',
+                Rule::in(Pago::CONDICIONES_PAGO),
             ],
             'fecha_pago' => [
                 'required',
@@ -147,6 +166,11 @@ class MatriculaRequest extends FormRequest
             'sede_id.integer' => 'La sede debe ser un número entero.',
             'sede_id.exists' => 'La sede seleccionada no existe o está inactiva.',
 
+            'modalidad_matricula.required' => 'La modalidad de matrícula es obligatoria.',
+            'modalidad_matricula.string' => 'La modalidad de matrícula debe ser una cadena de texto.',
+            'modalidad_matricula.max' => 'La modalidad de matrícula no puede tener más de 15 caracteres.',
+            'modalidad_matricula.in' => 'La modalidad de matrícula debe ser ' . implode(' o ', Matricula::MODALIDADES_ESTUDIO) . '.',
+
             'aula_ciclo_id.required' => 'El aula ciclo es obligatoria.',
             'aula_ciclo_id.integer' => 'El aula ciclo debe ser un número entero.',
             'aula_ciclo_id.exists' => 'El aula ciclo seleccionado no existe.',
@@ -161,11 +185,11 @@ class MatriculaRequest extends FormRequest
 
             'cod_operacion.required' => 'El código de operación es obligatorio.',
             'cod_operacion.string' => 'El código de operación debe ser una cadena de texto.',
-            'cod_operacion.max' => 'El código de operación no puede tener más de 50 caracteres.',
+            'cod_operacion.max' => 'El código de operación no puede tener más de 100 caracteres.',
 
             'descripcion_pago.required' => 'La descripción del pago es obligatoria.',
             'descripcion_pago.string' => 'La descripción del pago debe ser una cadena de texto.',
-            'descripcion_pago.max' => 'La descripción del pago no puede tener más de 255 caracteres.',
+            'descripcion_pago.max' => 'La descripción del pago no puede tener más de 100 caracteres.',
 
             'n_transaccion.required' => 'El número de transacción es obligatorio.',
             'n_transaccion.string' => 'El número de transacción debe ser una cadena de texto.',
@@ -182,6 +206,11 @@ class MatriculaRequest extends FormRequest
             'monto_neto.required' => 'El monto neto es obligatorio.',
             'monto_neto.numeric' => 'El monto neto debe ser un número.',
             'monto_neto.min' => 'El monto neto debe ser mayor o igual a 0.',
+
+            'condicion_pago.required' => 'La condición de pago es obligatoria.',
+            'condicion_pago.string' => 'La condición de pago debe ser una cadena de texto.',
+            'condicion_pago.max' => 'La condición de pago no puede tener más de 15 caracteres.',
+            'condicion_pago.in' => 'La condición de pago debe ser ' . implode(' o ', Pago::CONDICIONES_PAGO) . '.',
 
             'fecha_pago.required' => 'La fecha de pago es obligatoria.',
             'fecha_pago.date' => 'La fecha de pago debe ser una fecha válida.',

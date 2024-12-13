@@ -186,9 +186,28 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-12 col-md-6">
+                        <div class="row">
+                            <label class="control-label text-end col-md-7">Teléfono del apoderado:</label>
+                            <div class="col-md-5 ">
+                                <p class="form-control-static mb-0 text-uppercase">
+                                    {{ $matricula->estudiante->apoderado?->telefono_apoderado ?? '' }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                     
+                    <div class="col-12 col-md-6">
+                        <div class="row">
+                            <label class="control-label text-end col-md-7">Correo del apoderado:</label>
+                            <div class="col-md-5 ">
+                                <p class="form-control-static mb-0 text-uppercase">
+                                    {{ $matricula->estudiante->apoderado?->correo_apoderado ?? '' }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
 
-                    
                 </div>
 
                 <hr class="my-2">
@@ -219,15 +238,30 @@
                         </div>
                     </div>
                     
+                    
                     <div class="col-12 col-md-6">
                         <div class="row">
-                            <label class="control-label text-end col-md-7">Estado:</label>
+                            <label class="control-label text-end col-md-7">Modalidad de estudio:</label>
                             <div class="col-md-5 ">
-                                @if ($matricula->estado == 1)
-                                <span class="badge bg-primary-subtle text-primary">Activo</span>
-                                @else
-                                <span class="badge bg-danger-subtle text-danger">Inactivo</span>
-                                @endif
+                                <p class="form-control-static mb-0 text-uppercase">{{ $matricula->modalidad_estudio }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <div class="row">
+                            <label class="control-label text-end col-md-7">Condición académica:</label>
+                            <div class="col-md-5 ">
+                                <p class="form-control-static mb-0 text-uppercase">{{ $matricula->condicion_academica }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-12 col-md-6">
+                        <div class="row">
+                            <label class="control-label text-end col-md-7">Veces de matrícula en Cepre:</label>
+                            <div class="col-md-5 ">
+                                <p class="form-control-static mb-0 text-uppercase">{{ $matricula->cantidad_matricula }}</p>
                             </div>
                         </div>
                     </div>
@@ -238,6 +272,17 @@
                             <div class="col-md-5">
                                 <p class="form-control-static mb-0 text-uppercase">
                                     {{ $matricula->aulas->first()?->aula->descripcion ?? '' }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <div class="row">
+                            <label class="control-label text-end col-md-7">Forma de pago:</label>
+                            <div class="col-md-5 ">
+                                <p class="form-control-static mb-0 text-uppercase">
+                                    {{ $matricula->pagos->first()?->forma_de_pago->descripcion ?? '' }}
                                 </p>
                             </div>
                         </div>
@@ -298,27 +343,7 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-md-6">
-                        <div class="row">
-                            <label class="control-label text-end col-md-7">Teléfono del apoderado:</label>
-                            <div class="col-md-5 ">
-                                <p class="form-control-static mb-0 text-uppercase">
-                                    {{ $matricula->estudiante->apoderado?->telefono_apoderado ?? '' }}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
                     
-                    <div class="col-12 col-md-6">
-                        <div class="row">
-                            <label class="control-label text-end col-md-7">Correo del apoderado:</label>
-                            <div class="col-md-5 ">
-                                <p class="form-control-static mb-0 text-uppercase">
-                                    {{ $matricula->estudiante->apoderado?->correo_apoderado ?? '' }}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
                     
                 </div>
 

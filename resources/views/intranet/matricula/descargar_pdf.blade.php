@@ -10,10 +10,17 @@
             line-height: 1.5;
             
         }
+        body {
+            margin-top: -5mm;
+        }
         .img-unh{
             width: 4cm;
             height: auto;
             margin-bottom: 10px;
+        }
+        .document-header-img{
+            width: 55%;
+            margin-bottom: 3mm;
         }
         .page-title{
             font-size: 14px;
@@ -96,7 +103,7 @@
 <body>
     <div>
         <div class="pdf-header text-center">
-            <img class="img-unh" src="{{ $unh_logo }}" alt="" srcset="">
+            <img class="document-header-img" src="{{ $document_header }}" alt="" srcset="">
             <h5 class="page-title">FICHA DE INSCRIPCIÓN</h5>
             <h5 class="text-uppercase">{{ $matricula->ciclo->tipo_ciclo->descripcion; }}</h5>
             <div class="photo_box"></div>
@@ -145,7 +152,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="text-end">Aula <small>(Hasta examen de ubicación)</small>:</td>
+                <td class="text-end">AULA <small>(Hasta examen de ubicación)</small>:</td>
                 <td>
                     <strong class="text-uppercase">
                         {{ $matricula->aulas->first()?->aula->descripcion ?? '' }}
@@ -234,14 +241,15 @@
                     </td>
                 </tr>
             </table>
+            @if ($matricula->pagos->first()?->condicion_pago != 'Cancelado')
             <div>
                 <small>
                     <strong>NOTA.</strong> Los estudiantes que tienen pendiente la segunda cuota, la fecha límite de pago es 15/01/2024.
                 </small>
             </div>
+            @endif
         </div>
-
-       <p>
+        <p>
             Fecha de impresión: {{ now()->format('d/m/Y H:i:s') }}
         </p>
 
