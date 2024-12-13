@@ -18,7 +18,7 @@ class AsignarCarrerasACiclo extends Component
     {
         $this->cicloId = $cicloId;
         $this->ciclos = Ciclo::all();
-        $this->carreras = Carrera::with(['area'])->get();
+        $this->carreras = Carrera::with('area')->get();
         $this->carrerasAsignadas = Ciclo::find($this->cicloId)->carreras->pluck('id')->toArray();
     }
 
