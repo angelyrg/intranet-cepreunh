@@ -55,7 +55,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('ciclos/{ciclo}/asignar_carreras', [CicloController::class, 'asignar_carreras'])->name('ciclos.asignar_carreras');
     Route::get('ciclos/{ciclo}/asignar_asignaturas', [CicloController::class, 'asignar_asignaturas'])->name('ciclos.asignar_asignaturas');
     
-    Route::post('matricula/datos-personales', [MatriculaController::class, 'buscar_dni'])->name('matricula.buscar_dni');
+    Route::post('matricula/buscar_dni', [MatriculaController::class, 'buscar_dni'])->name('matricula.buscar_dni');
+    Route::get('matricula/datos-personales', [MatriculaController::class, 'datos_personales'])->name('matricula.datos_personales');
     Route::post('matricula/store_estudiante', [MatriculaController::class, 'store_estudiante'])->name('matricula.store_estudiante');
     Route::get('matricula/create', [MatriculaController::class, 'create'])->name('matricula.create');
     Route::post('matricula/store', [MatriculaController::class, 'store'])->name('matricula.store');

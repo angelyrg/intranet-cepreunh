@@ -39,6 +39,30 @@ class MatriculaController extends Controller
         $ciclo_id = $request->ciclo_id;
         $dni = $request->estudiante_dni;
 
+        $estudiante = Estudiante::where('nro_documento', $dni)->first();
+
+        if ($estudiante) {
+            $matricula = Matricula::where('estudiante_id', $estudiante->id)->where('ciclo_id', $ciclo_id)->first();
+
+            if ($matricula) {
+                return back()->with('warning', "El estudiante con dni $dni ya está matriculado en este ciclo.")->withInput();
+            }
+        }
+
+        session()->put('estudiante', $estudiante);
+        session()->put('ciclo_id', $ciclo_id);
+        session()->put('dni', $dni);
+
+        return redirect()->route('matricula.datos_personales');
+    }
+
+
+    public function datos_personales()
+    {
+        $estudiante = session()->get('estudiante');
+        $ciclo_id = session()->get('ciclo_id');
+        $dni = session()->get('dni');
+
         $direccion_ubigeoDepartamentoId = null;
         $direccion_ubigeoProvinciaId = null;
 
@@ -48,16 +72,7 @@ class MatriculaController extends Controller
         $colegio_ubigeoDepartamentoId = null;
         $colegio_ubigeoProvinciaId = null;
 
-        
-        $estudiante = Estudiante::where('nro_documento', $dni)->first();
-
         if($estudiante){
-            $matricula = Matricula::where('estudiante_id', $estudiante->id)->where('ciclo_id', $ciclo_id)->first();
-
-            if ($matricula) {
-                return back()->with('warning', "El estudiante con dni $dni ya está matriculado en este ciclo.")->withInput();
-            }
-
             // Ubigeo DIRECCION
             $direccion_ubigeo = $estudiante->direccion_ubigeodistrito_id;
             if($direccion_ubigeo){
@@ -1657,10 +1672,14 @@ class MatriculaController extends Controller
             'forma_de_pago_id' => $validatedData['forma_de_pago_id'],
         ]);
         
-        $pago = AulaMatricula::create([
+        $aula = AulaMatricula::create([
             'matricula_id' => $matricula->id,
             'aula_ciclo_id' => $validatedData['aula_ciclo_id'],
         ]);
+
+        if ($matricula && $pago && $aula){
+            session()->forget(['estudiante', 'ciclo_id', 'dni', 'estudiante_id']);
+        }
 
         return redirect()->route('matricula.show', [$matricula]);
     }
