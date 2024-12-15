@@ -9,6 +9,7 @@ use App\Http\Controllers\Intranet\AulaController;
 use App\Http\Controllers\Intranet\CarreraCicloController;
 use App\Http\Controllers\Intranet\CicloController;
 use App\Http\Controllers\Intranet\DocenteController;
+use App\Http\Controllers\Intranet\EstudianteController;
 use App\Http\Controllers\Intranet\MatriculaController;
 use App\Http\Controllers\Intranet\PermissionController;
 use App\Http\Controllers\Intranet\PrecioController;
@@ -67,8 +68,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Route::resource('matriculas', MatriculaController::class)->names('matriculas');
 
-
-
+    Route::get('estudiante', [EstudianteController::class, 'index'])->name('estudiante.index');
+    Route::get('estudiante/{estudiante}/edit', [EstudianteController::class, 'edit'])->name('estudiante.edit');
+    Route::put('estudiante/{estudiante}/update', [EstudianteController::class, 'update'])->name('estudiante.update');
 
     Route::resource('carreraciclo', CarreraCicloController::class)->except(['create','show','destroy'])->names('carreraciclo');
     Route::patch('carreraciclo/{carreraciclo}/eliminar', [CarreraCicloController::class, 'eliminar'])->name('carreraciclo.eliminar');

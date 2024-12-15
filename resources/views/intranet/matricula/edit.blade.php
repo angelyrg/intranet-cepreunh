@@ -14,6 +14,11 @@
                             <li class="breadcrumb-item">
                                 <a class="text-muted text-decoration-none" href="{{ route('ciclos.index') }}">Ciclos</a>
                             </li>
+                            <li class="breadcrumb-item">
+                                <a class="text-muted text-decoration-none" href="{{ route('ciclos.show', $ciclo->id) }}">
+                                    {{ $ciclo->descripcion }}
+                                </a>
+                            </li>
                             <li class="breadcrumb-item active" aria-current="page">Editar Matrícula</li>
                         </ol>
                     </nav>
@@ -39,6 +44,13 @@
         
                     <input type="hidden" name="ciclo_id" value="{{ $ciclo_id }}">
                     <input type="hidden" name="estudiante_id" value="{{ $estudiante_id }}">
+
+                    <div class="col-12 mt-3">
+                        <p class="mb-0 fw-bolder text-primary">
+                            INFORMACIÓN DE MATRÍCULA
+                        </p>
+                        <hr class="mt-0 border-primary opacity-25">
+                    </div>
         
                     <div class="col-md-4 mb-3">
                         <label for="area_id" class="form-label">Área</label>
@@ -64,7 +76,7 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-        
+
                     <div class="col-md-4 mb-3">
                         <label for="sede_id" class="form-label">Sede</label>
                         <select name="sede_id" id="sede_id" class="form-select @error('sede_id') is-invalid @enderror" required>
@@ -82,10 +94,10 @@
                     <div class="col-md-4 mb-3">
                         <label for="aula_ciclo_id" class="form-label">Aula</label>
                         <select name="aula_ciclo_id" id="aula_ciclo_id" class="form-select @error('aula_ciclo_id') is-invalid @enderror" required>
-                            {{-- TODO: MOSTRAR AULAS --}}
-                            @foreach ($ciclo->aulas as $aula)
-                            <option value="{{ $aula->id }}" {{ $aula->id == old('aula_ciclo_id', $matricula->aulas[0]->id) ? 'selected' : '' }}>
-                                {{ $aula->descripcion }}
+                            {{-- TODO: MOSTRAR AULAS CORRECTAS --}}
+                            @foreach ($ciclo->aulas_ciclos as $aula_ciclo)
+                            <option value="{{ $aula_ciclo->id }}" {{ $aula_ciclo->id == old('aula_ciclo_id', $matricula->aulas->first()?->id) ? 'selected' : '' }}>
+                                {{ $aula_ciclo->aula->descripcion }}
                             </option>
                             @endforeach
                         </select>
@@ -93,9 +105,56 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+
+
+                    <div class="col-md-4 mb-3">
+                        <label for="modalidad_estudio" class="form-label">Modalidad de estudio</label>
+                        <select name="modalidad_estudio" id="modalidad_estudio"
+                            class="form-select @error('modalidad_estudio') is-invalid @enderror" required>
+                            @foreach ($modalidades_estudio as $modalidad)
+                            <option value="{{ $modalidad }}" {{ $modalidad == old('modalidad_estudio', $matricula->modalidad_estudio) ? 'selected' : '' }}>
+                                {{ $modalidad }}
+                            </option>
+                            @endforeach
+                        </select>
+                        @error('modalidad_estudio')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    
+                    <div class="col-md-4 mb-3">
+                        <label for="condicion_academica" class="form-label">Condición académica</label>
+                        <select name="condicion_academica" id="condicion_academica"
+                            class="form-select @error('condicion_academica') is-invalid @enderror" required>
+                            @foreach ($condiciones_acadedmicas as $condicion)
+                            <option value="{{ $condicion }}" {{ $condicion == old('condicion_academica', $matricula->condicion_academica) ? 'selected' : '' }}>
+                                {{ $condicion }}
+                            </option>
+                            @endforeach
+                        </select>
+                        @error('condicion_academica')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    
+                    <div class="col-md-4 mb-3">
+                        <label for="cantidad_matricula" class="form-label">Veces matriculados en Cepre</label>
+                        <input name="cantidad_matricula" type="text" id="cantidad_matricula"
+                            class="form-control @error('cantidad_matricula') is-invalid @enderror"
+                            value="{{ old('cantidad_matricula', $matricula->cantidad_matricula) }}" autocomplete="off" />
+                        @error('cantidad_matricula')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
                 </div>
         
-                <hr>
+                <div class="col-12 mt-3">
+                    <p class="mb-0 fw-bolder text-primary">
+                        INFORMACIÓN DE PAGO
+                        <small class="text-dark fw-normal">(Primer pago)</small>
+                    </p>
+                    <hr class="mt-0 border-primary opacity-25">
+                </div>
         
                 <div class="row">
                     <div class="col-md-4 mb-3">
@@ -103,7 +162,7 @@
                         {{-- TODO: NO USAR [0] --}}
                         <select name="forma_de_pago_id" id="forma_de_pago_id" class="form-select @error('forma_de_pago_id') is-invalid @enderror" required>
                             @foreach ($formasDePago as $modalidad)
-                            <option value="{{ $modalidad->id }}" {{ $modalidad->id == old('forma_de_pago_id', $matricula->pagos[0]->id) ? 'selected' : '' }}>
+                            <option value="{{ $modalidad->id }}" {{ $modalidad->id == old('forma_de_pago_id', $matricula->pagos->first()?->id) ? 'selected' : '' }}>
                                 {{ $modalidad->descripcion }}
                             </option>
                             @endforeach
@@ -117,7 +176,7 @@
                         <label for="banco_id" class="form-label">Banco</label>
                         <select name="banco_id" id="banco_id" class="form-select @error('banco_id') is-invalid @enderror" required>
                             @foreach ($bancos as $banco)
-                            <option value="{{ $banco->id }}" {{ $banco->id == old('banco_id', $matricula->banco_id) ? 'selected' : '' }}>
+                            <option value="{{ $banco->id }}" {{ $banco->id == old('banco_id', $matricula->pagos->first()?->banco_id) ? 'selected' : '' }}>
                                 {{ $banco->descripcion }}
                             </option>
                             @endforeach
@@ -129,11 +188,10 @@
         
                     <div class="col-md-4 mb-3">
                         <label for="fecha_pago" class="form-label">Fecha de pago</label>
-                        {{-- <input name="fecha_pago" type="date" id="fecha_pago" class="form-control @error('fecha_pago') is-invalid @enderror" required value="{{ old('fecha_pago', $matricula->fecha_pago->format('Y-m-d')) }}" /> --}}
                         <input name="fecha_pago" type="date" id="fecha_pago" 
                             class="form-control @error('fecha_pago') is-invalid @enderror" 
-                            value="{{ old('fecha_pago', $matricula->fecha_pago ? $matricula->fecha_pago->format('Y-m-d') : '') }}" />
-
+                            value="{{ old('fecha_pago', optional($matricula->pagos->first())->fecha_pago ? \Carbon\Carbon::parse(optional($matricula->pagos->first())->fecha_pago)->format('Y-m-d') : '') }}"
+                             />
                         @error('fecha_pago')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -143,7 +201,9 @@
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <label for="cod_operacion" class="form-label">Código de operación</label>
-                        <input name="cod_operacion" type="text" id="cod_operacion" class="form-control @error('cod_operacion') is-invalid @enderror" required value="{{ old('cod_operacion', $matricula->cod_operacion) }}" autocomplete="off" />
+                        <input name="cod_operacion" type="text" id="cod_operacion" 
+                            class="form-control @error('cod_operacion') is-invalid @enderror" 
+                            value="{{ old('descripcion_pago', $matricula->pagos->first()?->cod_operacion) }}" autocomplete="off" />
                         @error('cod_operacion')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -151,7 +211,8 @@
         
                     <div class="col-md-4 mb-3">
                         <label for="descripcion_pago" class="form-label">Descripción del pago</label>
-                        <input name="descripcion_pago" type="text" id="descripcion_pago" class="form-control @error('descripcion_pago') is-invalid @enderror" required value="{{ old('descripcion_pago', $matricula->descripcion_pago) }}" autocomplete="off" />
+                        <input name="descripcion_pago" type="text" id="descripcion_pago" class="form-control @error('descripcion_pago') is-invalid @enderror" 
+                            value="{{ old('descripcion_pago', $matricula->pagos->first()?->descripcion_pago) }}" autocomplete="off" required/>
                         @error('descripcion_pago')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -159,7 +220,9 @@
         
                     <div class="col-md-4 mb-3">
                         <label for="n_transaccion" class="form-label">Número de transacción</label>
-                        <input name="n_transaccion" type="text" id="n_transaccion" class="form-control @error('n_transaccion') is-invalid @enderror" required value="{{ old('n_transaccion', $matricula->n_transaccion) }}" autocomplete="off" />
+                        <input name="n_transaccion" type="text" id="n_transaccion" 
+                            class="form-control @error('n_transaccion') is-invalid @enderror"
+                            value="{{ old('n_transaccion', $matricula->pagos->first()?->n_transaccion) }}" autocomplete="off" />
                         @error('n_transaccion')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -169,14 +232,16 @@
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <label for="monto" class="form-label">Monto</label>
-                        <input name="monto" type="number" id="monto" class="form-control @error('monto') is-invalid @enderror" required value="{{ old('monto', $matricula->monto) }}" autocomplete="off" />
+                        <input name="monto" type="number" id="monto" class="form-control @error('monto') is-invalid @enderror" 
+                            value="{{ old('monto', $matricula->pagos->first()?->monto) }}" autocomplete="off" step="0.01" required/>
                         @error('monto')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="comision" class="form-label">Comisión</label>
-                        <input name="comision" type="number" id="comision" class="form-control @error('comision') is-invalid @enderror" required value="{{ old('comision', $matricula->comision) }}" autocomplete="off" />
+                        <input name="comision" type="number" id="comision" class="form-control @error('comision') is-invalid @enderror" 
+                            value="{{ old('comision', $matricula->pagos->first()?->comision) }}" autocomplete="off" step="0.01" required/>
                         @error('comision')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -184,8 +249,24 @@
         
                     <div class="col-md-4 mb-3">
                         <label for="monto_neto" class="form-label">Monto neto</label>
-                        <input name="monto_neto" type="number" id="monto_neto" class="form-control @error('monto_neto') is-invalid @enderror" required value="{{ old('monto_neto', $matricula->monto_neto) }}" autocomplete="off" />
+                        <input name="monto_neto" type="number" id="monto_neto" class="form-control @error('monto_neto') is-invalid @enderror" 
+                            value="{{ old('monto_neto', $matricula->pagos->first()?->monto_neto) }}" autocomplete="off" step="0.01" required/>
                         @error('monto_neto')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="condicion_pago" class="form-label">Condición de pago</label>
+                        <select name="condicion_pago" id="condicion_pago" class="form-select @error('condicion_pago') is-invalid @enderror" required>
+                            <option value="Cancelado" {{ old('condicion_pago', $matricula->pagos->first()?->condicion_pago)=='Cancelado' ? 'selected' : '' }}>
+                                Cancelado
+                            </option>
+                            <option value="Parcial" {{ old('condicion_pago', $matricula->pagos->first()?->condicion_pago)=='Parcial' ? 'selected' : '' }}>
+                                Parcial
+                            </option>
+                        </select>
+                        @error('condicion_pago')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
@@ -193,7 +274,13 @@
         
                 <div class="row">
                     <div class="col text-end">
-                        <button type="submit" class="btn btn-primary px-8">Actualizar</button>
+                        <a href="{{ route('ciclos.show', $ciclo->id) }}" class="btn btn-outline-primary me-3">
+                            Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-primary px-8">
+                            <i class="ti ti-device-floppy"></i>
+                            Actualizar
+                        </button>
                     </div>
                 </div>
             </div>
@@ -221,33 +308,28 @@
 @section('scripts')
 
 <script>
-    // Obtener el elemento del select de Área
     const areaSelect = document.getElementById('area_id');
-    // Obtener el elemento del select de Carrera
+    
     const carreraSelect = document.getElementById('carrera_id');
+    
+    const selectedCarreraId = {{ $matricula->carrera_id ?? 'null' }};
 
-    // Cuando cambia el valor del select de área
-    areaSelect.addEventListener('change', function() {
-        const areaId = this.value;  // Obtener el ID del área seleccionada
-
-        // Limpiar las opciones anteriores de carreras
+    function loadCarreras(areaId) {
         carreraSelect.innerHTML = '<option value="">Seleccionar Carrera</option>';
 
         if (areaId) {
-            // Hacer una solicitud AJAX con Fetch para obtener las carreras de esa área
             fetch(`/carreras/${areaId}`)
                 .then(response => response.json())
                 .then(data => {
-
-                    console.log(data);
-                    
-                    // Verificar si la respuesta contiene carreras
                     if (data.length > 0) {
-                        // Llenar el select de carrera con las opciones obtenidas
                         data.forEach(carrera => {
                             const option = document.createElement('option');
                             option.value = carrera.id;
                             option.textContent = carrera.descripcion;
+
+                            if (carrera.id == selectedCarreraId) {
+                                option.selected = true;
+                            }
                             carreraSelect.appendChild(option);
                         });
                     }
@@ -255,8 +337,41 @@
                 .catch(error => {
                     console.error('Error al cargar las carreras:', error);
                 });
-        }        
+        }
+    }
+
+    areaSelect.addEventListener('change', function() {
+        const areaId = this.value;
+        loadCarreras(areaId);
     });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const areaId = areaSelect.value;
+        if (areaId) {
+            loadCarreras(areaId);
+        }
+    });
+</script>
+
+<script>
+    // Obtener los elementos por ID
+    const montoInput = document.getElementById('monto');
+    const comisionInput = document.getElementById('comision');
+    const montoNetoInput = document.getElementById('monto_neto');
+
+    // Función para actualizar el monto neto
+    function actualizarMontoNeto() {
+        const monto = parseFloat(montoInput.value) || 0;  // Si el valor no es un número, usamos 0
+        const comision = parseFloat(comisionInput.value) || 0;  // Si el valor no es un número, usamos 0
+        montoNetoInput.value = (monto + comision).toFixed(2);  // Sumar monto + comision y limitar a 2 decimales
+    }
+
+    // Escuchar los cambios en los campos de monto y comision
+    montoInput.addEventListener('input', actualizarMontoNeto);
+    comisionInput.addEventListener('input', actualizarMontoNeto);
+
+    // Ejecutar la actualización inicial para asegurarnos que el campo de monto neto esté al día
+    actualizarMontoNeto();
 </script>
 
 @endsection

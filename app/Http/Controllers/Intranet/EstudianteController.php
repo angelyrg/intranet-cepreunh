@@ -3,42 +3,56 @@
 namespace App\Http\Controllers\Intranet;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Matricula\MatriculaEstudianteRequest;
-use App\Http\Requests\Matricula\MatriculaRequest;
+use App\Http\Requests\Estudiantes\EstudianteRequest;
 use App\Models\Intranet\Apoderado;
-use App\Models\Intranet\Area;
-use App\Models\Intranet\AulaMatricula;
-use App\Models\Intranet\Banco;
-use App\Models\Intranet\Ciclo;
 use App\Models\Intranet\Discapacidad;
 use App\Models\Intranet\EstadoCivil;
 use App\Models\Intranet\Estudiante;
-use App\Models\Intranet\FormaDePago;
 use App\Models\Intranet\Genero;
 use App\Models\Intranet\IdentidadEtnica;
-use App\Models\Intranet\Matricula;
-use App\Models\Intranet\Pago;
 use App\Models\Intranet\Parentesco;
-use App\Models\Intranet\Sede;
 use App\Models\Intranet\TipoDocumento;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-use Barryvdh\DomPDF\Facade\Pdf;
-
-class MatriculaController extends Controller
+class EstudianteController extends Controller
 {
-
-    public function buscar_dni(Request $request)
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
     {
-        $request->validate([
-            'ciclo_id' => 'required|numeric|exists:ciclos,id',
-            'estudiante_dni' => 'required|numeric|min:8',
-        ]);
+        return view('intranet.estudiantes.index');
+    }
 
-        $ciclo_id = $request->ciclo_id;
-        $dni = $request->estudiante_dni;
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+    }
 
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Estudiante $estudiante)
+    {
         $direccion_ubigeoDepartamentoId = null;
         $direccion_ubigeoProvinciaId = null;
 
@@ -48,36 +62,25 @@ class MatriculaController extends Controller
         $colegio_ubigeoDepartamentoId = null;
         $colegio_ubigeoProvinciaId = null;
 
-        
-        $estudiante = Estudiante::where('nro_documento', $dni)->first();
+        // Ubigeo DIRECCION
+        $direccion_ubigeo = $estudiante->direccion_ubigeodistrito_id;
+        if ($direccion_ubigeo) {
+            $direccion_ubigeoDepartamentoId = substr($direccion_ubigeo, 0, 2);
+            $direccion_ubigeoProvinciaId = substr($direccion_ubigeo, 0, 4);
+        }
 
-        if($estudiante){
-            $matricula = Matricula::where('estudiante_id', $estudiante->id)->where('ciclo_id', $ciclo_id)->first();
+        // Ubigeo NACIMIENTO
+        $nacimiento_ubigeo = $estudiante->nacimiento_ubigeodistrito_id;
+        if ($nacimiento_ubigeo) {
+            $nacimiento_ubigeoDepartamentoId = substr($nacimiento_ubigeo, 0, 2);
+            $nacimiento_ubigeoProvinciaId = substr($nacimiento_ubigeo, 0, 4);
+        }
 
-            if ($matricula) {
-                return back()->with('warning', "El estudiante con dni $dni ya está matriculado en este ciclo.")->withInput();
-            }
-
-            // Ubigeo DIRECCION
-            $direccion_ubigeo = $estudiante->direccion_ubigeodistrito_id;
-            if($direccion_ubigeo){
-                $direccion_ubigeoDepartamentoId = substr($direccion_ubigeo, 0, 2);
-                $direccion_ubigeoProvinciaId = substr($direccion_ubigeo, 0, 4);
-            }
-
-            // Ubigeo NACIMIENTO
-            $nacimiento_ubigeo = $estudiante->nacimiento_ubigeodistrito_id;
-            if($nacimiento_ubigeo){
-                $nacimiento_ubigeoDepartamentoId = substr($nacimiento_ubigeo, 0, 2);
-                $nacimiento_ubigeoProvinciaId = substr($nacimiento_ubigeo, 0, 4);
-            }
-
-            // Ubigeo COLEGIO
-            $colegio_ubigeo = $estudiante->colegio_ubigeodistrito_id;
-            if($colegio_ubigeo){
-                $colegio_ubigeoDepartamentoId = substr($colegio_ubigeo, 0, 2);
-                $colegio_ubigeoProvinciaId = substr($colegio_ubigeo, 0, 4);
-            }
+        // Ubigeo COLEGIO
+        $colegio_ubigeo = $estudiante->colegio_ubigeodistrito_id;
+        if ($colegio_ubigeo) {
+            $colegio_ubigeoDepartamentoId = substr($colegio_ubigeo, 0, 2);
+            $colegio_ubigeoProvinciaId = substr($colegio_ubigeo, 0, 4);
         }
 
         $tipos_documentos = TipoDocumento::all();
@@ -1501,9 +1504,8 @@ class MatriculaController extends Controller
             ]
         ];
 
-        return view('intranet.matricula.datos-personales', compact(
+        return view('intranet.estudiantes.edit', compact(
             'estudiante',
-            'dni',
             'tipos_documentos',
             'generos',
             'estados_civiles',
@@ -1511,7 +1513,6 @@ class MatriculaController extends Controller
             'identidades_etnicas',
             'discapacidades',
             'parentescos',
-            'ciclo_id',
 
             'direccion_ubigeoDepartamentoId',
             'direccion_ubigeoProvinciaId',
@@ -1522,14 +1523,11 @@ class MatriculaController extends Controller
         ));
     }
 
-   
-
-
-    public function store_estudiante(MatriculaEstudianteRequest $request)
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(EstudianteRequest $request, Estudiante $estudiante)
     {
-        $ciclo_id = $request->validated()['ciclo_id'];
-        $estudiante_id = $request->validated()['estudiante_id'];
-
         $validatedData = $request->validated();
 
         $datosApoderado = [
@@ -1538,21 +1536,13 @@ class MatriculaController extends Controller
             'parentesco_id' => $validatedData['parentesco_id'],
         ];
 
-        if ($estudiante_id){
-            $estudiante_old =  Estudiante::findOrFail($estudiante_id);
-            $apoderado = $estudiante_old->apoderado()->first();
-            if ($apoderado) {
-                $apoderado->telefono_apoderado = $datosApoderado['telefono_apoderado'];
-                $apoderado->correo_apoderado = $datosApoderado['correo_apoderado'];
-                $apoderado->parentesco_id = $datosApoderado['parentesco_id'];
-                $apoderado->save();
-            } else {
-                $apoderado = Apoderado::create($datosApoderado);
-            }
-        }else{
-            $apoderado = Apoderado::create($datosApoderado);
+        $apoderado = $estudiante->apoderado()->first();
+        if ($apoderado) {
+            $apoderado->update($datosApoderado);
+        } else {
+            $estudiante->apoderado()->create($datosApoderado);
         }
-         
+
         $datosEstudiante = [
             'tipo_documento_id' => $validatedData['tipo_documento_id'],
             'nro_documento' => $validatedData['nro_documento'],
@@ -1580,203 +1570,21 @@ class MatriculaController extends Controller
             'year_culminacion' => $validatedData['year_culminacion'],
 
             'apoderado_id' => $apoderado->id,
-            //Apoderado
         ];
 
-        $estudiante = Estudiante::updateOrCreate(
-            ['id' => $estudiante_id],
-            $datosEstudiante
-        );
+        $estudiante->update($datosEstudiante);
 
         // Sync discapacidades
         $estudiante->discapacidades()->sync($validatedData['discapacidades'] ?? []);
 
-        session()->put('ciclo_id', $ciclo_id);
-        session()->put('estudiante_id', $estudiante->id);
-
-
-        return redirect()->route('matricula.create');
+        return redirect()->route('estudiante.index');
     }
 
-
-    public function create(Request $request)
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
     {
-        $ciclo_id = session('ciclo_id');
-        $estudiante_id = session('estudiante_id');
-
-        $areas = Area::all();
-        $sedes = Sede::all();
-        $bancos = Banco::all();
-        $formasDePago = FormaDePago::all();
-        $ciclo = Ciclo::with(['precios.forma_de_pago', 'aulas_ciclos.aula'])->findOrFail($ciclo_id);
-
-        $modalidades_estudio = Matricula::MODALIDADES_ESTUDIO;
-        $condiciones_acadedmicas = Matricula::CONDICIONES_ACADEMICAS;
-
-        return view('intranet.matricula.create', compact(
-            'ciclo_id',
-            'ciclo',
-            'estudiante_id',
-            'areas',
-            'sedes',
-            'bancos',
-            'formasDePago',
-            'modalidades_estudio',
-            'condiciones_acadedmicas'
-        ));
+        //
     }
-
-
-    public function store( MatriculaRequest $request )
-    {
-        $validatedData = $request->validated();
-
-        $matricula = Matricula::create([
-            'ciclo_id' => $validatedData['ciclo_id'],
-            'estudiante_id' => $validatedData['estudiante_id'],
-            'area_id' => $validatedData['area_id'],
-            'carrera_id' => $validatedData['carrera_id'],
-            'sede_id' => $validatedData['sede_id'],
-            'modalidad_estudio' => $validatedData['modalidad_estudio'],
-            'condicion_academica' => $validatedData['condicion_academica'],
-            'cantidad_matricula' => $validatedData['cantidad_matricula'],
-            'modalidad_matricula' => 1, //1: Presencial, 2: Virtual
-        ]);
-
-        $pago = Pago::create([
-            'matricula_id' => $matricula->id,
-            'banco_id' => $validatedData['banco_id'],
-            'cod_operacion' => $validatedData['cod_operacion'],
-            'descripcion_pago' => $validatedData['descripcion_pago'],
-            'n_transaccion' => $validatedData['n_transaccion'],
-            'monto' => $validatedData['monto'],
-            'comision' => $validatedData['comision'],
-            'monto_neto' => $validatedData['monto_neto'],
-            'condicion_pago' => $validatedData['condicion_pago'],
-            'fecha_pago' => $validatedData['fecha_pago'],
-            'forma_de_pago_id' => $validatedData['forma_de_pago_id'],
-        ]);
-        
-        $pago = AulaMatricula::create([
-            'matricula_id' => $matricula->id,
-            'aula_ciclo_id' => $validatedData['aula_ciclo_id'],
-        ]);
-
-        return redirect()->route('matricula.show', [$matricula]);
-    }
-
-
-    public function show($id)
-    {
-        $matricula = Matricula::findOrFail($id);
-        return view('intranet.matricula.show', compact('matricula'));
-    }
-
-    public function edit(string $id)
-    {
-        $matricula = Matricula::findOrFail($id);
-
-        $ciclo_id = $matricula->ciclo_id;
-        $estudiante_id = $matricula->estudiante_id;
-
-        $areas = Area::all();
-        $bancos = Banco::all();
-        $formasDePago = FormaDePago::all();
-        $ciclo = Ciclo::with(['precios.forma_de_pago', 'aulas_ciclos.aula'])->findOrFail($ciclo_id);
-
-        $sedes = Auth::user()->can('sedes.ver_todas')
-            ? Sede::all()
-            : Sede::where('id', Auth::user()->sede_id)->get();
-
-        $modalidades_estudio = Matricula::MODALIDADES_ESTUDIO;
-        $condiciones_acadedmicas = Matricula::CONDICIONES_ACADEMICAS;
-
-        return view('intranet.matricula.edit', compact(
-            'matricula',
-            'ciclo_id',
-            'ciclo',
-            'estudiante_id',
-            'areas',
-            'sedes',
-            'bancos',
-            'formasDePago',
-            'modalidades_estudio',
-            'condiciones_acadedmicas'
-        ));
-    }
-
-    public function update(MatriculaRequest $request, Matricula $matricula)
-    {
-        // Validar los datos del formulario
-        $validatedData = $request->validated();
-
-        // Actualizar la matrícula
-        $matricula->update([
-            'ciclo_id' => $validatedData['ciclo_id'],
-            'estudiante_id' => $validatedData['estudiante_id'],
-            'area_id' => $validatedData['area_id'],
-            'carrera_id' => $validatedData['carrera_id'],
-            'sede_id' => $validatedData['sede_id'],
-            'modalidad_estudio' => $validatedData['modalidad_estudio'],
-            'condicion_academica' => $validatedData['condicion_academica'],
-            'cantidad_matricula' => $validatedData['cantidad_matricula'],
-        ]);
-
-        // Actualizar el pago asociado
-        $pago = Pago::where('matricula_id', $matricula->id)->first();
-        $pago->update([
-            'banco_id' => $validatedData['banco_id'],
-            'cod_operacion' => $validatedData['cod_operacion'],
-            'descripcion_pago' => $validatedData['descripcion_pago'],
-            'n_transaccion' => $validatedData['n_transaccion'],
-            'monto' => $validatedData['monto'],
-            'comision' => $validatedData['comision'],
-            'monto_neto' => $validatedData['monto_neto'],
-            'fecha_pago' => $validatedData['fecha_pago'],
-            'condicion_pago' => $validatedData['condicion_pago'],
-            'forma_de_pago_id' => $validatedData['forma_de_pago_id'],
-        ]);
-
-        // Actualizar el aula matriculada
-        $aulaMatricula = AulaMatricula::where('matricula_id', $matricula->id)->first();
-        $aulaMatricula->update([
-            'aula_ciclo_id' => $validatedData['aula_ciclo_id'],
-        ]);
-
-        // Redirigir a la vista de la matrícula actualizada
-        return redirect()->route('matricula.show', $matricula->id)->with('success', 'Matrícula actualizada correctamente');
-    }
-
-    
-    public function descargar($id)
-    {
-        $matricula = Matricula::findOrFail($id);
-        $unh_logo_icon = public_path('assets/images/logos/CepreUNH.webp');
-        $document_header_img = public_path('assets/images/document-header.jpg');
-
-        $pdf = PDF::loadView('intranet.matricula.descargar_pdf', [
-                'matricula'=>$matricula,
-                'unh_logo' => $unh_logo_icon,
-                'document_header' => $document_header_img
-            ])->setPaper('A4', 'portrait');
-        return $pdf->download('FICHA_DE_MATRICULA_' . $matricula->estudiante->nro_documento . '.pdf');
-
-    }
-
-    public function imprimir($id)
-    {
-        $matricula = Matricula::findOrFail($id);
-        $unh_logo_icon = public_path('assets/images/logos/CepreUNH.webp');
-        $document_header_img = public_path('assets/images/document-header.jpg');
-
-        $pdf = PDF::loadView('intranet.matricula.descargar_pdf', [
-                'matricula' => $matricula,
-                'unh_logo' => $unh_logo_icon,
-                'document_header' => $document_header_img
-            ])
-            ->setPaper('A4', 'portrait');
-
-        return $pdf->stream('FICHA_DE_MATRICULA_' . $matricula->estudiante->nro_documento . '.pdf');
-    }
-
 }

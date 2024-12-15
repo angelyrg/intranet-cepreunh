@@ -37,7 +37,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
                         <h5 class="card-title fw-semibold">{{ $ciclo->descripcion }}</h5>
-                        <p class="card-subtitle">Detalles del ciclo académico</p>
+                        {{-- <p class="card-subtitle">Detalles del ciclo académico</p> --}}
                     </div>
                     <div>
                         @if($ciclo->estado == 1)
@@ -162,70 +162,7 @@
                 </div>
             </div>
             <div class="card-body">
-                {{-- <div class="table-responsive">
-                    <table class="table search-table align-middle text-nowrap table-striped">
-                        <thead class="header-item">
-                            <tr>
-                                <th>#</th>
-                                <th>N° Doc</th>
-                                <th>Nombres</th>
-                                <th>Apellidos</th>
-                                <th>Género</th>
-                                <th>Area</th>
-                                <th>Carrera</th>
-                                <th>Sede</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if ($ciclo->matriculas->isNotEmpty())
-                            @foreach ($ciclo->matriculas as $index => $matricula)
-                            <tr class="search-items">
-                                <td>
-                                    {{ ($index+1) }}
-                                </td>
-                                <td>
-                                    {{ $matricula->estudiante->nro_documento }}
-                                </td>
-                                <td>
-                                    {{ $matricula->estudiante->nombres }}
-                                </td>
-                                <td>
-                                    {{ $matricula->estudiante->apellido_paterno." ".$matricula->estudiante->apellido_materno }}
-                                </td>
-                                <td>
-                                    {{ $matricula->estudiante->genero->descripcion }}
-                                </td>
-                                <td>
-                                    {{ $matricula->area->descripcion }}
-                                </td>
-                                <td>
-                                    {{ $matricula->carrera->descripcion }}
-                                </td>
-                                <td>
-                                    {{ $matricula->sede->descripcion }}
-                                </td>
-                                <th>
-                                    <div class="action-btn">
-                                        <a href="{{ route('matricula.show', $matricula->id) }}" class="text-info edit">
-                                            <i class="ti ti-eye fs-5"></i>
-                                        </a>
-                                    </div>
-                                </th>
-                            </tr>
-                            @endforeach
-                            @else
-                            <tr>
-                                <td colspan="8" class="text-center">No hay matrículas disponibles.</td>
-                            </tr>
-                            @endif
-                        </tbody>
-                    </table>
-                </div> --}}
-                <hr>
-                <small>{{ $ciclo->id }}</small>
-                <livewire:ciclo.matriculas-table cicloId="{{ $ciclo->id }}" />
-                {{-- @livewire('ciclo.matriculas-table', ['cicloId' => $ciclo->id]) --}}
+                <livewire:ciclo.matriculas-table cicloId="{{ $ciclo->id }}" sedeId="{{ $sedeId }}" />
             </div>
         </div>
     </div>
