@@ -465,17 +465,17 @@
                     <div class="col-md-4 mb-3">
                         <label for="tiene_discapacidad" class="form-label">¿Tiene Discapacidad?</label>
                         <select name="tiene_discapacidad" id="tiene_discapacidad" class="form-select @error('tiene_discapacidad') is-invalid @enderror">
-                            <option value="0" {{ old('tiene_discapacidad', $estudiante->tiene_discapacidad) == 0 ? 'selected' : '' }}>
+                            <option value="0" {{ old('tiene_discapacidad', $estudiante->tiene_discapacidad ?? 0) == 0 ? 'selected' : '' }}>
                                 No
                             </option>
-                            <option value="1" {{ old('tiene_discapacidad', $estudiante->tiene_discapacidad) == 1 ? 'selected' : '' }}>
+                            <option value="1" {{ old('tiene_discapacidad', $estudiante->tiene_discapacidad ?? 0) == 1 ? 'selected' : '' }}>
                                 Sí
                             </option>
                         </select>
                     </div>
                     
                     <div class="col-md-4 mb-3" id="discapacidades-section"
-                        style="display: {{ old('tiene_discapacidad', $estudiante->tiene_discapacidad) == 1 ? 'block' : 'none' }};">
+                        style="display: {{ old('tiene_discapacidad', $estudiante->tiene_discapacidad ?? 0) == 1 ? 'block' : 'none' }};">
                         <label for="discapacidades" class="form-label">Seleccione las discapacidades</label>
                         <select name="discapacidades[]" id="discapacidades" class="form-select border" multiple>
                             @foreach($discapacidades as $discapacidad)
