@@ -174,6 +174,7 @@ class MatriculasTable extends DataTableComponent
                     'allowInput' => false,
                     'altFormat' => 'd/m/Y',
                     'ariaDateFormat' => 'd/m/Y',
+                    'autocomplete' => 'off',
                     'placeholder' => 'Seleccione las fechas',
                 ])
                 ->filter(function (Builder $query, array $dateRange) {
