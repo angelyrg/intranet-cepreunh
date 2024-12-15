@@ -21,9 +21,9 @@
                                     @if(!in_array($carrera->id, $carrerasAsignadas))
                                         <li class="list-group-item d-flex justify-content-between align-items-center">
                                             <div>
-                                                {{-- <span class="badge text-primary bg-primary-subtle">
+                                                <span class="badge text-primary bg-primary-subtle">
                                                     {{ $carrera->area->descripcion }}
-                                                </span> --}}
+                                                </span>
                                                 <span>
                                                     {{ $carrera->descripcion }}
                                                 </span>
@@ -66,8 +66,9 @@
                                     @endphp
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
                                         <div>
+                                            {{-- TODO: MOSTRAR AREA DE LA CARRERA --}}
                                             {{-- <span class="badge text-primary bg-primary-subtle">
-                                                {{ $carrera->area_id }}
+                                                {{ $carrera->area->descripcion }}
                                             </span> --}}
                                             <span>
                                                 {{ $carrera->descripcion }}

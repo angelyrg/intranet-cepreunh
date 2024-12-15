@@ -47,7 +47,9 @@
 
                 <div class="form-group mb-4">
                     <label for="estudiante_dni">DNI del estudiante <span class="text-danger">*</span></label>
-                    <input name="estudiante_dni" type="text" maxlength="8" class="form-control" value="{{ old('estudiante_dni') }}" required>
+                    <input name="estudiante_dni" type="text" maxlength="8" class="form-control"
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '')" autocomplete="off"
+                        value="{{ old('estudiante_dni') }}" required >
                 </div>                
 
                 <button class="btn btn-primary" type="submit">

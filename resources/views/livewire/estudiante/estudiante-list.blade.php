@@ -56,8 +56,11 @@
                     @foreach($students as $student)
                         <tr>
                             <td>
-                                <a wire:click="showForm({{ $student->id }})" class="btn badge fw-semibold py-1 bg-primary-subtle text-primary" role="button" title="Editar">
+                                {{-- <a wire:click="showForm({{ $student->id }})" class="btn badge fw-semibold py-1 bg-primary-subtle text-primary" role="button" title="Editar">
                                     <i class="ti ti-edit"></i>                                        
+                                </a> --}}
+                                <a href="{{ route('estudiante.edit', $student->id) }}" class="btn badge fw-semibold py-1 bg-primary-subtle text-primary" title="Editar">
+                                    <i class="ti ti-edit"></i>
                                 </a>
                                 <a wire:click="delete({{ $student->id }})" onclick="confirm('¿Estás seguro?') || event.stopImmediatePropagation()" class="btn badge fw-semibold py-1 bg-danger-subtle text-danger" role="button" title="Eliminar">
                                     <i class="ti ti-trash"></i>                                        
