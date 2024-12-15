@@ -40,12 +40,12 @@ class GrupoPrecio extends Component
         $this->precios = $this->initializePrecios();
 
         $this->gruposPrecios = IntranetGrupoPrecio::where('ciclo_id', $this->cicloId)
-            ->with([
+            ->with(
                 'carreras',
                 'precios',
                 'precios.banco:id,descripcion',
                 'precios.forma_de_pago'
-            ])
+            )
             ->get();
     }
 
@@ -111,7 +111,7 @@ class GrupoPrecio extends Component
 
     public function getCarrerasDisponibles()
     {
-        return Carrera::with(['area', 'carrera_ciclo'])
+        return Carrera::with('area', 'carrera_ciclo')
         ->whereHas('carrera_ciclo', function($query){
             $query->where('ciclo_id', $this->cicloId);
         })->whereDoesntHave('grupo_precios', function ($query) {

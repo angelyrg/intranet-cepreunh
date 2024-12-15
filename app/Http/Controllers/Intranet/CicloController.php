@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class CicloController extends Controller
 {
@@ -106,14 +107,18 @@ class CicloController extends Controller
             7 => 'Domingo',
         ];
 
-        $ciclo = Ciclo::with([
+        $ciclo = Ciclo::with(
             'asignaturaCiclos',
             'tipo_ciclo',
             'carreras.area',
             'asignaturas',
-            'matriculas',
+            'matriculas.estudiante',
+            'matriculas.estudiante.genero',
+            'matriculas.area',
+            'matriculas.carrera',
+            'matriculas.sede',
             'precios',
-        ])->findOrFail($id);
+        )->findOrFail($id);
 
         // Formatear las fechas
         $ciclo->fecha_inicio = Carbon::parse($ciclo->fecha_inicio)->format('d/m/Y');
@@ -124,16 +129,11 @@ class CicloController extends Controller
             return $diasDeLaSemana[$dia] ?? '';
         }, $ciclo->dias_lectivos);
 
-        $bancos = Banco::all();
-        $formasDePago = FormaDePago::all();
-        $precios = Precio::where('ciclo_id', $ciclo->id)->get();
-        $preciosAgrupados = $precios->groupBy('forma_de_pago_id');
-
-
-        $carreras = Carrera::with('area', 'grupo_precios.precios.banco', 'grupo_precios.precios.forma_de_pago')->get();
-
-
-        return view('intranet.ciclos.show', compact('ciclo', 'precios', 'preciosAgrupados', 'bancos', 'formasDePago', 'carreras'));
+        $sedeId = Auth::check() && Auth::user()->can('sedes.ver_todas')
+            ? null
+            : Auth::user()->sede_id;
+        
+        return view('intranet.ciclos.show', compact('ciclo', 'sedeId'));
     }
 
 

@@ -30,7 +30,7 @@
                             <li class="breadcrumb-item">
                                 <a class="text-muted text-decoration-none" href="{{ route('ciclos.index') }}">Ciclos</a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Nueva matrícula</li>
+                            <li class="breadcrumb-item active" aria-current="page">Editar</li>
                         </ol>
                     </nav>
                 </div>
@@ -44,13 +44,12 @@
 <div class="card shadow w-100 position-relative overflow-hidden">
     <div class="card-body p-4">
 
-        <form action="{{ route('matricula.store_estudiante') }}" method="POST" class="mx-auto p-8 px-10 shadow-md">
+        <form action="{{ route('estudiante.update', $estudiante->id) }}" method="POST" class="mx-auto p-8 px-10 shadow-md">
             @csrf
+            @method('PUT')
+
             <div class="row g-4">
                 <div class="row">
-
-                    <input type="hidden" name="ciclo_id" value="{{ $ciclo_id }}">
-                    <input type="hidden" name="estudiante_id" value="{{ $estudiante->id ?? '' }}">
 
                     <div class="col-12 mt-3">
                         <p class="mb-0 fw-bolder text-primary">
@@ -80,7 +79,7 @@
                         <label for="nro_documento" class="form-label">Número de documento</label>
                         <input type="text" name="nro_documento" id="nro_documento"
                             class="form-control @error('nro_documento') is-invalid @enderror"
-                            value="{{ $dni }}" autocomplete="off" readonly>
+                            value="{{ $estudiante->nro_documento }}" autocomplete="off" >
                         @error('nro_documento')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -491,7 +490,7 @@
             </div>
             <div class="row">
                 <div class="col-12 text-end">
-                    <button type="submit" class="btn btn-primary px-8">Guardar y Continuar</button>
+                    <button type="submit" class="btn btn-primary px-8">Actualizar Datos</button>
                 </div>
             </div>
         </form>

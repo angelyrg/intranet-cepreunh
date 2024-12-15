@@ -33,7 +33,7 @@ class MatriculaRequest extends FormRequest
                 }),
                 Rule::unique('matriculas')->where(function ($query) {
                     return $query->where('estudiante_id', $this->estudiante_id);
-                })->ignore($this->route('id')),
+                })->ignore($this->route('matricula')),
             ],
             'estudiante_id' => [
                 'required',

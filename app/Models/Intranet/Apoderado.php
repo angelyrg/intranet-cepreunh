@@ -18,7 +18,8 @@ class Apoderado extends Model
         'apellido_materno',
         
         'telefono_apoderado',
-        'correo_apoderado'
+        'correo_apoderado',
+        'parentesco_id'
     ];
     
     public function tipo_documento(){
