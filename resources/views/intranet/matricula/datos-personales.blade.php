@@ -40,6 +40,16 @@
 </div>
 {{-- Breadcrumb|end --}}
 
+@if ($estudiante)
+<div class="alert alert-success shadow-sm bg-success-subtle text-success py-2 fw-bold">
+    ESTUDIANTE ENCONTRADO
+</div>
+@else
+<div class="alert alert-primary shadow-sm bg-primary-subtle text-primary py-2 fw-bold">
+    NUEVO ESTUDIANTE
+</div>
+@endif
+
 {{-- content|start --}}
 <div class="card shadow w-100 position-relative overflow-hidden">
     <div class="card-body p-4">
@@ -480,7 +490,7 @@
                         <select name="discapacidades[]" id="discapacidades" class="form-select border" multiple>
                             @foreach($discapacidades as $discapacidad)
                             <option value="{{ $discapacidad->id }}"
-                                {{ in_array($discapacidad->id, old('discapacidades', $estudiante->discapacidades ? $estudiante->discapacidades->pluck('id')->toArray() : [])) ? 'selected' : ''}}>
+                                {{ in_array($discapacidad->id, old('discapacidades', $estudiante ? $estudiante->discapacidades->pluck('id')->toArray() : [])) ? 'selected' : ''}}>
                                 {{ $discapacidad->descripcion }}
                             </option>
                             @endforeach
