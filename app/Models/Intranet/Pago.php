@@ -22,7 +22,7 @@ class Pago extends Model
         'comision',
         'monto_neto',
         'condicion_pago',
-        'forma_de_pago_id ',
+        'forma_de_pago_id',
     ];
 
     const CONDICIONES_PAGO = ['Cancelado', 'Parcial'];
