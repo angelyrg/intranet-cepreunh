@@ -28,7 +28,7 @@ class Matricula extends Model
     ];
 
     const MODALIDADES_ESTUDIO = ['Presencial', 'Virtual'];
-    const CONDICIONES_ACADEMICAS = ['Egresado', '5to Secundaria', '4to Secundaria'];
+    const CONDICIONES_ACADEMICAS = ['Egresado', '5to Secundaria', '4to Secundaria', 'Estudiante de secundaria'];
 
     public function estudiante()
     {
