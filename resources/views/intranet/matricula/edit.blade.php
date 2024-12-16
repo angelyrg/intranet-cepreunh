@@ -94,7 +94,6 @@
                     <div class="col-md-4 mb-3">
                         <label for="aula_ciclo_id" class="form-label">Aula</label>
                         <select name="aula_ciclo_id" id="aula_ciclo_id" class="form-select @error('aula_ciclo_id') is-invalid @enderror" required>
-                            {{-- TODO: MOSTRAR AULAS CORRECTAS --}}
                             @foreach ($ciclo->aulas_ciclos as $aula_ciclo)
                             <option value="{{ $aula_ciclo->id }}" {{ $aula_ciclo->id == old('aula_ciclo_id', $matricula->aulas->first()?->id) ? 'selected' : '' }}>
                                 {{ $aula_ciclo->aula->descripcion }}
@@ -159,10 +158,9 @@
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <label for="forma_de_pago_id" class="form-label">Modalidad de pago</label>
-                        {{-- TODO: NO USAR [0] --}}
                         <select name="forma_de_pago_id" id="forma_de_pago_id" class="form-select @error('forma_de_pago_id') is-invalid @enderror" required>
                             @foreach ($formasDePago as $modalidad)
-                            <option value="{{ $modalidad->id }}" {{ $modalidad->id == old('forma_de_pago_id', $matricula->pagos->first()?->id) ? 'selected' : '' }}>
+                            <option value="{{ $modalidad->id }}" {{ $modalidad->id == old('forma_de_pago_id', $matricula->pagos->first()?->forma_de_pago_id) ? 'selected' : '' }}>
                                 {{ $modalidad->descripcion }}
                             </option>
                             @endforeach
