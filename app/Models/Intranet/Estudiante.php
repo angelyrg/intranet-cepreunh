@@ -37,6 +37,7 @@ class Estudiante extends Model
         'colegio_id',
         'year_culminacion',
         'apoderado_id',
+        'sede_actual_id',
         'user_id',
         'estado',
         // 'telefono_apoderado',
