@@ -140,6 +140,7 @@ class CicloController extends Controller
     private function getData()
     {
         $ciclos = Ciclo::with('tipo_ciclo')->get();
+        $user = Auth::user();
 
         $html = "";
         foreach ($ciclos as $item) {
@@ -152,19 +153,30 @@ class CicloController extends Controller
             $estado = $item->estado;
             $fecha_creacion = (new DateTime($item->created_at))->format('d/m/Y');
 
-            $acciones = "
-            <div class='btnActionCarrera'>
-                <a class='btn btn-sm btn-outline-primary btnEdit' data-id='$id' role='button'>
-                    <i class='ti ti-edit'></i>                                        
-                </a>
-                <a class='btn btn-sm btn-outline-danger btnDelete' data-id='$id' role='button'>
-                    <i class='ti ti-trash'></i>                                        
-                </a>
-                <a class='btn btn-sm btn-outline-primary' href=" . route('ciclos.show', $id) . ">
-                    <i class='ti ti-eye'></i>                                        
-                </a>
-            </div>
-            ";
+            $acciones = "<div class='btnActionCarrera'>";
+
+            // Verificar permiso para editar
+            if ($user->can('editar ciclo')) {
+                $acciones .= "<a class='btn btn-sm btn-outline-primary btnEdit' data-id='$id' role='button'>
+                            <i class='ti ti-edit'></i>                                        
+                        </a>";
+            }
+
+            // Verificar permiso para eliminar
+            if ($user->can('eliminar ciclo')) {
+                $acciones .= "<a class='btn btn-sm btn-outline-danger btnDelete' data-id='$id' role='button'>
+                            <i class='ti ti-trash'></i>                                        
+                        </a>";
+            }
+
+            // Verificar permiso para ver
+            if ($user->can('ver ciclo detalle')) {
+                $acciones .= "<a class='btn btn-sm btn-outline-primary' href=" . route('ciclos.show', $id) . ">
+                            <i class='ti ti-eye'></i>                                        
+                        </a>";
+            }
+
+            $acciones .= "</div>";
 
             if ($estado > 0) {
                 $estado = "<span class='badge bg-primary-subtle fw-semibold text-primary'>ACTIVO</span>";
@@ -172,14 +184,16 @@ class CicloController extends Controller
                 $estado = "<span class='badge bg-danger-subtle fw-semibold text-danger'>INACTIVO</span>";
             }
 
+            if ($user->can('ver ciclo detalle')) {
+                $cicloDetalleEnlace = "<a href=" . route('ciclos.show', $id) . ">$descripcion</a>";
+            } else {
+                $cicloDetalleEnlace = $descripcion;
+            }
+
             $html .= "<tr>
                 <td>$acciones</td>
                 <td>$estado</td>
-                <td>
-                    <a href=" . route('ciclos.show', $id) . ">
-                        $descripcion
-                    </a>
-                </td>
+                <td>$cicloDetalleEnlace</td>
                 <td>$fecha_inicio</td>
                 <td>$fecha_fin</td>
                 <td>$duracion</td>

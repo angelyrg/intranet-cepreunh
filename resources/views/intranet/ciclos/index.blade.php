@@ -20,9 +20,11 @@
                 </div>
                 <div class="col-3">
                     <div class="text-center" id="btnActionGeneral">
+                        @can('ciclo.crear')
                         <button type="button" class="btn btn-primary btnAdd{{ $slug }}">
                             <i class="ti ti-plus fs-4"></i> NUEVO REGISTRO
                         </button>
+                        @endcan
                     </div>
                 </div>
             </div>
@@ -42,7 +44,7 @@
                 <thead class="text-dark fs-4">
                     <tr>
                         <th>
-                            <h6 class="fs-4 fw-semibold mb-0">ACCIONES</h6>
+                            <h6 class="fs-4 fw-semibold mb-0"></h6>
                         </th>
                         <th>
                             <h6 class="fs-4 fw-semibold mb-0">ESTADO</h6>

@@ -8,6 +8,7 @@
           <span class="hide-menu">Dashboard</span>
         </a>
       </li>
+      @can('ver configuracion del sistema')
       <li class="nav-small-cap">
         <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
         <span class="hide-menu">CONFIG. DEL SISTEMA</span>
@@ -54,12 +55,14 @@
           </li>
         </ul>
       </li>
+      @endcan
       
       <li class="nav-small-cap">
         <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
         <span class="hide-menu">ADMINISTRACIÓN</span>
       </li>
 
+      @can('sedes.lista')
       <li class="sidebar-item">
         <a class="sidebar-link" href="{{ route('sedes.index') }}" aria-expanded="false">
           <span>
@@ -68,6 +71,9 @@
           <span class="hide-menu">Sedes</span>
         </a>
       </li>
+      @endcan
+
+      @can('aulas.lista')
       <li class="sidebar-item">
         <a class="sidebar-link" href="{{ route('aulas.index') }}" aria-expanded="false">
           <span>
@@ -76,6 +82,7 @@
           <span class="hide-menu">Aulas</span>
         </a>
       </li>
+      @endcan
 
 
       <li class="nav-small-cap">
@@ -83,6 +90,7 @@
         <span class="hide-menu">GESTIÓN CURRICULAR</span>
       </li>
 
+      @can('areas.lista')   
       <li class="sidebar-item">
         <a class="sidebar-link" href="{{ route('areas.index') }}" aria-expanded="false">
           <span>
@@ -91,6 +99,9 @@
           <span class="hide-menu">Áreas</span>
         </a>
       </li>
+      @endcan
+
+      @can('carreras.lista')
       <li class="sidebar-item">
         <a class="sidebar-link" href="{{ route('carreras.index') }}" aria-expanded="false">
           <span>
@@ -99,6 +110,8 @@
           <span class="hide-menu">Carreras</span>
         </a>
       </li>
+      @endcan
+      @can('docentes.lista')
       <li class="sidebar-item">
         <a class="sidebar-link" href="{{ route('docentes.index') }}" aria-expanded="false">
           <span>
@@ -107,6 +120,7 @@
           <span class="hide-menu">Docentes</span>
         </a>
       </li>
+      @endcan
       <li class="sidebar-item">
         <a class="sidebar-link" href="{{ route('estudiante.index') }}" aria-expanded="false">
           <span>
@@ -115,6 +129,9 @@
           <span class="hide-menu">Estudiantes</span>
         </a>
       </li>
+      @can('estudiantes.lista')    
+      @endcan
+      @can('asignaturas.lista')
       <li class="sidebar-item">
         <a class="sidebar-link" href="{{ route('asignaturas.index') }}" aria-expanded="false">
           <span>
@@ -123,6 +140,9 @@
           <span class="hide-menu">Asignaturas</span>
         </a>
       </li>
+      @endcan
+
+      @can('ciclos.lista')
       <li class="sidebar-item">
         <a class="sidebar-link" href="{{ route('ciclos.index') }}" aria-expanded="false">
           <span>
@@ -130,7 +150,7 @@
           </span>
           <span class="hide-menu">Ciclos académicos</span>
         </a>
-      </li>
-      
+      </li> 
+      @endcan      
     </ul>
 </nav>

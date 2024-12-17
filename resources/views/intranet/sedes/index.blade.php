@@ -20,7 +20,7 @@
                 </div>
                 <div class="col-3">
                     <div class="text-center" id="btnActionGeneral">
-                        @can('sedes.create')
+                        @can('sedes.crear')
                         <button type="button" class="btn btn-primary btnAdd{{ $slug }}">
                             <i class="ti ti-books fs-4"></i> NUEVO REGISTRO
                         </button>
