@@ -4,7 +4,9 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Models\Intranet\Empleado;
 use App\Models\Intranet\Sede;
+use App\Models\Intranet\TiposUsuarios;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -23,6 +25,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'username',
+        'estado',
+        'sede_id',
+        'tipos_usuarios_id'
     ];
 
     /**
@@ -51,5 +57,13 @@ class User extends Authenticatable
     public function sede()
     {
         return $this->belongsTo(Sede::class);
+    }
+
+    public function tiposUsuarios(){
+        return $this->belongsTo(TiposUsuarios::class, 'tipo_usuario_id');
+    }
+
+    public function empleados(){
+        return $this->hasMany(Empleado::class, 'usuario_id');
     }
 }
