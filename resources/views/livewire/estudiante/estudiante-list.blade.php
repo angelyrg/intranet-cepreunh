@@ -19,10 +19,9 @@
                 </div>
                 <div class="col-3">
                     <div class="text-center">
-                        {{-- <button type="button" class="btn btn-primary btnAddEstudiante">
-                            <i class="ti ti-books fs-4"></i> NUEVO REGISTRO
-                        </button> --}}
+                        @can('estudiante.crear')
                         <button wire:click="showForm" class="btn btn-primary"><i class="ti ti-books fs-4"></i> AGREGAR ESTUDIANTE</button>
+                        @endcan
                     </div>
                 </div>
             </div>
@@ -42,7 +41,7 @@
             <table class="table text-nowrap mb-0 align-middle" id="tblEstudiante">
                 <thead class="text-dark fs-4">
                     <tr>
-                        <th><h6 class="fs-4 fw-semibold mb-0">ACCIONES</h6></th>
+                        <th><h6 class="fs-4 fw-semibold mb-0"></h6></th>
                         <th><h6 class="fs-4 fw-semibold mb-0">ESTADO</h6></th>
                         <th><h6 class="fs-4 fw-semibold mb-0">NOMBRES</h6></th>
                         <th><h6 class="fs-4 fw-semibold mb-0">AP. PATERNO</h6></th>
@@ -59,12 +58,16 @@
                                 {{-- <a wire:click="showForm({{ $student->id }})" class="btn badge fw-semibold py-1 bg-primary-subtle text-primary" role="button" title="Editar">
                                     <i class="ti ti-edit"></i>                                        
                                 </a> --}}
+                                @can('estudiante.editar')
                                 <a href="{{ route('estudiante.edit', $student->id) }}" class="btn badge fw-semibold py-1 bg-primary-subtle text-primary" title="Editar">
                                     <i class="ti ti-edit"></i>
                                 </a>
+                                @endcan
+                                @can('estudiante.eliminar')
                                 <a wire:click="delete({{ $student->id }})" onclick="confirm('¿Estás seguro?') || event.stopImmediatePropagation()" class="btn badge fw-semibold py-1 bg-danger-subtle text-danger" role="button" title="Eliminar">
                                     <i class="ti ti-trash"></i>                                        
                                 </a>
+                                @endcan
                             </td>
                             <td>
                                 @if($student->estado == 1)

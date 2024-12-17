@@ -75,7 +75,8 @@
     {{-- Modal|roles|end --}}
     {{-- Modal|permisos|atart --}}
     @if($showModalAsignarPermiso)
-        <livewire:roles-permisos.asignar-permiso-rol :role-id="$id" wire:key="{{ $id ?? 'create' }}" />
+        {{-- <livewire:roles-permisos.asignar-permiso-rol :role-id="$id" wire:key="{{ $id ?? 'create' }}" /> --}}
+        <livewire:roles-permisos.asignar-permisos-a-roles :role-id="$id" wire:key="{{ $id ?? 'create' }}" />
     @endif
     {{-- Modal|permisos|end --}}
     

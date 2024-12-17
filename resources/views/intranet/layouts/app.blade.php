@@ -84,18 +84,15 @@
               </li> --}}
             </ul>
 
-            {{-- <ul class="navbar-nav quick-links d-none d-lg-flex">
+            <ul class="navbar-nav quick-links d-none d-lg-flex">
 
               <li class="nav-item dropdown-hover d-none d-lg-block">
-                <a class="nav-link" href="#">Chat</a>
+                <p class="mb-0">Sede <strong>{{ Auth::user()->sede->descripcion }}</strong></p>
               </li>
-              <li class="nav-item dropdown-hover d-none d-lg-block">
+              {{-- <li class="nav-item dropdown-hover d-none d-lg-block">
                 <a class="nav-link" href="#">Calendar</a>
-              </li>
-              <li class="nav-item dropdown-hover d-none d-lg-block">
-                <a class="nav-link" href="#">Email</a>
-              </li>
-            </ul> --}}
+              </li>               --}}
+            </ul>
 
             <div class="d-block d-lg-none">
               <img src="{{ asset('assets/images/logos/CepreUNH.webp') }}" width="180" alt="" />
@@ -120,7 +117,7 @@
                   <!-- start notification Dropdown -->
                   <!-- ------------------------------- -->
                   <li class="nav-item dropdown">
-                    <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
+                    {{-- <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
                       aria-expanded="false">
                       <i class="ti ti-bell-ringing"></i>
                       <div class="notification bg-primary rounded-circle"></div>
@@ -158,7 +155,7 @@
                         <button class="btn btn-outline-primary w-100">See All Notifications</button>
                       </div>
 
-                    </div>
+                    </div> --}}
                   </li>
                   <!-- ------------------------------- -->
                   <!-- end notification Dropdown -->
@@ -188,14 +185,14 @@
                             alt="" />
                           <div class="ms-3">
                             <h5 class="mb-1 fs-3">{{ Auth::user()->name }}</h5>
-                            <span class="mb-1 d-block">Designer</span>
+                            <span class="mb-1 d-block">Sede <strong>{{ Auth::user()->sede->descripcion }} </strong></span>
                             <p class="mb-0 d-flex align-items-center gap-2">
-                              <i class="ti ti-mail fs-4"></i> {{ Auth::user()->email }}
+                              <i class="ti ti-user fs-4"></i> {{ Auth::user()->username }}
                             </p>
                           </div>
                         </div>
                         <div class="message-body">
-                          <a href="{{ route('profile.edit') }}" class="py-8 px-7 mt-8 d-flex align-items-center">
+                          {{-- <a href="{{ route('profile.edit') }}" class="py-8 px-7 mt-8 d-flex align-items-center">
                             <span class="d-flex align-items-center justify-content-center text-bg-light rounded-1 p-6">
                               <img src="#" alt="" width="24" height="24" />
                             </span>
@@ -203,7 +200,7 @@
                               <h6 class="mb-1 fs-3 fw-semibold lh-base">{{ __('Mi perfil') }}</h6>
                               <span class="fs-2 d-block text-body-secondary">{{ __('Configuraciones de la cuenta') }}</span>
                             </div>
-                          </a>
+                          </a> --}}
                           {{-- <a href="#" class="py-8 px-7 d-flex align-items-center">
                             <span class="d-flex align-items-center justify-content-center text-bg-light rounded-1 p-6">
                               <img src="#" alt="" width="24" height="24" />
@@ -220,7 +217,6 @@
                               @csrf
                               <button type="submit" class="btn btn-outline-primary w-100">{{ __('Cerrar Sesión') }}</button>
                           </form>
-                          {{-- <a href="#" class="btn btn-outline-primary">Log Out11</a> --}}
                         </div>
                       </div>
 
