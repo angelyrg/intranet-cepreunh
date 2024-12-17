@@ -29,14 +29,14 @@
               <span class="hide-menu">Roles</span>
             </a>
           </li>
-          <li class="sidebar-item">
+          {{-- <li class="sidebar-item">
             <a href="{{ route('permisos.index') }}" class="sidebar-link">
               <div class="round-16 d-flex align-items-center justify-content-center">
                 <i class="ti ti-circle"></i>
               </div>
               <span class="hide-menu">Permisos</span>
             </a>
-          </li>
+          </li> --}}
           <li class="sidebar-item">
             <a href="{{ route('usuarios.index') }}" class="sidebar-link">
               <div class="round-16 d-flex align-items-center justify-content-center">

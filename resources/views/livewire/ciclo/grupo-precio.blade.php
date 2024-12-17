@@ -69,7 +69,7 @@
         </div>
     </div>
 
-    @if($ciclo->estado == 1)
+    @if($ciclo->estado == 1 && Auth::user()->can('ciclo.configurar_precios'))
     <div class="card shadow">
         <div class="card-body">
             <form wire:submit.prevent="crearGrupo">

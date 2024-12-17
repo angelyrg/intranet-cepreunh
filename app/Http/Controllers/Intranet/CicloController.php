@@ -156,21 +156,21 @@ class CicloController extends Controller
             $acciones = "<div class='btnActionCarrera'>";
 
             // Verificar permiso para editar
-            if ($user->can('editar ciclo')) {
+            if ($user->can('ciclo.editar')) {
                 $acciones .= "<a class='btn btn-sm btn-outline-primary btnEdit' data-id='$id' role='button'>
                             <i class='ti ti-edit'></i>                                        
                         </a>";
             }
 
             // Verificar permiso para eliminar
-            if ($user->can('eliminar ciclo')) {
+            if ($user->can('ciclo.eliminar')) {
                 $acciones .= "<a class='btn btn-sm btn-outline-danger btnDelete' data-id='$id' role='button'>
                             <i class='ti ti-trash'></i>                                        
                         </a>";
             }
 
             // Verificar permiso para ver
-            if ($user->can('ver ciclo detalle')) {
+            if ($user->can('ciclo.detalles')) {
                 $acciones .= "<a class='btn btn-sm btn-outline-primary' href=" . route('ciclos.show', $id) . ">
                             <i class='ti ti-eye'></i>                                        
                         </a>";
@@ -184,7 +184,7 @@ class CicloController extends Controller
                 $estado = "<span class='badge bg-danger-subtle fw-semibold text-danger'>INACTIVO</span>";
             }
 
-            if ($user->can('ver ciclo detalle')) {
+            if ($user->can('ciclo.detalles')) {
                 $cicloDetalleEnlace = "<a href=" . route('ciclos.show', $id) . ">$descripcion</a>";
             } else {
                 $cicloDetalleEnlace = $descripcion;

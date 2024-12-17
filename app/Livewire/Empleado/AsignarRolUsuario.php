@@ -115,9 +115,9 @@ class AsignarRolUsuario extends Component
 
     public function update(){
         
-        logger('Método update ejecutado');
+        // logger('Método update ejecutado');
 
-        logger('id ===>  ' . $this->id);
+        // logger('id ===>  ' . $this->id);
         // dd($this->id);
 
         try {
@@ -128,12 +128,17 @@ class AsignarRolUsuario extends Component
 
             if(!$usuario->id) throw new \Exception('Usuario no encontrado');
 
-            $usuario->update([
+            $usuarioData = [
                 'sede_id' => $this->sede_id,
                 'email' => $this->correo_personal,
                 'username' => $this->username,
-                'password' => Hash::make($this->password),
-            ]);
+            ];
+
+            if($this->password != ''){
+                $usuarioData['password'] = Hash::make($this->password);
+            }
+
+            $usuario->update($usuarioData);
 
             $empleado->update([
                 'sede_id' => $this->sede_id,
