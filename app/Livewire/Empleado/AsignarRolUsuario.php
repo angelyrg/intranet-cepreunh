@@ -7,7 +7,7 @@ use App\Models\Intranet\Empleado;
 use App\Models\Intranet\Permission;
 use App\Models\Intranet\Role;
 use App\Models\Intranet\Sede;
-use App\Models\Intranet\User;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Rule;
@@ -40,12 +40,12 @@ class AsignarRolUsuario extends Component
         $this->user_id = $empleado->user_id;
 
         if($this->user_id){
-            $usuario = User::where('id', $this->user_id)->first();
-
-            logger('usuario: ' . $usuario->roles);
-            
-            $this->role_id = $usuario->roles->first()->id;
-            $this->permisos = Role::find($this->role_id)->permissions;
+            $usuario = User::findOrFail($this->user_id);
+                        
+            $this->role_id = $usuario->roles->first()?->id;
+            if ($this->role_id){
+                $this->permisos = Role::find($this->role_id)->permissions;
+            }
             
             $this->sede_id = $usuario->sede_id;
             $this->correo_personal = $usuario->email;

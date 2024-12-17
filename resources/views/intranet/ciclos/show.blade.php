@@ -153,16 +153,20 @@
                     <h5 class="card-title">Matrículas</h5>
                     <div>
                         @if($ciclo->estado == 1)
+                        @can('matricula.crear')
                         <a class="btn btn-primary d-block" href={{ route('ciclos.matricula', $ciclo->id) }}>
                             <span><i class="ti ti-user-plus"></i></span>
                             <span>Matricular estudiante</span>
                         </a>
+                        @endcan
                         @endif
                     </div>
                 </div>
             </div>
             <div class="card-body">
+                @can('matriculas.lista')
                 <livewire:ciclo.matriculas-table cicloId="{{ $ciclo->id }}" sedeId="{{ $sedeId }}" />
+                @endcan
             </div>
         </div>
     </div>
