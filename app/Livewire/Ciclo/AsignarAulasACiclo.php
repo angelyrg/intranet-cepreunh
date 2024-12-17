@@ -4,6 +4,7 @@ namespace App\Livewire\Ciclo;
 
 use App\Models\Intranet\Aula;
 use App\Models\Intranet\Ciclo;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class AsignarAulasACiclo extends Component
@@ -19,9 +20,13 @@ class AsignarAulasACiclo extends Component
     {
         $this->cicloId = $cicloId;
         $this->ciclo = Ciclo::findOrFail($cicloId);
-        $this->sedeId = 1; //TODO: Obtener sede del usuario logueado. 
+        $this->sedeId = Auth::user()->sede_id;
         $this->aulas = Aula::where('sede_id', $this->sedeId)->get();
-        $this->aulasAsignadas = Ciclo::find($this->cicloId)->aulas->pluck('id')->toArray();
+
+        $this->aulasAsignadas = $this->ciclo->aulas()
+            ->where('sede_id', $this->sedeId)
+            ->pluck('aulas.id')
+            ->toArray();
     }
 
     public function asignarAula($aulaId)

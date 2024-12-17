@@ -1,7 +1,7 @@
 <div class="rounded-2">
     <div class="">
         <div class="row">
-            @if($ciclo->estado == 1)
+            @if($ciclo->estado == 1 && Auth::user()->can('ciclo.configurar_carreras'))
             <div class="col-12 col-md-6">
                 <div class="card shadow">
                     <div class="card-header">
@@ -40,16 +40,16 @@
                 </div>
             </div>
             @endif
-            <div class="col-12 @if($ciclo->estado == 1) col-md-6 @endif">
+            <div class="col-12 @if($ciclo->estado == 1 && Auth::user()->can('ciclo.configurar_carreras') ) col-md-6 @endif">
                 <div class="card shadow">
-                    @if($ciclo->estado == 1)
+                    @if($ciclo->estado == 1 && Auth::user()->can('ciclo.configurar_carreras') )
                     <div class="card-header">
                         <h4 class="card-title">Carreras asignadas al ciclo</h4>
                     </div>
                     @endif
                     <div class="card-body">
                         <div class="mb-4">
-                            @if($ciclo->estado == 1)
+                            @if($ciclo->estado == 1 && Auth::user()->can('ciclo.configurar_carreras') )
                             <div class="text-end mb-1 mt-2">
                                 <button class="btn btn-warning btn-sm" wire:click="quitarTodasLasCarreras">
                                     <span><i class="ti ti-arrows-left"></i></span>
@@ -74,7 +74,7 @@
                                                 {{ $carrera->descripcion }}
                                             </span>
                                         </div>
-                                        @if($ciclo->estado == 1)
+                                        @if($ciclo->estado == 1 && Auth::user()->can('ciclo.configurar_carreras'))
                                         <button class="btn btn-danger btn-sm" wire:click="quitarCarrera({{ $carrera->id }})">
                                             Quitar
                                         </button>

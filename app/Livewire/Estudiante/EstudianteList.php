@@ -3,6 +3,7 @@
 namespace App\Livewire\Estudiante;
 
 use App\Models\Intranet\Estudiante;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\On;
@@ -24,9 +25,13 @@ class EstudianteList extends Component
 
     public function render()
     {
-        return view('livewire.estudiante.estudiante-list', [
-            'students' => Estudiante::paginate(10)
-        ]);
+        $user = Auth::user();
+        if ($user->can('sedes.ver_todas')){
+            $students = Estudiante::paginate(10);
+        }else{
+            $students = Estudiante::where('sede_actual_id', $user->sede_id)->paginate(10);
+        }
+        return view('livewire.estudiante.estudiante-list', compact('students'));
     }
 
     public function delete($studentId)

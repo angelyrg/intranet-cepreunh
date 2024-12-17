@@ -1,6 +1,6 @@
 <div class="">
     <div class="row">
-        @if($ciclo->estado == 1)
+        @if($ciclo->estado == 1 && Auth::user()->can('ciclo.configurar_asignaturas'))
         <div class="col-12 col-md-6">
             <div class="card shadow">
                 <div class="card-header">
@@ -32,9 +32,9 @@
             </div>
         </div>
         @endif
-        <div class="col-12 @if($ciclo->estado == 1) col-md-6 @endif">
+        <div class="col-12 @if($ciclo->estado == 1 && Auth::user()->can('ciclo.configurar_asignaturas')) col-md-6 @endif">
             <div class="card shadow">
-                @if($ciclo->estado == 1)
+                @if($ciclo->estado == 1 && Auth::user()->can('ciclo.configurar_asignaturas'))
                 <div class="card-header">
                     <h5 class="card-title">Asignaturas asignadas al ciclo</h5>
                 </div>
@@ -42,7 +42,7 @@
                 <div class="card-body">
                     <!-- Asignaturas asignadas -->
                     <div class="mb-4">
-                        @if($ciclo->estado == 1)
+                        @if($ciclo->estado == 1 && Auth::user()->can('ciclo.configurar_asignaturas'))
                         <div class="mb-1">
                             <button class="btn btn-warning btn-sm" wire:click="quitarTodasLasAsignaturas">
                                 <span><i class="ti ti-arrows-left"></i></span>
@@ -60,7 +60,7 @@
                                     <span>
                                         {{ $asignatura->descripcion }}
                                     </span>
-                                    @if($ciclo->estado == 1)
+                                    @if($ciclo->estado == 1 && Auth::user()->can('ciclo.configurar_asignaturas'))
                                     <button class="btn btn-danger btn-sm" wire:click="quitarAsignatura({{ $asignatura->id }})">
                                         Quitar
                                     </button>
