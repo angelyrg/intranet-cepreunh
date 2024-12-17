@@ -1595,6 +1595,7 @@ class MatriculaController extends Controller
             'year_culminacion' => $validatedData['year_culminacion'],
 
             'apoderado_id' => $apoderado->id,
+            'sede_actual_id' => Auth::user()->sede_id,
             //Apoderado
         ];
 
