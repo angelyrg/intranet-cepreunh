@@ -88,9 +88,13 @@
                     <div class="col-md-4 mb-3">
                         <label for="aula_ciclo_id" class="form-label">Aula</label>
                         <select name="aula_ciclo_id" id="aula_ciclo_id" class="form-select @error('aula_ciclo_id') is-invalid @enderror" required>
-                            @foreach ($ciclo->aulas_ciclos as $aula)
-                            <option value="{{ $aula->id }}" {{ old('aula_ciclo_id')==$aula->id ? 'selected' : '' }}>
-                                {{ $aula->aula->descripcion }}
+                            @foreach ($aulaCicloDisponibles as $aulaCiclo)
+                            <option value="{{ $aulaCiclo->id }}"
+                                {{ old('aula_ciclo_id')==$aulaCiclo->id ? 'selected' : '' }}
+                                {{ $aulaCiclo->full ? 'disabled' : '' }}
+                                title="{{ $aulaCiclo->full ? 'Este aula ha alcanzado su aforo máximo.' : '' }}"
+                                >
+                                {{ $aulaCiclo->aula->descripcion }}
                             </option>
                             @endforeach
                         </select>
@@ -296,10 +300,7 @@
             // Hacer una solicitud AJAX con Fetch para obtener las carreras de esa área
             fetch(`/carreras/${areaId}`)
                 .then(response => response.json())
-                .then(data => {
-
-                    console.log(data);
-                    
+                .then(data => {                    
                     // Verificar si la respuesta contiene carreras
                     if (data.length > 0) {
                         // Llenar el select de carrera con las opciones obtenidas
