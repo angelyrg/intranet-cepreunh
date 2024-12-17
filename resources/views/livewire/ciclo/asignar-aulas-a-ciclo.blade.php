@@ -1,6 +1,6 @@
 <div class="">
     <div class="row">
-        @if($ciclo->estado == 1)
+        @if($ciclo->estado == 1 && Auth::user()->can('ciclo.configurar_aulas'))
         <div class="col-12 col-md-6">
             <div class="card shadow">
                 <div class="card-header">
@@ -33,16 +33,16 @@
             </div>
         </div>
         @endif
-        <div class="col-12 @if($ciclo->estado == 1) col-md-6 @endif">
+        <div class="col-12 @if($ciclo->estado == 1 && Auth::user()->can('ciclo.configurar_aulas')) col-md-6 @endif">
             <div class="card shadow">
-                @if($ciclo->estado == 1)
+                @if($ciclo->estado == 1 && Auth::user()->can('ciclo.configurar_aulas'))
                 <div class="card-header">
                     <h5 class="card-title">Aulas asignadas al ciclo</h5>
                 </div>
                 @endif
                 <div class="card-body">
                     <div class="mb-4">
-                        @if($ciclo->estado == 1)
+                        @if($ciclo->estado == 1 && Auth::user()->can('ciclo.configurar_aulas'))
                         <div class="mb-1">
                             <button class="btn btn-warning btn-sm" wire:click="quitarTodasLasAulas">
                                 <span><i class="ti ti-arrows-left"></i></span>
@@ -60,7 +60,7 @@
                                 <span>
                                     {{ $aula->descripcion }}
                                 </span>
-                                @if($ciclo->estado == 1)
+                                @if($ciclo->estado == 1 && Auth::user()->can('ciclo.configurar_aulas'))
                                 <button class="btn btn-danger btn-sm"
                                     wire:click="quitarAula({{ $aula->id }})">
                                     Quitar

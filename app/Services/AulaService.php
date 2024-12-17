@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Intranet\Aula;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Auth;
 
 class AulaService
 {
@@ -28,7 +29,14 @@ class AulaService
 
     public function getData()
     {
-        $aula = Aula::with('sede')->get();
+        $user = Auth::user();
+        if ($user->can('sedes.ver_todas')){
+            $aula = Aula::with('sede')->get();
+        }else{
+            // $user->sede_id;
+            $aula = Aula::where('sede_id', $user->sede_id)->with('sede')->get();
+        }
+
         return $aula;
     }
 
