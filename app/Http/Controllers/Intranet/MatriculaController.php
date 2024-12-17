@@ -7,6 +7,7 @@ use App\Http\Requests\Matricula\MatriculaEstudianteRequest;
 use App\Http\Requests\Matricula\MatriculaRequest;
 use App\Models\Intranet\Apoderado;
 use App\Models\Intranet\Area;
+use App\Models\Intranet\AulaCiclo;
 use App\Models\Intranet\AulaMatricula;
 use App\Models\Intranet\Banco;
 use App\Models\Intranet\Ciclo;
@@ -1619,19 +1620,41 @@ class MatriculaController extends Controller
     {
         $ciclo_id = session('ciclo_id');
         $estudiante_id = session('estudiante_id');
+        $user = Auth::user();
 
         $areas = Area::all();
-        $sedes = Sede::all();
+        if ($user->can('sedes.ver_todas')){
+            $sedes = Sede::all();
+        }else{
+            $sedes = collect([Sede::findOrFail($user->sede_id)]);
+        }
         $bancos = Banco::all();
         $formasDePago = FormaDePago::all();
-        $ciclo = Ciclo::with(['precios.forma_de_pago', 'aulas_ciclos.aula'])->findOrFail($ciclo_id);
+        // $ciclo = Ciclo::with(['precios.forma_de_pago', 'aulas_ciclos.aula'])->findOrFail($ciclo_id);
 
+        $ciclo = Ciclo::with(['precios.forma_de_pago'])->findOrFail($ciclo_id);
+
+        $aulaCicloDisponibles = AulaCiclo::with('aula')
+            ->where('ciclo_id', $ciclo->id)
+            ->whereHas('aula', function ($query) {
+                $query->where('sede_id', Auth::user()->sede_id);
+            })
+            ->get();
+        
+        // Iterar sobre los resultados y agregar el campo 'full' si el aforo ha sido alcanzado
+        $aulaCicloDisponibles->each(function ($aulaCiclo) {
+            $aforo = $aulaCiclo->aula->aforo;
+            $matriculasExistentes = AulaMatricula::where('aula_ciclo_id', $aulaCiclo->id)->count();
+            $aulaCiclo->full = $matriculasExistentes >= $aforo;
+        });
+ 
         $modalidades_estudio = Matricula::MODALIDADES_ESTUDIO;
         $condiciones_acadedmicas = Matricula::CONDICIONES_ACADEMICAS;
 
         return view('intranet.matricula.create', compact(
             'ciclo_id',
             'ciclo',
+            'aulaCicloDisponibles',
             'estudiante_id',
             'areas',
             'sedes',
