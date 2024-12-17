@@ -74,7 +74,7 @@ class AsignarRolUsuario extends Component
 
             $empleado = Empleado::find($this->id);
             $name = explode(' ', $empleado->nombres)[0] . ' ' . $empleado->apellido_paterno;
-            $tipoUsuario = 1; // 1 = docente, 2 = administrativo, 3 = estudiante
+            $tipoUsuario = 1; // 1 = empleado, 2 = docente, 3 = estudiante
 
             $userData = [
                 'name' => $name,
@@ -91,7 +91,7 @@ class AsignarRolUsuario extends Component
             $empleado->save();
 
             // Logging
-            Log::info("Cuenta creada para el empleado ID: {$empleado->id}", ['usuario_id' => $usuario->id]);
+            // Log::info("Cuenta creada para el empleado ID: {$empleado->id}", ['usuario_id' => $usuario->id]);
 
             $this->dispatch('showNotify', ['type' => 'success', 'msg' => 'La cuenta del empleado ha sido registrada correctamente.']);
             
