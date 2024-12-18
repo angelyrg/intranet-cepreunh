@@ -13,12 +13,47 @@ use App\Models\Intranet\Genero;
 use App\Models\Intranet\IdentidadEtnica;
 use App\Models\Intranet\Matricula;
 use App\Models\Intranet\Pago;
+use App\Models\Intranet\Parentesco;
 use App\Models\Intranet\TipoDocumento;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class MatriculaController extends Controller
 {
+    public function validarPago(ValidacionPagoRequest $request)
+    {
+        try {
+            $datosValidados = $request->validated();
+
+            $dni = $datosValidados['dni'];
+            $nTransaccion = $datosValidados['nTransaccion'];
+            $ciclo_id = $datosValidados['ciclo'];
+
+            // Verificar si la boleta de pago existe
+            $boletaConsultaResult = $this->obtenerBoletaAPI($dni, $nTransaccion);
+            if (!$boletaConsultaResult['success']) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $boletaConsultaResult['message'],
+                ], 404);
+            }
+
+            $boleta = $boletaConsultaResult['data'];
+
+            return response()->json([
+                'success' => true,
+                'data' => $boleta,
+            ], 200);
+
+        } catch (\Exception $e) {
+            Log::error('Error en MatriculaController::procesarMatricula: ' . $e->getMessage());
+            return [
+                'success' => false,
+                'message' => 'Ocurrió un error al procesar la matrícula.'
+            ];
+        }
+    }
+
     public function procesarMatricula(ValidacionPagoRequest $request)
     {
         try {
@@ -101,6 +136,83 @@ class MatriculaController extends Controller
             return [
                 'success' => false,
                 'message' => 'Ocurrió un error al obtener la matrícula.'
+            ];
+        }
+    }
+
+    public function getFullDataByEstudiante(String $dni)
+    {
+        try {
+            $estudiante = Estudiante::where('nro_documento', $dni)
+                ->with(['matriculas', 'matriculas.pagos', 'apoderado'])
+                ->first();
+
+            $direccion_ubigeoDepartamentoId = null;
+            $direccion_ubigeoProvinciaId = null;
+            $nacimiento_ubigeoDepartamentoId = null;
+            $nacimiento_ubigeoProvinciaId = null;
+            $colegio_ubigeoDepartamentoId = null;
+            $colegio_ubigeoProvinciaId = null;
+
+            // Ubigeo DIRECCION
+            $direccion_ubigeo = $estudiante->direccion_ubigeodistrito_id;
+            if ($direccion_ubigeo) {
+                $direccion_ubigeoDepartamentoId = substr($direccion_ubigeo, 0, 2);
+                $direccion_ubigeoProvinciaId = substr($direccion_ubigeo, 0, 4);
+            }
+
+            // Ubigeo NACIMIENTO
+            $nacimiento_ubigeo = $estudiante->nacimiento_ubigeodistrito_id;
+            if ($nacimiento_ubigeo) {
+                $nacimiento_ubigeoDepartamentoId = substr($nacimiento_ubigeo, 0, 2);
+                $nacimiento_ubigeoProvinciaId = substr($nacimiento_ubigeo, 0, 4);
+            }
+
+            // Ubigeo COLEGIO
+            $colegio_ubigeo = $estudiante->colegio_ubigeodistrito_id;
+            if ($colegio_ubigeo) {
+                $colegio_ubigeoDepartamentoId = substr($colegio_ubigeo, 0, 2);
+                $colegio_ubigeoProvinciaId = substr($colegio_ubigeo, 0, 4);
+            }
+
+            $tipos_documentos = TipoDocumento::all();
+            $generos = Genero::all();
+            $estados_civiles = EstadoCivil::all();
+            $discapacidades = Discapacidad::all();
+            $identidades_etnicas = IdentidadEtnica::all();
+            $parentescos = Parentesco::all();
+            $departamentos = UbigeoDepartamento::all();
+
+
+            $data = [
+                'estudiante' => $estudiante,
+                
+                'tipos_documentos' => $tipos_documentos,
+                'generos' => $generos,
+                'estados_civiles' => $estados_civiles,
+                'discapacidades' => $discapacidades,
+                'identidades_etnicas' => $identidades_etnicas,
+                'parentescos' => $parentescos,
+                'departamentos' => $departamentos,
+
+                'direccion_ubigeoDepartamentoId' => $direccion_ubigeoDepartamentoId,
+                'direccion_ubigeoProvinciaId' => $direccion_ubigeoProvinciaId,
+                'nacimiento_ubigeoDepartamentoId' => $nacimiento_ubigeoDepartamentoId,
+                'nacimiento_ubigeoProvinciaId' => $nacimiento_ubigeoProvinciaId,
+                'colegio_ubigeoDepartamentoId' => $colegio_ubigeoDepartamentoId,
+                'colegio_ubigeoProvinciaId' => $colegio_ubigeoProvinciaId,
+
+            ];
+
+            return response()->json([
+                'success' => true,
+                'data' => $data,
+            ], 200);
+        } catch (\Exception $e) {
+            Log::error('Error en MatriculaController::getFullDataByEstudiante: ' . $e->getMessage());
+            return [
+                'success' => false,
+                'message' => 'Ocurrió un error al obtener estudiante.'
             ];
         }
     }
