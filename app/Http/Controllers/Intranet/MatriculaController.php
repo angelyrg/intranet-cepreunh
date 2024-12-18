@@ -1715,10 +1715,8 @@ class MatriculaController extends Controller
         return view('intranet.matricula.show', compact('matricula'));
     }
 
-    public function edit(string $id)
+    public function edit(Matricula $matricula)
     {
-        $matricula = Matricula::findOrFail($id);
-
         $ciclo_id = $matricula->ciclo_id;
         $estudiante_id = $matricula->estudiante_id;
 
@@ -1737,7 +1735,7 @@ class MatriculaController extends Controller
         
         // Iterar sobre los resultados y agregar el campo 'full' si el aforo ha sido alcanzado excepto si es el actual
         // TODO: Obtener aula actual
-        $matricula_AulaCicloId = $matricula->aulas->first()->pivot->aula_ciclo_id;
+        $matricula_AulaCicloId = $matricula->aulas->first()?->pivot->aula_ciclo_id;
         $aulaCicloDisponibles->each(function ($aulaCiclo) use($matricula_AulaCicloId) {
             $aforo = $aulaCiclo->aula->aforo;
             $matriculasExistentes = AulaMatricula::where('aula_ciclo_id', $aulaCiclo->id)->count();

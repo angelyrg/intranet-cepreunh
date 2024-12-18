@@ -155,21 +155,21 @@ class MatriculaController extends Controller
             $colegio_ubigeoProvinciaId = null;
 
             // Ubigeo DIRECCION
-            $direccion_ubigeo = $estudiante->direccion_ubigeodistrito_id;
+            $direccion_ubigeo = $estudiante->direccion_ubigeodistrito_id ?? null;
             if ($direccion_ubigeo) {
                 $direccion_ubigeoDepartamentoId = substr($direccion_ubigeo, 0, 2);
                 $direccion_ubigeoProvinciaId = substr($direccion_ubigeo, 0, 4);
             }
 
             // Ubigeo NACIMIENTO
-            $nacimiento_ubigeo = $estudiante->nacimiento_ubigeodistrito_id;
+            $nacimiento_ubigeo = $estudiante->nacimiento_ubigeodistrito_id ?? null;
             if ($nacimiento_ubigeo) {
                 $nacimiento_ubigeoDepartamentoId = substr($nacimiento_ubigeo, 0, 2);
                 $nacimiento_ubigeoProvinciaId = substr($nacimiento_ubigeo, 0, 4);
             }
 
             // Ubigeo COLEGIO
-            $colegio_ubigeo = $estudiante->colegio_ubigeodistrito_id;
+            $colegio_ubigeo = $estudiante->colegio_ubigeodistrito_id ?? null;
             if ($colegio_ubigeo) {
                 $colegio_ubigeoDepartamentoId = substr($colegio_ubigeo, 0, 2);
                 $colegio_ubigeoProvinciaId = substr($colegio_ubigeo, 0, 4);
