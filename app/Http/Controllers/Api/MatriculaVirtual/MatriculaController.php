@@ -6,14 +6,22 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\EstudianteRequest;
 use App\Http\Requests\Api\ValidacionPagoRequest;
 use App\Models\Common\UbigeoDepartamento;
+use App\Models\Intranet\Area;
+use App\Models\Intranet\AulaCiclo;
+use App\Models\Intranet\AulaMatricula;
+use App\Models\Intranet\Banco;
+use App\Models\Intranet\Carrera;
+use App\Models\Intranet\Ciclo;
 use App\Models\Intranet\Discapacidad;
 use App\Models\Intranet\EstadoCivil;
 use App\Models\Intranet\Estudiante;
+use App\Models\Intranet\FormaDePago;
 use App\Models\Intranet\Genero;
 use App\Models\Intranet\IdentidadEtnica;
 use App\Models\Intranet\Matricula;
 use App\Models\Intranet\Pago;
 use App\Models\Intranet\Parentesco;
+use App\Models\Intranet\Sede;
 use App\Models\Intranet\TipoDocumento;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -332,4 +340,59 @@ class MatriculaController extends Controller
             ];
         }
     }
+
+    public function getDataForMatricula($ciclo_id)
+    {
+        try {
+            $areas = Area::all();
+            $carreras = Carrera::all();
+            $sedes = Sede::all();
+            $bancos = Banco::all();
+            $formasDePago = FormaDePago::all();
+
+            $ciclo = Ciclo::with(['precios.forma_de_pago'])->findOrFail($ciclo_id);
+
+            $aulaCicloDisponibles = AulaCiclo::with('aula')
+            ->where('ciclo_id', $ciclo->id)
+            ->has('aula')
+            ->get();
+
+            // ASIGNACION DE AULAS AUTOMÁTICO EN MATRIACULA VIRTUAL
+            // Iterar sobre los resultados y agregar el campo 'full' si el aforo ha sido alcanzado
+            $aulaCicloDisponibles->each(function ($aulaCiclo) {
+                $aforo = $aulaCiclo->aula->aforo;
+                $matriculasExistentes = AulaMatricula::where('aula_ciclo_id', $aulaCiclo->id)->count();
+                $aulaCiclo->full = $matriculasExistentes >= $aforo;
+            });
+
+            $modalidades_estudio = Matricula::MODALIDADES_ESTUDIO;
+            $condiciones_academicas = Matricula::CONDICIONES_ACADEMICAS;
+
+            $data = [
+                'ciclo' => $ciclo,
+                'aulaCicloDisponibles' => $aulaCicloDisponibles,
+                'areas' => $areas,
+                'carreras' => $carreras,
+                'sedes' => $sedes,
+                'bancos' => $bancos,
+                'formasDePago' => $formasDePago,
+                'modalidades_estudio' => $modalidades_estudio,
+                'condiciones_academicas' => $condiciones_academicas,
+            ];
+
+            return response()->json([
+                'success' => true,
+                'data' => $data,
+            ], 200);
+        } catch (\Exception $e) {
+            Log::error('Error en Api/MatriculaController::getDataForMatricula: ' . $e->getMessage());
+            return [
+                'success' => false,
+                'message' => 'Ocurrió un error al datos para la matricula.'
+            ];
+        }
+        
+
+        
+    } 
 }

@@ -19,6 +19,7 @@ Route::prefix('matricula_virtual')->group(function () {
     Route::get('getMatriculaByUUID/{uuid}', [MatriculaController::class, 'getByUUID']);
     Route::get('getFullDataByEstudiante/{dni}', [MatriculaController::class, 'getFullDataByEstudiante']);
     Route::get('getFullMatriculaDataByUUID/{uuid}', [MatriculaController::class, 'getFullDataByUUID']);
+    Route::get('getDataForMatricula/{ciclo_id}', [MatriculaController::class, 'getDataForMatricula']);
     Route::get('ciclos', [CicloController::class, 'obtenerCiclosActivos']);
     Route::put('estudiante/{estudiante}', [MatriculaController::class, 'updateDatosEstudiante']);
 });
