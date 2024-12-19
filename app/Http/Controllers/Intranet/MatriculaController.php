@@ -1783,24 +1783,48 @@ class MatriculaController extends Controller
 
         // Actualizar el pago asociado
         $pago = Pago::where('matricula_id', $matricula->id)->first();
-        $pago->update([
-            'banco_id' => $validatedData['banco_id'],
-            'cod_operacion' => $validatedData['cod_operacion'],
-            'descripcion_pago' => $validatedData['descripcion_pago'],
-            'n_transaccion' => $validatedData['n_transaccion'],
-            'monto' => $validatedData['monto'],
-            'comision' => $validatedData['comision'],
-            'monto_neto' => $validatedData['monto_neto'],
-            'fecha_pago' => $validatedData['fecha_pago'],
-            'condicion_pago' => $validatedData['condicion_pago'],
-            'forma_de_pago_id' => $validatedData['forma_de_pago_id'],
-        ]);
+
+        if ($pago) {
+            $pago->update([
+                'banco_id' => $validatedData['banco_id'],
+                'cod_operacion' => $validatedData['cod_operacion'],
+                'descripcion_pago' => $validatedData['descripcion_pago'],
+                'n_transaccion' => $validatedData['n_transaccion'],
+                'monto' => $validatedData['monto'],
+                'comision' => $validatedData['comision'],
+                'monto_neto' => $validatedData['monto_neto'],
+                'condicion_pago' => $validatedData['condicion_pago'],
+                'fecha_pago' => $validatedData['fecha_pago'],
+                'forma_de_pago_id' => $validatedData['forma_de_pago_id'],
+            ]);
+        } else {
+            Pago::create([
+                'matricula_id' => $matricula->id,
+                'banco_id' => $validatedData['banco_id'],
+                'cod_operacion' => $validatedData['cod_operacion'],
+                'descripcion_pago' => $validatedData['descripcion_pago'],
+                'n_transaccion' => $validatedData['n_transaccion'],
+                'monto' => $validatedData['monto'],
+                'comision' => $validatedData['comision'],
+                'monto_neto' => $validatedData['monto_neto'],
+                'condicion_pago' => $validatedData['condicion_pago'],
+                'fecha_pago' => $validatedData['fecha_pago'],
+                'forma_de_pago_id' => $validatedData['forma_de_pago_id'],
+            ]);
+        }
 
         // Actualizar el aula matriculada
         $aulaMatricula = AulaMatricula::where('matricula_id', $matricula->id)->first();
-        $aulaMatricula->update([
-            'aula_ciclo_id' => $validatedData['aula_ciclo_id'],
-        ]);
+        if ($aulaMatricula) {
+            $aulaMatricula->update([
+                'aula_ciclo_id' => $validatedData['aula_ciclo_id'],
+            ]);
+        } else {
+            AulaMatricula::create([
+                'matricula_id' => $matricula->id,
+                'aula_ciclo_id' => $validatedData['aula_ciclo_id'],
+            ]);
+        }
 
         // Redirigir a la vista de la matrícula actualizada
         return redirect()->route('matricula.show', $matricula->id)->with('success', 'Matrícula actualizada correctamente');
