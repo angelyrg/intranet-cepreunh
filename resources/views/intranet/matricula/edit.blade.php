@@ -94,6 +94,7 @@
                     <div class="col-md-4 mb-3">
                         <label for="aula_ciclo_id" class="form-label">Aula</label>
                         <select name="aula_ciclo_id" id="aula_ciclo_id" class="form-select @error('aula_ciclo_id') is-invalid @enderror" required>
+                            <option value="">Seleccione</option>
                             @foreach ($aulaCicloDisponibles as $aulaCiclo)
                             <option value="{{ $aulaCiclo->id }}"
                                 {{ $aulaCiclo->id == old('aula_ciclo_id', $matricula->aulas->first()?->id) ? 'selected' : '' }}
