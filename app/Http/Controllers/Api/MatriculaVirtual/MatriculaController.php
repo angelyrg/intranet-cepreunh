@@ -301,7 +301,7 @@ class MatriculaController extends Controller
             } else {
                 return [
                     'success' => false,
-                    'message' => 'No se encontró ninguna boleta con el número de transacción proporcionado.',
+                    'message' => 'No se encontró ninguna boleta con el DNI y número de transacción proporcionado.',
                 ];
             }
         } catch (\Exception $e) {
