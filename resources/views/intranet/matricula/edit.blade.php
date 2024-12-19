@@ -94,9 +94,13 @@
                     <div class="col-md-4 mb-3">
                         <label for="aula_ciclo_id" class="form-label">Aula</label>
                         <select name="aula_ciclo_id" id="aula_ciclo_id" class="form-select @error('aula_ciclo_id') is-invalid @enderror" required>
-                            @foreach ($ciclo->aulas_ciclos as $aula_ciclo)
-                            <option value="{{ $aula_ciclo->id }}" {{ $aula_ciclo->id == old('aula_ciclo_id', $matricula->aulas->first()?->id) ? 'selected' : '' }}>
-                                {{ $aula_ciclo->aula->descripcion }}
+                            @foreach ($aulaCicloDisponibles as $aulaCiclo)
+                            <option value="{{ $aulaCiclo->id }}"
+                                {{ $aulaCiclo->id == old('aula_ciclo_id', $matricula->aulas->first()?->id) ? 'selected' : '' }}
+                                {{ $aulaCiclo->full ? 'disabled' : '' }}
+                                title="{{ $aulaCiclo->full ? 'Este aula ha alcanzado su aforo máximo.' : '' }}"
+                                >
+                                {{ $aulaCiclo->aula->descripcion }}
                             </option>
                             @endforeach
                         </select>

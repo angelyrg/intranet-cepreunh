@@ -1715,17 +1715,32 @@ class MatriculaController extends Controller
         return view('intranet.matricula.show', compact('matricula'));
     }
 
-    public function edit(string $id)
+    public function edit(Matricula $matricula)
     {
-        $matricula = Matricula::findOrFail($id);
-
         $ciclo_id = $matricula->ciclo_id;
         $estudiante_id = $matricula->estudiante_id;
 
         $areas = Area::all();
         $bancos = Banco::all();
         $formasDePago = FormaDePago::all();
-        $ciclo = Ciclo::with(['precios.forma_de_pago', 'aulas_ciclos.aula'])->findOrFail($ciclo_id);
+        // $ciclo = Ciclo::with(['precios.forma_de_pago', 'aulas_ciclos.aula'])->findOrFail($ciclo_id);
+        $ciclo = Ciclo::with(['precios.forma_de_pago'])->findOrFail($ciclo_id);
+
+        $aulaCicloDisponibles = AulaCiclo::with('aula')
+            ->where('ciclo_id', $ciclo->id)
+            ->whereHas('aula', function ($query) {
+                $query->where('sede_id', Auth::user()->sede_id);
+            })
+            ->get();
+        
+        // Iterar sobre los resultados y agregar el campo 'full' si el aforo ha sido alcanzado excepto si es el actual
+        // TODO: Obtener aula actual
+        $matricula_AulaCicloId = $matricula->aulas->first()?->pivot->aula_ciclo_id;
+        $aulaCicloDisponibles->each(function ($aulaCiclo) use($matricula_AulaCicloId) {
+            $aforo = $aulaCiclo->aula->aforo;
+            $matriculasExistentes = AulaMatricula::where('aula_ciclo_id', $aulaCiclo->id)->count();
+            $aulaCiclo->full = ($matriculasExistentes >= $aforo) && ($aulaCiclo->id != $matricula_AulaCicloId);
+        });
 
         $sedes = Auth::user()->can('sedes.ver_todas')
             ? Sede::all()
@@ -1738,6 +1753,7 @@ class MatriculaController extends Controller
             'matricula',
             'ciclo_id',
             'ciclo',
+            'aulaCicloDisponibles',
             'estudiante_id',
             'areas',
             'sedes',

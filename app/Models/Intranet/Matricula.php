@@ -62,7 +62,7 @@ class Matricula extends Model
 
     public function aulas()
     {
-        return $this->belongsToMany(AulaCiclo::class, 'aula_matricula');
+        return $this->belongsToMany(AulaCiclo::class, 'aula_matricula', 'matricula_id', 'aula_ciclo_id');
     }
 
     protected static function boot()
