@@ -22,6 +22,8 @@ Route::prefix('matricula_virtual')->group(function () {
     Route::get('getDataForMatricula/{ciclo_id}', [MatriculaController::class, 'getDataForMatricula']);
     Route::get('ciclos', [CicloController::class, 'obtenerCiclosActivos']);
     Route::put('estudiante/{estudiante}', [MatriculaController::class, 'updateDatosEstudiante']);
+    Route::post('guardarMatricula', [MatriculaController::class, 'guardarMatriculaVirtual']);
+    Route::get('descargarMatricula/{uuid}', [MatriculaController::class, 'descargarFichaDeMatriculaVirtual']);
 });
 
 

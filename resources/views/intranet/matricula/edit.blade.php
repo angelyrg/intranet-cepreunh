@@ -262,6 +262,7 @@
                     <div class="col-md-4 mb-3">
                         <label for="condicion_pago" class="form-label">Condición de pago</label>
                         <select name="condicion_pago" id="condicion_pago" class="form-select @error('condicion_pago') is-invalid @enderror" required>
+                            <option value="" {{ old('condicion_pago', $matricula->pagos->first()?->condicion_pago)==null ? 'selected' : '' }}>Seleccione</option>
                             <option value="Cancelado" {{ old('condicion_pago', $matricula->pagos->first()?->condicion_pago)=='Cancelado' ? 'selected' : '' }}>
                                 Cancelado
                             </option>

@@ -2,23 +2,23 @@
 
 namespace App\Services;
 
-use App\Models\Intranet\Matricula;
+use App\Models\Intranet\Pago;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class MatriculaService
+class PagoService
 {
 
-    public function create(array $data): Matricula
+    public function create(array $data): Pago
     {
         $data = $this->sanitizeData($data);
-        return Matricula::create($data);
+        return Pago::create($data);
     }
     
-    public function update(Matricula $matricula, array $data): Matricula
+    public function update(Pago $pago, array $data): Pago
     {
         $data = $this->sanitizeData($data);
-        $matricula->update($data);
-        return $matricula;
+        $pago->update($data);
+        return $pago;
     }
 
     private function sanitizeData(array $data): array
@@ -28,58 +28,58 @@ class MatriculaService
 
     public function getData()
     {
-        $matricula = Matricula::all();
-        return $matricula;
+        $pago = Pago::all();
+        return $pago;
     }
 
-    public function softDelete(Matricula $matricula)
+    public function softDelete(Pago $pago)
     {
         try {
-            $matricula->delete(); // Soft delete
-            $matricula->save();
+            $pago->delete(); // Soft delete
+            $pago->save();
 
             return [
                 'success' => true,
-                'message' => 'Matricula eliminada con éxito',
+                'message' => 'Pago eliminado con éxito',
                 'code' => 200
             ];
         } catch (ModelNotFoundException $e) {
             return [
                 'success' => false,
-                'message' => 'Matricula no encontrada',
+                'message' => 'Pago no encontrada',
                 'code' => 404
             ];
         } catch (\Exception $e) {
             return [
                 'success' => false,
-                'message' => 'Error al eliminar la matricula',
+                'message' => 'Error al eliminar el Pago',
                 'code' => 500,
                 'error' => $e->getMessage()
             ];
         }
     }
-    
-    public function forceDelete(Matricula $matricula)
+
+    public function forceDelete(Pago $pago)
     {
         try {
-            $matricula->forceDelete(); // Force delete
-            $matricula->save();
+            $pago->forceDelete(); // Force delete
+            $pago->save();
 
             return [
                 'success' => true,
-                'message' => 'Matricula eliminada forzosamente con éxito',
+                'message' => 'Pago eliminado con éxito forzosamente',
                 'code' => 200
             ];
         } catch (ModelNotFoundException $e) {
             return [
                 'success' => false,
-                'message' => 'Matricula no encontrada',
+                'message' => 'Pago no encontrado',
                 'code' => 404
             ];
         } catch (\Exception $e) {
             return [
                 'success' => false,
-                'message' => 'Error al eliminar la matricula forzosamente',
+                'message' => 'Error al eliminar el pago forzosamente',
                 'code' => 500,
                 'error' => $e->getMessage()
             ];
