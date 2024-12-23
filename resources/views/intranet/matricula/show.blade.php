@@ -370,10 +370,44 @@
             </div>
         </div>
     </div>
+</div>
 
-    
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow rounded-3">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Historial de pagos</h5>
+                    <button type="button" class="btn btn-outline-primary d-flex justify-content-center align-items-center gap-1"
+                        data-bs-toggle="modal" data-bs-target="#modalNuevoPago">
+                        <i class="ti ti-circle-plus"></i>
+                        <span>Nuevo pago</span>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                @livewire('matricula.pagos-lista', ['matricula_id' => $matricula->id])
+            </div>
+        </div>
+    </div>
 </div>
 
 {{-- content|end --}}
+
+
+<!-- Modal Matricula -->
+<div class="modal fade" id="modalNuevoPago" tabindex="-1" aria-labelledby="modalNuevoPagoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modalNuevoPagoLabel">Pago</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                @livewire('matricula.pagos-nuevo', ['matricula_id' => $matricula->id])
+            </div>
+        </div>
+    </div>
+</div>
 
 @endsection
