@@ -37,11 +37,26 @@
         .text-uppercase{
             text-transform: uppercase;
         }
+        .text-bold{
+            font-weight: bold
+        }
+        .text_small{
+            font-size: 10px;
+            font-weight: 400;
+            text-transform: capitalize;
+            position: relative;
+            top: 4px;
+        }
+
         .mb-0{
             margin-bottom: 0;
         }
         .mt-0{
             margin-top: 0;
+        }
+
+        .vertical-align-center{
+            vertical-align: center;
         }
 
         .photo_box{
@@ -75,6 +90,8 @@
        
         .matricula-table *{
             margin-top: 0;
+            vertical-align: top;
+            /* border: 1px solid black; */
         }
         .matricula-table tr td:first-child{
             width: 45%;
@@ -145,40 +162,38 @@
                         <table>
                             <tr>
                                 <td class="text-end">NOMBRES:</td>
-                                <td>
-                                    <strong class="text-uppercase">{{ $matricula->estudiante->nombres; }}</strong>
+                                <td class="text-uppercase text-bold">
+                                    {{ $matricula->estudiante->nombres; }}
                                 </td>
                             </tr>
                             <tr>
                                 <td class="text-end">APELLIDOS:</td>
-                                <td>
-                                    <strong class="text-uppercase">{{ $matricula->estudiante->apellido_paterno; }} {{
-                                        $matricula->estudiante->apellido_materno; }}</strong>
+                                <td class="text-uppercase text-bold">
+                                    {{ $matricula->estudiante->apellido_paterno; }} {{ $matricula->estudiante->apellido_materno; }}
                                 </td>
                             </tr>
                             <tr>
                                 <td class="text-end">DNI:</td>
-                                <td>
-                                    <strong class="text-uppercase">{{ $matricula->estudiante->nro_documento; }}</strong>
+                                <td class="text-uppercase text-bold">
+                                    {{ $matricula->estudiante->nro_documento; }}
                                 </td>
                             </tr>
                             <tr>
                                 <td class="text-end">ÁREA:</td>
-                                <td>
-                                    <strong class="text-uppercase">{{ $matricula->area?->descripcion ?? '' }}</strong>
+                                <td class="text-uppercase text-bold">
+                                    {{ $matricula->area?->descripcion ?? '' }}
                                 </td>
                             </tr>
                             <tr>
                                 <td class="text-end">CARRERA:</td>
-                                <td>
-                                    <strong class="text-uppercase">{{ $matricula->carrera?->descripcion ?? ''
-                                        }}</strong>
+                                <td class="text-uppercase text-bold">
+                                    {{ $matricula->carrera?->descripcion ?? '' }}
                                 </td>
                             </tr>
                             <tr>
                                 <td class="text-end">SEDE:</td>
-                                <td>
-                                    <strong class="text-uppercase">{{ $matricula->sede?->descripcion ?? '' }}</strong>
+                                <td class="text-uppercase text-bold">
+                                    {{ $matricula->sede?->descripcion ?? '' }}
                                 </td>
                             </tr>
                         </table>
@@ -187,38 +202,37 @@
                 <td>
                     <div>
                         <table>
-
                             <tr>
                                 <td class="text-end">AULA:</td>
-                                <td>
-                                    <strong class="text-uppercase">
-                                        {{ $matricula->aulas->first()?->aula->descripcion ?? '' }}
-                                    </strong>
-                                    <small>(Hasta examen de ubicación)</small>
+                                <td class="text-uppercase text-bold vertical-align-center">
+                                    {{ $matricula->aulas->first()?->aula->descripcion ?? '' }}
+                                    <small class="text_small">(Hasta examen de ubicación)</small>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="text-end">CONCEPTO DE PAGO:</td>
-                                <td>
-                                    <strong class="text-uppercase">
-                                        {{ $matricula->pagos->first()?->descripcion_pago ?? '' }}
-                                    </strong>
+                                <td class="text-uppercase text-bold">
+                                    {{ $matricula->pagos->first()?->descripcion_pago ?? '' }}
                                 </td>
                             </tr>
                             <tr>
                                 <td class="text-end">MONTO NETO:</td>
-                                <td>
-                                    <strong class="text-uppercase">
-                                        S/{{ $matricula->pagos->first()?->monto_neto ?? '' }}
-                                    </strong>
+                                <td class="text-uppercase text-bold">
+                                    S/{{ $matricula->pagos->first()?->monto_neto ?? '' }}
                                 </td>
                             </tr>
+                            @if ($matricula->pagos->first()?->condicion_pago)  
                             <tr>
                                 <td class="text-end">CONDICIÓN DE PAGO:</td>
-                                <td>
-                                    <strong class="text-uppercase">
-                                        {{ $matricula->pagos->first()?->condicion_pago ?? '' }}
-                                    </strong>
+                                <td class="text-uppercase text-bold">
+                                    {{ $matricula->pagos->first()?->condicion_pago ?? '' }}
+                                </td>
+                            </tr>
+                            @endif
+                            <tr>
+                                <td class="text-end">MODALIDAD DE MATRÍCULA:</td>
+                                <td class="text-uppercase text-bold">
+                                    {{ $matricula->modalidad_matricula }}
                                 </td>
                             </tr>
                         </table>

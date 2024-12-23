@@ -88,7 +88,8 @@
                     <div class="col-md-4 mb-3">
                         <label for="aula_ciclo_id" class="form-label">Aula</label>
                         <select name="aula_ciclo_id" id="aula_ciclo_id" class="form-select @error('aula_ciclo_id') is-invalid @enderror" required>
-                            @foreach ($aulaCicloDisponibles as $aulaCiclo)
+                            <option value="">Seleccionar Aula</option>
+                            {{-- @foreach ($aulaCicloDisponibles as $aulaCiclo)
                             <option value="{{ $aulaCiclo->id }}"
                                 {{ old('aula_ciclo_id')==$aulaCiclo->id ? 'selected' : '' }}
                                 {{ $aulaCiclo->full ? 'disabled' : '' }}
@@ -96,7 +97,7 @@
                                 >
                                 {{ $aulaCiclo->aula->descripcion }}
                             </option>
-                            @endforeach
+                            @endforeach --}}
                         </select>
                         @error('aula_ciclo_id')
                         <div class="invalid-feedback">{{ $message }}</div>
@@ -289,12 +290,17 @@
     // Obtener el elemento del select de Carrera
     const carreraSelect = document.getElementById('carrera_id');
 
+    // Obtener el elemento del select de Carrera
+    const aulaCicloSelect = document.getElementById('aula_ciclo_id');
+    const aulasCiclosDisponibles = @json($aulaCicloDisponibles);
+
     // Cuando cambia el valor del select de área
     areaSelect.addEventListener('change', function() {
         const areaId = this.value;  // Obtener el ID del área seleccionada
 
         // Limpiar las opciones anteriores de carreras
         carreraSelect.innerHTML = '<option value="">Seleccionar Carrera</option>';
+        aulaCicloSelect.innerHTML = '';
 
         if (areaId) {
             // Hacer una solicitud AJAX con Fetch para obtener las carreras de esa área
@@ -315,6 +321,17 @@
                 .catch(error => {
                     console.error('Error al cargar las carreras:', error);
                 });
+
+            // Filtrar aulas por areas
+            const aulaCicloPorArea = aulasCiclosDisponibles.filter(aulaCiclo => aulaCiclo.area_id == areaId);
+            aulaCicloPorArea.forEach(aulaCiclo => {
+                const option = document.createElement('option');
+                option.value = aulaCiclo.id;
+                option.textContent = aulaCiclo.aula.descripcion;
+                option.disabled = aulaCiclo.full;
+                option.title = aulaCiclo.full ? 'Este aula ha alcanzado su aforo máximo.' : '';
+                aulaCicloSelect.appendChild(option);
+            });
         }        
     });
 </script>

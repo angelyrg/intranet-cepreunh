@@ -6,20 +6,46 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\EstudianteRequest;
 use App\Http\Requests\Api\ValidacionPagoRequest;
 use App\Models\Common\UbigeoDepartamento;
+use App\Models\Intranet\Apoderado;
+use App\Models\Intranet\Area;
+use App\Models\Intranet\AulaCiclo;
+use App\Models\Intranet\AulaMatricula;
+use App\Models\Intranet\Banco;
+use App\Models\Intranet\Carrera;
+use App\Models\Intranet\Ciclo;
 use App\Models\Intranet\Discapacidad;
 use App\Models\Intranet\EstadoCivil;
 use App\Models\Intranet\Estudiante;
+use App\Models\Intranet\FormaDePago;
 use App\Models\Intranet\Genero;
 use App\Models\Intranet\IdentidadEtnica;
 use App\Models\Intranet\Matricula;
 use App\Models\Intranet\Pago;
 use App\Models\Intranet\Parentesco;
+use App\Models\Intranet\Sede;
 use App\Models\Intranet\TipoDocumento;
+use App\Services\EstudianteService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use App\Services\MatriculaService;
+use App\Services\PagoService;
+
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class MatriculaController extends Controller
 {
+    protected $estudianteService;
+    protected $matriculaService;
+    protected $pagoService;
+
+    public function __construct(EstudianteService $estudianteService, MatriculaService $matriculaService, PagoService $pagoService)
+    {
+        $this->estudianteService = $estudianteService;
+        $this->matriculaService = $matriculaService;
+        $this->pagoService = $pagoService;
+    }
+
     public function validarPago(ValidacionPagoRequest $request)
     {
         try {
@@ -28,6 +54,22 @@ class MatriculaController extends Controller
             $dni = $datosValidados['dni'];
             $nTransaccion = $datosValidados['nTransaccion'];
             $ciclo_id = $datosValidados['ciclo'];
+
+            // Verificar si el DNI ya ha sido matriculado
+            $estudiante = Estudiante::where('nro_documento', $dni)->first();
+            if ($estudiante) {
+                $matriculaExistente = Matricula::where('estudiante_id', $estudiante->id)
+                    ->where('ciclo_id', $ciclo_id)
+                    ->where('deleted_at', null)
+                    ->first();
+
+                if ($matriculaExistente) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'El estudiante con el DNI proporciado ya ha sido matriculado en el ciclo seleccionado.',
+                    ], 400);
+                }
+            }
 
             // Verificar si la boleta de pago existe
             $boletaConsultaResult = $this->obtenerBoletaAPI($dni, $nTransaccion);
@@ -46,96 +88,10 @@ class MatriculaController extends Controller
             ], 200);
 
         } catch (\Exception $e) {
-            Log::error('Error en MatriculaController::procesarMatricula: ' . $e->getMessage());
+            Log::error('Error en MatriculaController::validarPago: ' . $e->getMessage());
             return [
                 'success' => false,
                 'message' => 'Ocurrió un error al procesar la matrícula.'
-            ];
-        }
-    }
-
-    public function procesarMatricula(ValidacionPagoRequest $request)
-    {
-        try {
-            $datosValidados = $request->validated();
-
-            $dni = $datosValidados['dni'];
-            $nTransaccion = $datosValidados['nTransaccion'];
-            $ciclo_id = $datosValidados['ciclo'];
-
-            // Verificar si la boleta de pago existe
-            $boletaConsultaResult = $this->obtenerBoletaAPI($dni, $nTransaccion);
-            if (!$boletaConsultaResult['success']) {
-                return response()->json([
-                    'success' => false,
-                    'message' => $boletaConsultaResult['message'],
-                ], 404);
-            }
-
-            $boleta = $boletaConsultaResult['data'];
-
-            // Buscar o crear estudiante por su DNI
-            $estudiante = Estudiante::firstOrCreate(
-                ['nro_documento' => $dni, 'tipo_documento_id' => 1] //1:DNI
-            );
-
-            // Verificar si el estudiante ya está matriculado en el ciclo y si no, lo crea
-            $matricula = Matricula::firstOrCreate([
-                'ciclo_id' => $ciclo_id,
-                'estudiante_id' => $estudiante->id,
-            ]);
-
-            if ($matricula->wasRecentlyCreated) {
-                $pago = Pago::create([
-                    'matricula_id' => $matricula->id,
-                    'banco' => $boleta['Banco'],
-                    'cod_operacion' => $boleta['CodigoOperacion'],
-                    'descripcion_pago' => $boleta['DescripcionPago'],
-                    'fecha_pago' => $boleta['FechaOperacion'] . " " . $boleta['HoraOperacion'],
-                    'n_transaccion' => $boleta['Transaccion'],
-                    'monto' => $boleta['monto'],
-                    'comision' => $boleta['comision'],
-                    'monto_neto' => $boleta['monto_neto'],
-                ]);
-            }
-
-            return response()->json([
-                'success' => true,
-                'uuid' => $matricula->uuid,
-            ], 200);
-        } catch (\Exception $e) {
-            Log::error('Error en MatriculaController::procesarMatricula: ' . $e->getMessage());
-            return [
-                'success' => false,
-                'message' => 'Ocurrió un error al procesar la matrícula.'
-            ];
-        }
-    }
-
-    public function getByUUID(String $uuid)
-    {
-        try {
-            $matricula = Matricula::where('uuid', $uuid)
-                ->where('estado', 1)
-                ->with(['estudiante', 'ciclo', 'pagos'])
-                ->first();
-
-            if (!$matricula) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Matrícula no encontrada',
-                ], 404);
-            }
-
-            return response()->json([
-                'success' => true,
-                'data' => $matricula,
-            ], 200);
-        } catch (\Exception $e) {
-            Log::error('Error en MatriculaController::getByUUID: ' . $e->getMessage());
-            return [
-                'success' => false,
-                'message' => 'Ocurrió un error al obtener la matrícula.'
             ];
         }
     }
@@ -269,6 +225,8 @@ class MatriculaController extends Controller
             "nTransaccion" => $nTransaccion
         ];
 
+        $COD_OPERACION_PAGOS_CEPRE = ['2701', '2700', '2699'];
+
         try {
             $response = Http::asForm()->post('https://sisacad2.unh.edu.pe/apis/api_login/api_caja.php', $data);
 
@@ -292,6 +250,9 @@ class MatriculaController extends Controller
             $filteredData = collect($responseData['result'])->first(function ($item) use ($dni, $nTransaccion) {
                 return $item['DNI'] === $dni && $item['Transaccion'] === $nTransaccion;
             });
+
+            // if( !in_array($filteredData['CodigoOperacion'], $COD_OPERACION_PAGOS_CEPRE) ){                
+            // }
 
             if ($filteredData) {
                 return [
@@ -332,4 +293,276 @@ class MatriculaController extends Controller
             ];
         }
     }
+
+    public function getDataForMatricula($ciclo_id)
+    {
+        try {
+            $areas = Area::all();
+            $carreras = Carrera::all();
+            $sedes = Sede::all();
+            $bancos = Banco::all();
+            $formasDePago = FormaDePago::all();
+
+            $ciclo = Ciclo::with(['precios.forma_de_pago'])->findOrFail($ciclo_id);
+
+            $aulaCicloDisponibles = AulaCiclo::with('aula')
+            ->where('ciclo_id', $ciclo->id)
+            ->has('aula')
+            ->get();
+
+            // ASIGNACION DE AULAS AUTOMÁTICO EN MATRIACULA VIRTUAL
+            // Iterar sobre los resultados y agregar el campo 'full' si el aforo ha sido alcanzado
+            $aulaCicloDisponibles->each(function ($aulaCiclo) {
+                $aforo = $aulaCiclo->aula->aforo;
+                $matriculasExistentes = AulaMatricula::where('aula_ciclo_id', $aulaCiclo->id)->count();
+                $aulaCiclo->full = $matriculasExistentes >= $aforo;
+            });
+
+            $modalidades_estudio = Matricula::MODALIDADES_ESTUDIO;
+            $condiciones_academicas = Matricula::CONDICIONES_ACADEMICAS;
+
+            $data = [
+                'ciclo' => $ciclo,
+                'aulaCicloDisponibles' => $aulaCicloDisponibles,
+                'areas' => $areas,
+                'carreras' => $carreras,
+                'sedes' => $sedes,
+                'bancos' => $bancos,
+                'formasDePago' => $formasDePago,
+                'modalidades_estudio' => $modalidades_estudio,
+                'condiciones_academicas' => $condiciones_academicas,
+            ];
+
+            return response()->json([
+                'success' => true,
+                'data' => $data,
+            ], 200);
+        } catch (\Exception $e) {
+            Log::error('Error en Api/MatriculaController::getDataForMatricula: ' . $e->getMessage());
+            return [
+                'success' => false,
+                'message' => 'Ocurrió un error al datos para la matricula.'
+            ];
+        }
+        
+
+        
+    }
+
+    public function guardarMatriculaVirtual(Request $request){
+        try {
+            $ciclo_id = $request->input('ciclo_id');
+            $estudianteData = $request->input('estudiante');
+            $matriculaData = $request->input('matricula');
+            $boletaData = $request->input('boleta');
+
+            $estudiante = Estudiante::where('nro_documento', $estudianteData['nro_documento'])->first();
+
+            $datosApoderado = [
+                'telefono_apoderado' => $estudianteData['telefono_apoderado'],
+                'correo_apoderado' => $estudianteData['correo_apoderado'],
+                'parentesco_id' => $estudianteData['parentesco_id'],
+            ];
+
+            if ($estudiante){
+                $apoderado = $estudiante->apoderado()->first();
+                if ($apoderado) {
+                    $apoderado->telefono_apoderado = $datosApoderado['telefono_apoderado'];
+                    $apoderado->correo_apoderado = $datosApoderado['correo_apoderado'];
+                    $apoderado->parentesco_id = $datosApoderado['parentesco_id'];
+                    $apoderado->save();
+                } else {
+                    $apoderado = Apoderado::create($datosApoderado);
+                }
+            }else{
+                $apoderado = Apoderado::create($datosApoderado);
+            }
+
+            $dataEstudianteToSave = [
+                'tipo_documento_id' => $estudianteData['tipo_documento_id'],
+                'nro_documento' => $estudianteData['nro_documento'],
+                'nombres' => $estudianteData['nombres'],
+                'apellido_paterno' => $estudianteData['apellido_paterno'],
+                'apellido_materno' => $estudianteData['apellido_materno'],
+                'genero_id' => $estudianteData['genero_id'],
+                'estado_civil_id' => $estudianteData['estado_civil_id'],
+                'fecha_nacimiento' => $estudianteData['fecha_nacimiento'],
+                'pais_nacimiento' => $estudianteData['pais_nacimiento'],
+                'nacionalidad' => $estudianteData['nacionalidad'],
+                'telefono_personal' => $estudianteData['telefono_personal'],
+                'whatsapp' => $estudianteData['whatsapp'],
+                'correo_personal' => $estudianteData['correo_personal'],
+                'correo_institucional' => $estudianteData['correo_institucional'],
+                'tiene_discapacidad' => $estudianteData['tiene_discapacidad'],
+                //dispacidades
+                'identidad_etnica_id' => $estudianteData['identidad_etnica_id'],
+                'nacimiento_ubigeodistrito_id' => $estudianteData['nacimiento_ubigeodistrito_id'],
+                'direccion_ubigeodistrito_id' => $estudianteData['direccion_ubigeodistrito_id'],
+                'direccion' => $estudianteData['direccion'],
+
+                'colegio_ubigeodistrito_id' => $estudianteData['colegio_ubigeodistrito_id'],
+                'colegio_id' => $estudianteData['colegio_id'],
+                'year_culminacion' => $estudianteData['year_culminacion'],
+
+                'apoderado_id' => $apoderado->id,
+                'sede_actual_id' => $matriculaData['sede_id'],
+            ];
+
+            // Si no se encuentra 'estudiante', retornamos un error adecuado
+            if (is_null($estudianteData)) {
+                return response()->json(['message' => 'No hay estudiante'], 400);
+            }
+
+            // Verificamos si 'nro_documento' existe en 'estudiante'
+            if (!isset($estudianteData['nro_documento'])) {
+                return response()->json(['message' => 'Número de documento del estudiante no proporcionado'], 400);
+            }
+            
+            if ($estudiante) {
+                $estudiante = $this->estudianteService->update($estudiante, $dataEstudianteToSave);
+            }else{
+                $estudiante = $this->estudianteService->create($dataEstudianteToSave);
+            }
+
+            if (!$estudiante) {
+                throw new \Exception('No se encontró ningún estudiante para matricular.');
+            }
+
+
+            $estudiante->load('matriculas');
+            $cantidad_matriculas = $estudiante->matriculas->count() + 1;
+
+            $dataMatriculaToSave = [
+                'ciclo_id' => $ciclo_id,
+                'estudiante_id' => $estudiante->id,
+                'area_id' => $matriculaData['area_id'],
+                'carrera_id' => $matriculaData['carrera_id'],
+                'sede_id' => $matriculaData['sede_id'],
+                'modalidad_estudio' => $matriculaData['modalidad_estudio'],
+                'condicion_academica' => $matriculaData['condicion_academica'],
+                'cantidad_matricula' => $cantidad_matriculas,
+                'modalidad_matricula' => 2, //1: Presencial, 2: Virtual
+            ];
+
+            $matricula = $this->matriculaService->create($dataMatriculaToSave);
+
+            $dataPagoToSave = [
+                'matricula_id' => $matricula->id,
+                'banco_id' => $matriculaData['banco_id'],
+                'cod_operacion' => $boletaData['cod_operacion'],
+                'descripcion_pago' => $boletaData['descripcion_pago'],
+                'n_transaccion' => $boletaData['nro_transaccion'],
+                'monto' => $boletaData['monto'],
+                'comision' => $boletaData['comision'],
+                'monto_neto' => $boletaData['monto_neto'],
+                // 'condicion_pago' => $matriculaData['condicion_pago'],
+                'fecha_pago' => $boletaData['fecha_pago'],
+                'forma_de_pago_id' => null // Pendiente de asignar: Debe ser verificado por un administrador
+            ];
+
+            $pago = $this->pagoService->create($dataPagoToSave);
+
+            $aulaDisponible = $this->obtenerAulaDisponible($matriculaData['sede_id'], $ciclo_id, $matriculaData['area_id']);
+
+            if (!$aulaDisponible){
+                $this->pagoService->forceDelete($pago);
+                $this->matriculaService->forceDelete($matricula);
+
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No hay aulas disponibles para matricular al estudiante. Por favor, contacte con el administrador.'
+                ]);
+            }
+
+            $aula = AulaMatricula::create([
+                'matricula_id' => $matricula->id,
+                'aula_ciclo_id' => $aulaDisponible->id,
+            ]);
+
+            if ($estudiante && $matricula && $pago && $aula)
+            {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Estudiante matriculado correctamente.',
+                    'matricula' => $matricula->uuid
+                ]);
+
+            }else{
+                if ($aula){
+                    $aula->delete();
+                }
+                if ($pago){
+                    $this->pagoService->forceDelete($pago);
+                }
+                if ($matricula){
+                    $this->matriculaService->forceDelete($matricula);
+                }
+            }
+
+        }catch (\Exception $e) {
+            Log::error('Error en Api/MatriculaController::guardarMatricula: ' . $e->getMessage());
+            return [
+                'success' => false,
+                'message' => 'Ocurrió un error al datos al realizar la matricula. Ponte en contacto con el admintrador para obtener ayuda.'
+            ];
+        }
+    }
+
+    public function descargarFichaDeMatriculaVirtual($uuid)
+    {
+        try {
+            $matriculaData = $this->matriculaService->getMatriculaDataToPrint($uuid);
+
+            // Si hubo un problema al obtener los datos, devolver el error con el código correspondiente
+            if (!$matriculaData['success']) {
+                return response()->json([
+                    'message' => $matriculaData['message'],
+                    'error' => $matriculaData['error'] ?? 'Detalles del error no disponibles.',
+                ], $matriculaData['code']);
+            }
+
+            // Generar el PDF de la matrícula
+            $pdf = PDF::loadView('intranet.matricula.descargar_pdf', [
+                'matricula' => $matriculaData['matricula'],
+                'unh_logo' => $matriculaData['unh_logo_icon'],
+                'document_header' => $matriculaData['document_header_img']
+            ])->setPaper('A4', 'portrait');
+
+            // Devolver el PDF como una descarga
+            return response()->stream(function () use ($pdf) {
+                echo $pdf->output();
+            }, 200, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="FICHA_DE_MATRICULA_VIRTUAL.pdf"',
+                'Cache-Control' => 'no-cache, no-store, must-revalidate',
+                'Pragma' => 'no-cache',
+                'Expires' => '0',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Hubo un problema al procesar la solicitud.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    private function obtenerAulaDisponible($sede, $ciclo, $area)
+    {
+        $aulaDisponible = AulaCiclo::with('aula')
+            ->where('area_id', $area)
+            ->where('ciclo_id', $ciclo)
+            ->whereHas('aula', function ($query) use ($sede) {
+                $query->where('sede_id', $sede);
+            })
+            ->get()
+            ->filter(function ($aulaCiclo) {
+                $aforo = $aulaCiclo->aula->aforo;
+                $matriculasExistentes = AulaMatricula::where('aula_ciclo_id', $aulaCiclo->id)->count();
+                return $matriculasExistentes < $aforo;
+            })
+            ->first();
+
+        return $aulaDisponible;
+    }
+
 }

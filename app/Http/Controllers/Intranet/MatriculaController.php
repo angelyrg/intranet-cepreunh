@@ -22,6 +22,7 @@ use App\Models\Intranet\Pago;
 use App\Models\Intranet\Parentesco;
 use App\Models\Intranet\Sede;
 use App\Models\Intranet\TipoDocumento;
+use App\Services\MatriculaService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -29,6 +30,12 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class MatriculaController extends Controller
 {
+    protected $matriculaService;
+
+    public function __construct(MatriculaService $matriculaService)
+    {
+        $this->matriculaService = $matriculaService;
+    }
 
     public function buscar_dni(Request $request)
     {
@@ -1833,33 +1840,40 @@ class MatriculaController extends Controller
     
     public function descargar($id)
     {
-        $matricula = Matricula::findOrFail($id);
-        $unh_logo_icon = public_path('assets/images/logos/CepreUNH.webp');
-        $document_header_img = public_path('assets/images/document-header.jpg');
+        $matriculaData = $this->matriculaService->getMatriculaDataToPrint($id);
+
+        if (!$matriculaData['success']) {
+            return response()->json([
+                'message' => $matriculaData['message']
+            ], $matriculaData['code']);
+        }
 
         $pdf = PDF::loadView('intranet.matricula.descargar_pdf', [
-                'matricula'=>$matricula,
-                'unh_logo' => $unh_logo_icon,
-                'document_header' => $document_header_img
+                'matricula' => $matriculaData['matricula'],
+                'unh_logo' => $matriculaData['unh_logo_icon'],
+                'document_header' => $matriculaData['document_header_img']
             ])->setPaper('A4', 'portrait');
-        return $pdf->download('FICHA_DE_MATRICULA_' . $matricula->estudiante->nro_documento . '.pdf');
-
+        return $pdf->download('FICHA_DE_MATRICULA_' . $matriculaData['matricula']->estudiante->nro_documento . '.pdf');
     }
 
     public function imprimir($id)
     {
-        $matricula = Matricula::findOrFail($id);
-        $unh_logo_icon = public_path('assets/images/logos/CepreUNH.webp');
-        $document_header_img = public_path('assets/images/document-header.jpg');
+        $matriculaData = $this->matriculaService->getMatriculaDataToPrint($id);
+
+        if (!$matriculaData['success']) {
+            return response()->json([
+                'message' => $matriculaData['message']
+            ], $matriculaData['code']);
+        }
 
         $pdf = PDF::loadView('intranet.matricula.descargar_pdf', [
-                'matricula' => $matricula,
-                'unh_logo' => $unh_logo_icon,
-                'document_header' => $document_header_img
+                'matricula' => $matriculaData['matricula'],
+                'unh_logo' => $matriculaData['unh_logo_icon'],
+                'document_header' => $matriculaData['document_header_img']
             ])
             ->setPaper('A4', 'portrait');
 
-        return $pdf->stream('FICHA_DE_MATRICULA_' . $matricula->estudiante->nro_documento . '.pdf');
+        return $pdf->stream('FICHA_DE_MATRICULA_' . $matriculaData['matricula']->estudiante->nro_documento . '.pdf');
     }
 
 }
