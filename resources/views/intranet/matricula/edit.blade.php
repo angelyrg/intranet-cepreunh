@@ -95,7 +95,7 @@
                         <label for="aula_ciclo_id" class="form-label">Aula</label>
                         <select name="aula_ciclo_id" id="aula_ciclo_id" class="form-select @error('aula_ciclo_id') is-invalid @enderror" required>
                             <option value="">Seleccione</option>
-                            @foreach ($aulaCicloDisponibles as $aulaCiclo)
+                            {{-- @foreach ($aulaCicloDisponibles as $aulaCiclo)
                             <option value="{{ $aulaCiclo->id }}"
                                 {{ $aulaCiclo->id == old('aula_ciclo_id', $matricula->aulas->first()?->id) ? 'selected' : '' }}
                                 {{ $aulaCiclo->full ? 'disabled' : '' }}
@@ -103,7 +103,7 @@
                                 >
                                 {{ $aulaCiclo->aula->descripcion }}
                             </option>
-                            @endforeach
+                            @endforeach --}}
                         </select>
                         @error('aula_ciclo_id')
                         <div class="invalid-feedback">{{ $message }}</div>
@@ -262,6 +262,7 @@
                     <div class="col-md-4 mb-3">
                         <label for="condicion_pago" class="form-label">Condición de pago</label>
                         <select name="condicion_pago" id="condicion_pago" class="form-select @error('condicion_pago') is-invalid @enderror" required>
+                            <option value="" {{ old('condicion_pago', $matricula->pagos->first()?->condicion_pago)==null ? 'selected' : '' }}>Seleccione</option>
                             <option value="Cancelado" {{ old('condicion_pago', $matricula->pagos->first()?->condicion_pago)=='Cancelado' ? 'selected' : '' }}>
                                 Cancelado
                             </option>
@@ -317,8 +318,13 @@
     
     const selectedCarreraId = {{ $matricula->carrera_id ?? 'null' }};
 
+    // Obtener el elemento del select de Carrera
+    const aulaCicloSelect = document.getElementById('aula_ciclo_id');
+    const aulasCiclosDisponibles = @json($aulaCicloDisponibles);
+
     function loadCarreras(areaId) {
         carreraSelect.innerHTML = '<option value="">Seleccionar Carrera</option>';
+        aulaCicloSelect.innerHTML = '';
 
         if (areaId) {
             fetch(`/carreras/${areaId}`)
@@ -340,6 +346,17 @@
                 .catch(error => {
                     console.error('Error al cargar las carreras:', error);
                 });
+            
+            // Filtrar aulas por areas
+            const aulaCicloPorArea = aulasCiclosDisponibles.filter(aulaCiclo => aulaCiclo.area_id == areaId);
+            aulaCicloPorArea.forEach(aulaCiclo => {
+                const option = document.createElement('option');
+                option.value = aulaCiclo.id;
+                option.textContent = aulaCiclo.aula.descripcion;
+                option.disabled = aulaCiclo.full;
+                option.title = aulaCiclo.full ? 'Este aula ha alcanzado su aforo máximo.' : '';
+                aulaCicloSelect.appendChild(option);
+            });
         }
     }
 
