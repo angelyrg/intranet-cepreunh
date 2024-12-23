@@ -1687,6 +1687,7 @@ class MatriculaController extends Controller
             'condicion_academica' => $validatedData['condicion_academica'],
             'cantidad_matricula' => $validatedData['cantidad_matricula'],
             'modalidad_matricula' => 1, //1: Presencial, 2: Virtual
+            'usuario_registro_id' => Auth::user()->id,
         ]);
 
         $pago = Pago::create([

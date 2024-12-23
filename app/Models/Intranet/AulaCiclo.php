@@ -10,6 +10,7 @@ class AulaCiclo extends Model
     use HasFactory;
 
     protected $table = 'aula_ciclo';
+    protected $fillable = ['aula_id', 'ciclo_id', 'area_id'];
 
     public function aula()
     {

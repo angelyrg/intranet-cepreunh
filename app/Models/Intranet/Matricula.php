@@ -25,6 +25,7 @@ class Matricula extends Model
         'cantidad_matricula',
         'turno',
         'estado',
+        'usuario_registro_id'
     ];
 
     const MODALIDADES_ESTUDIO = ['Presencial', 'Virtual'];
