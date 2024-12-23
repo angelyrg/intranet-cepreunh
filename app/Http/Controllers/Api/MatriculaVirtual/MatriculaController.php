@@ -55,6 +55,22 @@ class MatriculaController extends Controller
             $nTransaccion = $datosValidados['nTransaccion'];
             $ciclo_id = $datosValidados['ciclo'];
 
+            // Verificar si el DNI ya ha sido matriculado
+            $estudiante = Estudiante::where('nro_documento', $dni)->first();
+            if ($estudiante) {
+                $matriculaExistente = Matricula::where('estudiante_id', $estudiante->id)
+                    ->where('ciclo_id', $ciclo_id)
+                    ->where('deleted_at', null)
+                    ->first();
+
+                if ($matriculaExistente) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'El estudiante con el DNI proporciado ya ha sido matriculado en el ciclo seleccionado.',
+                    ], 400);
+                }
+            }
+
             // Verificar si la boleta de pago existe
             $boletaConsultaResult = $this->obtenerBoletaAPI($dni, $nTransaccion);
             if (!$boletaConsultaResult['success']) {
@@ -72,96 +88,10 @@ class MatriculaController extends Controller
             ], 200);
 
         } catch (\Exception $e) {
-            Log::error('Error en MatriculaController::procesarMatricula: ' . $e->getMessage());
+            Log::error('Error en MatriculaController::validarPago: ' . $e->getMessage());
             return [
                 'success' => false,
                 'message' => 'Ocurrió un error al procesar la matrícula.'
-            ];
-        }
-    }
-
-    public function procesarMatricula(ValidacionPagoRequest $request)
-    {
-        try {
-            $datosValidados = $request->validated();
-
-            $dni = $datosValidados['dni'];
-            $nTransaccion = $datosValidados['nTransaccion'];
-            $ciclo_id = $datosValidados['ciclo'];
-
-            // Verificar si la boleta de pago existe
-            $boletaConsultaResult = $this->obtenerBoletaAPI($dni, $nTransaccion);
-            if (!$boletaConsultaResult['success']) {
-                return response()->json([
-                    'success' => false,
-                    'message' => $boletaConsultaResult['message'],
-                ], 404);
-            }
-
-            $boleta = $boletaConsultaResult['data'];
-
-            // Buscar o crear estudiante por su DNI
-            $estudiante = Estudiante::firstOrCreate(
-                ['nro_documento' => $dni, 'tipo_documento_id' => 1] //1:DNI
-            );
-
-            // Verificar si el estudiante ya está matriculado en el ciclo y si no, lo crea
-            $matricula = Matricula::firstOrCreate([
-                'ciclo_id' => $ciclo_id,
-                'estudiante_id' => $estudiante->id,
-            ]);
-
-            if ($matricula->wasRecentlyCreated) {
-                $pago = Pago::create([
-                    'matricula_id' => $matricula->id,
-                    'banco' => $boleta['Banco'],
-                    'cod_operacion' => $boleta['CodigoOperacion'],
-                    'descripcion_pago' => $boleta['DescripcionPago'],
-                    'fecha_pago' => $boleta['FechaOperacion'] . " " . $boleta['HoraOperacion'],
-                    'n_transaccion' => $boleta['Transaccion'],
-                    'monto' => $boleta['monto'],
-                    'comision' => $boleta['comision'],
-                    'monto_neto' => $boleta['monto_neto'],
-                ]);
-            }
-
-            return response()->json([
-                'success' => true,
-                'uuid' => $matricula->uuid,
-            ], 200);
-        } catch (\Exception $e) {
-            Log::error('Error en MatriculaController::procesarMatricula: ' . $e->getMessage());
-            return [
-                'success' => false,
-                'message' => 'Ocurrió un error al procesar la matrícula.'
-            ];
-        }
-    }
-
-    public function getByUUID(String $uuid)
-    {
-        try {
-            $matricula = Matricula::where('uuid', $uuid)
-                ->where('estado', 1)
-                ->with(['estudiante', 'ciclo', 'pagos'])
-                ->first();
-
-            if (!$matricula) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Matrícula no encontrada',
-                ], 404);
-            }
-
-            return response()->json([
-                'success' => true,
-                'data' => $matricula,
-            ], 200);
-        } catch (\Exception $e) {
-            Log::error('Error en MatriculaController::getByUUID: ' . $e->getMessage());
-            return [
-                'success' => false,
-                'message' => 'Ocurrió un error al obtener la matrícula.'
             ];
         }
     }
@@ -295,6 +225,8 @@ class MatriculaController extends Controller
             "nTransaccion" => $nTransaccion
         ];
 
+        $COD_OPERACION_PAGOS_CEPRE = ['2701', '2700', '2699'];
+
         try {
             $response = Http::asForm()->post('https://sisacad2.unh.edu.pe/apis/api_login/api_caja.php', $data);
 
@@ -318,6 +250,9 @@ class MatriculaController extends Controller
             $filteredData = collect($responseData['result'])->first(function ($item) use ($dni, $nTransaccion) {
                 return $item['DNI'] === $dni && $item['Transaccion'] === $nTransaccion;
             });
+
+            // if( !in_array($filteredData['CodigoOperacion'], $COD_OPERACION_PAGOS_CEPRE) ){                
+            // }
 
             if ($filteredData) {
                 return [
@@ -522,16 +457,27 @@ class MatriculaController extends Controller
                 'monto_neto' => $boletaData['monto_neto'],
                 // 'condicion_pago' => $matriculaData['condicion_pago'],
                 'fecha_pago' => $boletaData['fecha_pago'],
-                'forma_de_pago_id' => $matriculaData['forma_de_pago_id'],
+                'forma_de_pago_id' => null // Pendiente de asignar: Debe ser verificado por un administrador
             ];
 
             $pago = $this->pagoService->create($dataPagoToSave);
 
+            $aulaDisponible = $this->obtenerAulaDisponible($matriculaData['sede_id'], $ciclo_id, $matriculaData['area_id']);
+
+            if (!$aulaDisponible){
+                $this->pagoService->forceDelete($pago);
+                $this->matriculaService->forceDelete($matricula);
+
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No hay aulas disponibles para matricular al estudiante. Por favor, contacte con el administrador.'
+                ]);
+            }
+
             $aula = AulaMatricula::create([
                 'matricula_id' => $matricula->id,
-                'aula_ciclo_id' => $matriculaData['aula_ciclo_id'],
+                'aula_ciclo_id' => $aulaDisponible->id,
             ]);
-
 
             if ($estudiante && $matricula && $pago && $aula)
             {
@@ -564,20 +510,59 @@ class MatriculaController extends Controller
 
     public function descargarFichaDeMatriculaVirtual($uuid)
     {
-        $matricula = Matricula::where('uuid', $uuid)->first();
-        if (!$matricula) {
-            return response()->json(['success' => false, 'message' => 'Matrícula no encontrada'], 404);
+        try {
+            $matriculaData = $this->matriculaService->getMatriculaDataToPrint($uuid);
+
+            // Si hubo un problema al obtener los datos, devolver el error con el código correspondiente
+            if (!$matriculaData['success']) {
+                return response()->json([
+                    'message' => $matriculaData['message'],
+                    'error' => $matriculaData['error'] ?? 'Detalles del error no disponibles.',
+                ], $matriculaData['code']);
+            }
+
+            // Generar el PDF de la matrícula
+            $pdf = PDF::loadView('intranet.matricula.descargar_pdf', [
+                'matricula' => $matriculaData['matricula'],
+                'unh_logo' => $matriculaData['unh_logo_icon'],
+                'document_header' => $matriculaData['document_header_img']
+            ])->setPaper('A4', 'portrait');
+
+            // Devolver el PDF como una descarga
+            return response()->stream(function () use ($pdf) {
+                echo $pdf->output();
+            }, 200, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="FICHA_DE_MATRICULA_VIRTUAL.pdf"',
+                'Cache-Control' => 'no-cache, no-store, must-revalidate',
+                'Pragma' => 'no-cache',
+                'Expires' => '0',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Hubo un problema al procesar la solicitud.',
+                'error' => $e->getMessage(),
+            ], 500);
         }
+    }
 
-        $unh_logo_icon = public_path('assets/images/logos/CepreUNH.webp');
-        $document_header_img = public_path('assets/images/document-header.jpg');
+    private function obtenerAulaDisponible($sede, $ciclo, $area)
+    {
+        $aulaDisponible = AulaCiclo::with('aula')
+            ->where('area_id', $area)
+            ->where('ciclo_id', $ciclo)
+            ->whereHas('aula', function ($query) use ($sede) {
+                $query->where('sede_id', $sede);
+            })
+            ->get()
+            ->filter(function ($aulaCiclo) {
+                $aforo = $aulaCiclo->aula->aforo;
+                $matriculasExistentes = AulaMatricula::where('aula_ciclo_id', $aulaCiclo->id)->count();
+                return $matriculasExistentes < $aforo;
+            })
+            ->first();
 
-        $pdf = PDF::loadView('intranet.matricula.descargar_pdf', [
-            'matricula' => $matricula,
-            'unh_logo' => $unh_logo_icon,
-            'document_header' => $document_header_img
-        ])->setPaper('A4', 'portrait');
-        return $pdf->stream('MATRICULA_' . $matricula->estudiante->nro_documento . '.pdf');
+        return $aulaDisponible;
     }
 
 }
