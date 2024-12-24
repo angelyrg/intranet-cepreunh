@@ -432,6 +432,15 @@ class MatriculaController extends Controller
             $estudiante->load('matriculas');
             $cantidad_matriculas = $estudiante->matriculas->count() + 1;
 
+            $aulaDisponible = $this->obtenerAulaDisponible($matriculaData['sede_id'], $ciclo_id, $matriculaData['area_id']);
+
+            if (!$aulaDisponible) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No hay aulas disponibles para matricular al estudiante. Por favor, contacte con el administrador.'
+                ]);
+            }
+
             $dataMatriculaToSave = [
                 'ciclo_id' => $ciclo_id,
                 'estudiante_id' => $estudiante->id,
@@ -441,6 +450,7 @@ class MatriculaController extends Controller
                 'modalidad_estudio' => $matriculaData['modalidad_estudio'],
                 'condicion_academica' => $matriculaData['condicion_academica'],
                 'cantidad_matricula' => $cantidad_matriculas,
+                'aula_ciclo_actual_id' => $aulaDisponible->id,
                 'modalidad_matricula' => 2, //1: Presencial, 2: Virtual
             ];
 
@@ -462,17 +472,6 @@ class MatriculaController extends Controller
 
             $pago = $this->pagoService->create($dataPagoToSave);
 
-            $aulaDisponible = $this->obtenerAulaDisponible($matriculaData['sede_id'], $ciclo_id, $matriculaData['area_id']);
-
-            if (!$aulaDisponible){
-                $this->pagoService->forceDelete($pago);
-                $this->matriculaService->forceDelete($matricula);
-
-                return response()->json([
-                    'success' => false,
-                    'message' => 'No hay aulas disponibles para matricular al estudiante. Por favor, contacte con el administrador.'
-                ]);
-            }
 
             $aula = AulaMatricula::create([
                 'matricula_id' => $matricula->id,
@@ -548,7 +547,7 @@ class MatriculaController extends Controller
 
     private function obtenerAulaDisponible($sede, $ciclo, $area)
     {
-        $aulaDisponible = AulaCiclo::with('aula')
+        $aulaCicloDisponible = AulaCiclo::with('aula')
             ->where('area_id', $area)
             ->where('ciclo_id', $ciclo)
             ->whereHas('aula', function ($query) use ($sede) {
@@ -562,7 +561,7 @@ class MatriculaController extends Controller
             })
             ->first();
 
-        return $aulaDisponible;
+        return $aulaCicloDisponible;
     }
 
 }
