@@ -455,9 +455,9 @@ class MatriculaController extends Controller
                 'monto' => $boletaData['monto'],
                 'comision' => $boletaData['comision'],
                 'monto_neto' => $boletaData['monto_neto'],
-                // 'condicion_pago' => $matriculaData['condicion_pago'],
+                'condicion_pago' => $matriculaData['condicion_pago'],
                 'fecha_pago' => $boletaData['fecha_pago'],
-                'forma_de_pago_id' => null // Pendiente de asignar: Debe ser verificado por un administrador
+                'forma_de_pago_id' => $matriculaData['forma_de_pago_id']
             ];
 
             $pago = $this->pagoService->create($dataPagoToSave);

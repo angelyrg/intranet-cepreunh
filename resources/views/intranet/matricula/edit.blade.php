@@ -164,6 +164,10 @@
                     <div class="col-md-4 mb-3">
                         <label for="forma_de_pago_id" class="form-label">Modalidad de pago</label>
                         <select name="forma_de_pago_id" id="forma_de_pago_id" class="form-select @error('forma_de_pago_id') is-invalid @enderror" required>
+                            <!-- Opción de 'null' o vacía -->
+                            <option value="" {{ is_null(old('forma_de_pago_id', $matricula->pagos->first()?->forma_de_pago_id)) ? 'selected' : '' }}>
+                                -- Seleccionar modalidad de pago --
+                            </option>                    
                             @foreach ($formasDePago as $modalidad)
                             <option value="{{ $modalidad->id }}" {{ $modalidad->id == old('forma_de_pago_id', $matricula->pagos->first()?->forma_de_pago_id) ? 'selected' : '' }}>
                                 {{ $modalidad->descripcion }}
