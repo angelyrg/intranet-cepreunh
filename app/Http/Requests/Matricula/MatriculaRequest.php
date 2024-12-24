@@ -136,6 +136,11 @@ class MatriculaRequest extends FormRequest
                 'required',
                 'date',
             ],
+            'aula_ciclo_actual_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('aula_ciclo', 'id'),
+            ],
         ];
 
         return $rules;
@@ -214,6 +219,9 @@ class MatriculaRequest extends FormRequest
 
             'fecha_pago.required' => 'La fecha de pago es obligatoria.',
             'fecha_pago.date' => 'La fecha de pago debe ser una fecha válida.',
+
+            'aula_ciclo_actual_id.integer' => 'El aula ciclo actual debe ser un número entero.',
+            'aula_ciclo_actual_id.exists' => 'El aula ciclo actual seleccionado no existe.',
         ];
     }
 }

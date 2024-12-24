@@ -16,6 +16,8 @@ use Rappasoft\LaravelLivewireTables\Views\Columns\IncrementColumn;
 use Rappasoft\LaravelLivewireTables\Views\Columns\LinkColumn;
 use Rappasoft\LaravelLivewireTables\Views\Filters\DateRangeFilter;
 use Rappasoft\LaravelLivewireTables\Views\Filters\SelectFilter;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\MatriculaExport;
 
 class MatriculasTable extends DataTableComponent
 {
@@ -225,6 +227,28 @@ class MatriculasTable extends DataTableComponent
             $query->where('sede_id', $this->sedeId);
         }
         return $query;
+    }
+
+    public function bulkActions(): array
+    {
+        return [
+            'export' => 'Export',
+        ];
+    }
+
+    public function export()
+    {
+        $selectedIds  = $this->getSelected();
+
+        if (empty($selectedIds)) {
+            $matriculas = $this->builder()->get();
+        } else {
+            $matriculas = Matricula::whereIn('id', $selectedIds)->get();
+        }
+
+        $this->clearSelected();
+
+        return Excel::download(new MatriculaExport($matriculas), 'matriculas.xlsx');
     }
 
 }
