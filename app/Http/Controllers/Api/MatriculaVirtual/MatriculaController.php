@@ -564,4 +564,42 @@ class MatriculaController extends Controller
         return $aulaCicloDisponible;
     }
 
+
+    public function getFichaDeMatriculaByEstudiante($dni, $ciclo_id)
+    {
+
+        try {
+            $estudiante = $this->estudianteService->getEstudianteByNroDocumento($dni);
+
+            if (!$estudiante) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No se pudo encontrar al estudiante con el DNI proporcionado.',
+                ], 404);
+            }
+
+            $matricula = $this->matriculaService->getMatriculasByColumns(['estudiante_id' => $estudiante->id, 'ciclo_id' => $ciclo_id], true);
+
+            if (!$matricula) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'El estudiante no tiene matrícula registrada en el ciclo seleccionado.',
+                ], 404);
+            }
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Ficha de matrícula encontrada.',
+                'data' => $matricula
+            ], 200);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Hubo un problema al buscar la ficha de matricula.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
 }

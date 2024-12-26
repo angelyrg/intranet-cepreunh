@@ -99,6 +99,23 @@ class MatriculaService
     }
 
     /**
+     * Obtiene las matrículas que coincidan con los filtros proporcionados.
+     *
+     * @param array $filters Los filtros a aplicar en la consulta.
+     * @return \Illuminate\Database\Eloquent\Collection Las matrículas que coinciden con los filtros.
+     */
+    public function getMatriculasByColumns($filters = [], $getOnlyFirst = false)
+    {
+        $query = Matricula::query();
+
+        foreach ($filters as $column => $value) {
+            $query->where($column, $value);
+        }
+
+        return $getOnlyFirst ?  $query->first() : $query->get();
+    }
+
+    /**
      * Obtiene los datos de matrícula para imprimir.
      *
      * @param mixed $identifier Se acepta el ID o el UUID del estudiante.
