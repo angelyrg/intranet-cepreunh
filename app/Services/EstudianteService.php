@@ -58,4 +58,10 @@ class EstudianteService
             ];
         }
     }
+
+    public function getEstudianteByNroDocumento($nro_documento)
+    {
+        $estudiante = Estudiante::where('nro_documento', $nro_documento)->first();
+        return $estudiante;
+    }
 }

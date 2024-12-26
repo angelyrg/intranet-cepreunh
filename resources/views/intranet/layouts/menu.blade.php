@@ -117,6 +117,11 @@
       </li>
       @endcan
 
+      <li class="nav-small-cap">
+          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+        <span class="hide-menu">GESTIÓN ACADÉMICA</span>
+      </li>
+      
       @can('ciclos.lista')
       <li class="sidebar-item">
         <a class="sidebar-link" href="{{ route('ciclos.index') }}" aria-expanded="false">
@@ -127,12 +132,6 @@
         </a>
       </li>
       @endcan
-
-
-      <li class="nav-small-cap">
-          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-        <span class="hide-menu">GESTIÓN ACADÉMICA</span>
-      </li>
       
       @can('docentes.lista')
       <li class="sidebar-item">
