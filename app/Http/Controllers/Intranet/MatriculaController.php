@@ -1805,7 +1805,7 @@ class MatriculaController extends Controller
                 'monto_neto' => $validatedData['monto_neto'],
                 'condicion_pago' => $validatedData['condicion_pago'],
                 'fecha_pago' => $validatedData['fecha_pago'],
-                'forma_de_pago_id' => $validatedData['forma_de_pago_id'],
+                'forma_de_pago_id' => $validatedData['aula_ciclo_id'],
             ]);
         } else {
             Pago::create([
