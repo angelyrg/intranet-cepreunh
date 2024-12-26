@@ -246,9 +246,9 @@ class MatriculaController extends Controller
                 ];
             }
 
-            // TODO:Validar que el pago ingresado sea del pago de matrícula
+            // TODO:Validar que el pago ingresado sea del pago de matrícula           
             $filteredData = collect($responseData['result'])->first(function ($item) use ($dni, $nTransaccion) {
-                return $item['DNI'] === $dni && $item['Transaccion'] === $nTransaccion;
+                return $item['DNI'] === $dni && ltrim($item['Transaccion'], '0') === ltrim($nTransaccion, '0'); //ltrim(): Quita los ceros del inicio
             });
 
             // if( !in_array($filteredData['CodigoOperacion'], $COD_OPERACION_PAGOS_CEPRE) ){                

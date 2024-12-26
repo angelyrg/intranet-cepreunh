@@ -72,25 +72,8 @@
         </a>
       </li>
       @endcan
-
-      @can('aulas.lista')
-      <li class="sidebar-item">
-        <a class="sidebar-link" href="{{ route('aulas.index') }}" aria-expanded="false">
-          <span>
-            <i class="ti ti-door"></i>
-          </span>
-          <span class="hide-menu">Aulas</span>
-        </a>
-      </li>
-      @endcan
-
-
-      <li class="nav-small-cap">
-          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-        <span class="hide-menu">GESTIÓN CURRICULAR</span>
-      </li>
-
-      @can('areas.lista')   
+      
+      @can('areas.lista')
       <li class="sidebar-item">
         <a class="sidebar-link" href="{{ route('areas.index') }}" aria-expanded="false">
           <span>
@@ -111,33 +94,25 @@
         </a>
       </li>
       @endcan
-      @can('docentes.lista')
+
+      @can('pagos.lista')
       <li class="sidebar-item">
-        <a class="sidebar-link" href="{{ route('docentes.index') }}" aria-expanded="false">
+        <a class="sidebar-link" href="#" aria-expanded="false">
           <span>
-            <i class="ti ti-user-screen"></i>
+            <i class="ti ti-coin"></i>
           </span>
-          <span class="hide-menu">Docentes</span>
+          <span class="hide-menu">Pagos</span>
         </a>
       </li>
       @endcan
+
+      @can('aulas.lista')
       <li class="sidebar-item">
-        <a class="sidebar-link" href="{{ route('estudiante.index') }}" aria-expanded="false">
+        <a class="sidebar-link" href="{{ route('aulas.index') }}" aria-expanded="false">
           <span>
-            <i class="ti ti-user-screen"></i>
+            <i class="ti ti-door"></i>
           </span>
-          <span class="hide-menu">Estudiantes</span>
-        </a>
-      </li>
-      @can('estudiantes.lista')    
-      @endcan
-      @can('asignaturas.lista')
-      <li class="sidebar-item">
-        <a class="sidebar-link" href="{{ route('asignaturas.index') }}" aria-expanded="false">
-          <span>
-            <i class="ti ti-books"></i>
-          </span>
-          <span class="hide-menu">Asignaturas</span>
+          <span class="hide-menu">Aulas</span>
         </a>
       </li>
       @endcan
@@ -150,7 +125,130 @@
           </span>
           <span class="hide-menu">Ciclos académicos</span>
         </a>
-      </li> 
-      @endcan      
+      </li>
+      @endcan
+
+
+      <li class="nav-small-cap">
+          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+        <span class="hide-menu">GESTIÓN ACADÉMICA</span>
+      </li>
+      
+      @can('docentes.lista')
+      <li class="sidebar-item">
+        <a class="sidebar-link" href="{{ route('docentes.index') }}" aria-expanded="false">
+          <span>
+            <i class="ti ti-user-pentagon"></i>
+          </span>
+          <span class="hide-menu">Docentes</span>
+        </a>
+      </li>
+      @endcan
+      
+      @can('estudiantes.lista')
+      <li class="sidebar-item">
+        <a class="sidebar-link" href="{{ route('estudiante.index') }}" aria-expanded="false">
+          <span>
+            <i class="ti ti-users"></i>
+          </span>
+          <span class="hide-menu">Estudiantes</span>
+        </a>
+      </li>
+      @endcan
+
+      @can('asignaturas.lista')
+      <li class="sidebar-item">
+        <a class="sidebar-link" href="{{ route('asignaturas.index') }}" aria-expanded="false">
+          <span>
+            <i class="ti ti-books"></i>
+          </span>
+          <span class="hide-menu">Asignaturas</span>
+        </a>
+      </li>
+      @endcan
+
+      @can('asistencias.lista')
+      <li class="sidebar-item">
+        <a class="sidebar-link" href="#" aria-expanded="false">
+          <span>
+            <i class="ti ti-mood-check"></i>
+          </span>
+          <span class="hide-menu">Asistencias</span>
+        </a>
+      </li>
+      @endcan
+
+      @can('evaluaciones.lista')
+      <li class="sidebar-item">
+        <a class="sidebar-link" href="#" aria-expanded="false">
+          <span>
+            <i class="ti ti-checklist"></i>
+          </span>
+          <span class="hide-menu">Evaluaciones</span>
+        </a>
+      </li>
+      @endcan
+
+      @can('encuestas.lista')
+      <li class="sidebar-item">
+        <a class="sidebar-link" href="#" aria-expanded="false">
+          <span>
+            <i class="ti ti-gradienter"></i>
+          </span>
+          <span class="hide-menu">Encuestas</span>
+        </a>
+      </li>
+      @endcan
+
+      @can('cms.configuracion')
+      <li class="nav-small-cap">
+        <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+        <span class="hide-menu">PÁGINA WEB</span>
+      </li>
+
+      <li class="sidebar-item">
+        <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+          <span class="d-flex">
+            <i class="ti ti-chart-donut-3"></i>
+          </span>
+          <span class="hide-menu">CMS</span>
+        </a>
+        <ul aria-expanded="false" class="collapse first-level">
+          <li class="sidebar-item">
+            <a href="#" class="sidebar-link">
+              <div class="round-16 d-flex align-items-center justify-content-center">
+                <i class="ti ti-circle"></i>
+              </div>
+              <span class="hide-menu">Contenidos (Noticias)</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a href="#" class="sidebar-link">
+              <div class="round-16 d-flex align-items-center justify-content-center">
+                <i class="ti ti-circle"></i>
+              </div>
+              <span class="hide-menu">Comunicados (Docs)</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a href="#" class="sidebar-link">
+              <div class="round-16 d-flex align-items-center justify-content-center">
+                <i class="ti ti-circle"></i>
+              </div>
+              <span class="hide-menu">Anuncios (Popups)</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a href="#" class="sidebar-link">
+              <div class="round-16 d-flex align-items-center justify-content-center">
+                <i class="ti ti-circle"></i>
+              </div>
+              <span class="hide-menu">Carousel (Home)</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      @endcan
+      
     </ul>
 </nav>

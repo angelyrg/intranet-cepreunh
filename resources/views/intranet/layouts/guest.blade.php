@@ -25,12 +25,11 @@
     <div class="position-relative z-index-5">
         <div class="row">
         <div class="col-xl-7 col-xxl-8">
-            {{-- <a href="#" class="text-nowrap logo-img d-block px-4 py-9 w-100">
-                <img src="{{asset('modernize/images/logos/dark-logo.svg')}}" class="dark-logo" alt="Logo-Dark" />
-                <img src="{{asset('modernize/images/logos/light-logo.svg')}}" class="light-logo" alt="Logo-light" />
-            </a> --}}
+            <a href="#" class="text-nowrap logo-img d-block px-4 py-9 w-100">
+                <img src="{{asset('assets/images/logos/CepreUNH.webp')}}" width="180" class="img-fluid" alt="CepreUNH" />
+            </a>
             <div class="d-none d-xl-flex align-items-center justify-content-center" style="height: calc(100vh - 80px);">
-            <img src="{{asset('modernize/images/backgrounds/login-security.svg')}}" alt="" class="img-fluid" width="500">
+            <img src="{{asset('assets/images/login-security.svg')}}" alt="" class="img-fluid" width="500">
             </div>
         </div>
         <div class="col-xl-5 col-xxl-4">
