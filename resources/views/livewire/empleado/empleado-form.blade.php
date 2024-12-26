@@ -7,7 +7,7 @@
                     <div class="col-lg-6">
                         <div class="form-group mb-3 ">
                             <label for="departamento_id" class="form-label mb-1 fw-bold fs-2">Departamento</label>
-                            <select id="departamento_id" wire:model="departamento_id" class="form-control">
+                            <select id="departamento_id" wire:model="departamento_id" class="form-select">
                                 <option value="">Seleccione</option>
                                 @foreach($departamentos as $departamento)
                                     <option value="{{ $departamento->id }}">{{ $departamento->descripcion }}</option>
@@ -18,7 +18,7 @@
                     <div class="col-lg-6">
                         <div class="form-group mb-3 ">
                             <label for="tipo_documento_id" class="form-label mb-1 fw-bold fs-2">Tipo documento</label>
-                            <select id="tipo_documento_id" wire:model="tipo_documento_id" class="form-control">
+                            <select id="tipo_documento_id" wire:model="tipo_documento_id" class="form-select">
                                 <option value="">Seleccione</option>
                                 @foreach($tipo_documentos as $tipo_documento)
                                     <option value="{{ $tipo_documento->id }}">{{ $tipo_documento->descripcion }}</option>

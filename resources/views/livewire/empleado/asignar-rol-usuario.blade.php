@@ -92,7 +92,7 @@
                             <div class="card-body p-4">
                                 <div class="mb-4">
                                     <label for="sede_id" class="form-label fw-semibold">Sede</label>
-                                    <select wire:model="sede_id" id="sede_id" class="form-control">
+                                    <select wire:model="sede_id" id="sede_id" class="form-select">
                                         <option value="">Seleccione</option>
                                         @foreach ($sedes as $id => $descripcion)
                                             <option value="{{ $id }}">{{ $descripcion }}</option>
@@ -131,7 +131,7 @@
                             <div class="card-body p-4">
                                 <div class="mb-4">
                                     <label for="role_id" class="form-label fw-semibold">Rol</label>
-                                    <select wire:model.lazy="role_id" id="role_id" class="form-control">
+                                    <select wire:model.lazy="role_id" id="role_id" class="form-select">
                                         <option value="">Seleccione</option>
                                         @foreach ($roles as $rol)
                                             <option value="{{ $rol->id }}">{{ $rol->name }}</option>
