@@ -211,6 +211,10 @@ $(document).ready(function() {
                   formData.append('_method', 'PATCH');
                   formData.append('estado', 5);
 
+                  // TODO: Set deleted_at correctamente para el softdelete
+                  const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' '); // Formato: YYYY-MM-DD HH:mm:ss
+                  formData.append('deleted_at', currentDate);
+
                   for (let [key, value] of formData.entries()) {
                      console.log(`${key}: ${value}`);
                   }

@@ -4,12 +4,13 @@ namespace App\Models\Intranet;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Carrera extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
-    protected $fillable = ['area_id', 'descripcion', 'estado'];
+    protected $fillable = ['area_id', 'descripcion', 'estado', 'deleted_at'];
 
     function area(){
         return $this->belongsTo(Area::class);
