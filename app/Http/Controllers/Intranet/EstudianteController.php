@@ -1545,7 +1545,7 @@ class EstudianteController extends Controller
         if ($apoderado) {
             $apoderado->update($datosApoderado);
         } else {
-            $estudiante->apoderado()->create($datosApoderado);
+            $apoderado = $estudiante->apoderado()->create($datosApoderado);
         }
 
         $datosEstudiante = [

@@ -150,16 +150,12 @@ class CarreraController extends Controller
     private function getData()
     {
 
-        $carreras = DB::table('carreras')
-            ->join('areas', 'carreras.area_id', '=', 'areas.id')
-            ->select('carreras.*', 'areas.descripcion as descarea')
-            ->where('carreras.estado','REGEXP','^[^5]')
-            ->get();
+        $carreras = Carrera::with('area')->get();
 
         $html = "";
         foreach ($carreras as $item) {
             $id = $item->id;
-            $descarea = $item->descarea;
+            $descarea = $item->area->descripcion;
             $descripcion = $item->descripcion;
             $estado = $item->estado;
 
