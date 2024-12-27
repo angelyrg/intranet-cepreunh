@@ -142,7 +142,7 @@ class MatriculasTable extends DataTableComponent
             Column::make("CARRERA", "carrera.descripcion")->sortable()->searchable(),
             Column::make("ÁREA", "area.descripcion")->sortable()->searchable(),
             Column::make("SEDE", "sede.descripcion")->sortable()->searchable(),
-            Column::make("AULA", "aula.descripcion")->sortable()->searchable(),
+            Column::make("AULA", "aula_actual.descripcion")->sortable()->searchable(),
             Column::make("MODALIDAD ESTUDIO", "modalidad_estudio")->sortable()->searchable(),
             Column::make("CONDICION ACADÉMICA", "condicion_academica")->sortable()->searchable(),
             
@@ -243,6 +243,15 @@ class MatriculasTable extends DataTableComponent
     {
         $query = Matricula::query();
 
+        $query->with([
+            'estudiante',
+            'estudiante.genero',
+            'carrera',
+            'area',
+            'sede',
+            'aula_actual'
+        ]);
+
         if ($this->cicloId) {
             $query->where('ciclo_id', $this->cicloId);
         }
@@ -264,9 +273,29 @@ class MatriculasTable extends DataTableComponent
         $selectedIds  = $this->getSelected();
 
         if (empty($selectedIds)) {
-            $matriculas = $this->builder()->get();
+            // Aplicamos eager loading con las relaciones necesarias
+            $matriculas = $this->builder()
+                ->with([
+                    'estudiante',
+                    'estudiante.genero',
+                    'carrera',
+                    'area',
+                    'sede',
+                    'aula_actual'
+                ])
+                ->get();
         } else {
-            $matriculas = Matricula::whereIn('id', $selectedIds)->get();
+            // Aplicamos eager loading para las matrículas seleccionadas
+            $matriculas = Matricula::with([
+                'estudiante',
+                'estudiante.genero',
+                'carrera',
+                'area',
+                'sede',
+                'aula_actual'
+            ])
+                ->whereIn('id', $selectedIds)
+                ->get();
         }
 
         $this->clearSelected();

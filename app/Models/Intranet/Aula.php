@@ -24,4 +24,8 @@ class Aula extends Model
         return $this->belongsToMany(Ciclo::class);
     }
 
+    public function matriculas(){
+        return $this->hasMany(Matricula::class, 'aula_actual_id');
+    }
+
 }
