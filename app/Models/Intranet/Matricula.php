@@ -25,7 +25,7 @@ class Matricula extends Model
         'cantidad_matricula',
         'turno',
         'estado',
-        'aula_ciclo_actual_id',
+        'aula_actual_id',
         'usuario_registro_id'
     ];
 
@@ -60,6 +60,11 @@ class Matricula extends Model
     public function sede()
     {
         return $this->belongsTo(Sede::class, 'sede_id');
+    }
+
+    public function aula()
+    {
+        return $this->belongsTo(Aula::class, 'aula_actual_id');
     }
 
     public function aulas()

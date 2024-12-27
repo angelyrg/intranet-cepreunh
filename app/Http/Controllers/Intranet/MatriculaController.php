@@ -1677,6 +1677,8 @@ class MatriculaController extends Controller
     {
         $validatedData = $request->validated();
 
+        $aulaCiclo = AulaCiclo::findOrFail($validatedData['aula_ciclo_id']);
+
         $matricula = Matricula::create([
             'ciclo_id' => $validatedData['ciclo_id'],
             'estudiante_id' => $validatedData['estudiante_id'],
@@ -1687,7 +1689,7 @@ class MatriculaController extends Controller
             'condicion_academica' => $validatedData['condicion_academica'],
             'cantidad_matricula' => $validatedData['cantidad_matricula'],
             'modalidad_matricula' => 1, //1: Presencial, 2: Virtual
-            'aula_ciclo_actual_id' => $validatedData['aula_ciclo_id'],
+            'aula_actual_id' => $aulaCiclo->aula_id,
             'usuario_registro_id' => Auth::user()->id,
         ]);
 
@@ -1778,6 +1780,8 @@ class MatriculaController extends Controller
         // Validar los datos del formulario
         $validatedData = $request->validated();
 
+        $aulaCiclo = AulaCiclo::findOrFail($validatedData['aula_ciclo_id']);
+
         // Actualizar la matrícula
         $matricula->update([
             'ciclo_id' => $validatedData['ciclo_id'],
@@ -1788,7 +1792,7 @@ class MatriculaController extends Controller
             'modalidad_estudio' => $validatedData['modalidad_estudio'],
             'condicion_academica' => $validatedData['condicion_academica'],
             'cantidad_matricula' => $validatedData['cantidad_matricula'],
-            'aula_ciclo_actual_id' => $validatedData['aula_ciclo_id'],
+            'aula_actual_id' => $aulaCiclo->aula_id,
         ]);
 
         // Actualizar el pago asociado
