@@ -1854,7 +1854,8 @@ class MatriculaController extends Controller
         $pdf = PDF::loadView('intranet.matricula.descargar_pdf', [
                 'matricula' => $matriculaData['matricula'],
                 'unh_logo' => $matriculaData['unh_logo_icon'],
-                'document_header' => $matriculaData['document_header_img']
+                'document_header' => $matriculaData['document_header_img'],
+                'sello_VB' => $matriculaData['sello_VB']
             ])->setPaper('A4', 'portrait');
         return $pdf->download('FICHA_DE_MATRICULA_' . $matriculaData['matricula']->estudiante->nro_documento . '.pdf');
     }
@@ -1872,7 +1873,8 @@ class MatriculaController extends Controller
         $pdf = PDF::loadView('intranet.matricula.descargar_pdf', [
                 'matricula' => $matriculaData['matricula'],
                 'unh_logo' => $matriculaData['unh_logo_icon'],
-                'document_header' => $matriculaData['document_header_img']
+                'document_header' => $matriculaData['document_header_img'],
+                'sello_VB' => $matriculaData['sello_VB']
             ])
             ->setPaper('A4', 'portrait');
 
