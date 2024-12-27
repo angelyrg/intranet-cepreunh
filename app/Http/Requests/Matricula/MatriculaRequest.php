@@ -24,17 +24,27 @@ class MatriculaRequest extends FormRequest
      */
     public function rules(): array
     {
-        $rules = [
-            'ciclo_id' => [
+        $rulesCicloId = [];
+
+        if ($this->isMethod('put')) {
+            $rulesCicloId['ciclo_id'] = [
                 'required',
                 'integer',
-                Rule::exists('ciclos', 'id')->where(function ($query) {
-                    $query->where('estado', 1);
-                }),
-                Rule::unique('matriculas')->where(function ($query) {
+                Rule::exists('ciclos', 'id')->where('estado', 1),
+            ];
+        } else {
+            $rulesCicloId['ciclo_id'] = [
+                'required',
+                'integer',
+                Rule::exists('ciclos', 'id')->where('estado', 1),
+                Rule::unique('matriculas')
+                ->where(function ($query) {
                     return $query->where('estudiante_id', $this->estudiante_id);
-                })->ignore($this->route('matricula')),
-            ],
+                }),
+            ];
+        }
+
+        $rules = [
             'estudiante_id' => [
                 'required',
                 'integer',
@@ -143,7 +153,9 @@ class MatriculaRequest extends FormRequest
             ],
         ];
 
-        return $rules;
+        $fullRules = array_merge($rulesCicloId, $rules);
+
+        return $fullRules;
     }
 
 

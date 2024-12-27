@@ -1788,7 +1788,7 @@ class MatriculaController extends Controller
             'modalidad_estudio' => $validatedData['modalidad_estudio'],
             'condicion_academica' => $validatedData['condicion_academica'],
             'cantidad_matricula' => $validatedData['cantidad_matricula'],
-            'aula_ciclo_actual_id' => $validatedData['aula_ciclo_actual_id'],
+            'aula_ciclo_actual_id' => $validatedData['aula_ciclo_id'],
         ]);
 
         // Actualizar el pago asociado
@@ -1805,7 +1805,7 @@ class MatriculaController extends Controller
                 'monto_neto' => $validatedData['monto_neto'],
                 'condicion_pago' => $validatedData['condicion_pago'],
                 'fecha_pago' => $validatedData['fecha_pago'],
-                'forma_de_pago_id' => $validatedData['aula_ciclo_id'],
+                'forma_de_pago_id' => $validatedData['forma_de_pago_id'],
             ]);
         } else {
             Pago::create([

@@ -325,6 +325,12 @@
     // Obtener el elemento del select de Carrera
     const aulaCicloSelect = document.getElementById('aula_ciclo_id');
     const aulasCiclosDisponibles = @json($aulaCicloDisponibles);
+    let aulasCiclo = @json($matricula->aulas ?? []);
+    
+    let currentAulaCicloId = null;
+    if (aulasCiclo.length > 0 ){
+        currentAulaCicloId = aulasCiclo[0].id
+    }
 
     function loadCarreras(areaId) {
         carreraSelect.innerHTML = '<option value="">Seleccionar Carrera</option>';
@@ -358,6 +364,7 @@
                 option.value = aulaCiclo.id;
                 option.textContent = aulaCiclo.aula.descripcion;
                 option.disabled = aulaCiclo.full;
+                option.selected = aulaCiclo.id == currentAulaCicloId;
                 option.title = aulaCiclo.full ? 'Este aula ha alcanzado su aforo máximo.' : '';
                 aulaCicloSelect.appendChild(option);
             });
