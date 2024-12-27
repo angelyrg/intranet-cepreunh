@@ -432,9 +432,9 @@ class MatriculaController extends Controller
             $estudiante->load('matriculas');
             $cantidad_matriculas = $estudiante->matriculas->count() + 1;
 
-            $aulaDisponible = $this->obtenerAulaDisponible($matriculaData['sede_id'], $ciclo_id, $matriculaData['area_id']);
+            $aulaCicloDisponible = $this->obtenerAulaDisponible($matriculaData['sede_id'], $ciclo_id, $matriculaData['area_id']);
 
-            if (!$aulaDisponible) {
+            if (!$aulaCicloDisponible) {
                 return response()->json([
                     'success' => false,
                     'message' => 'No hay aulas disponibles para matricular al estudiante. Por favor, contacte con el administrador.'
@@ -450,7 +450,7 @@ class MatriculaController extends Controller
                 'modalidad_estudio' => $matriculaData['modalidad_estudio'],
                 'condicion_academica' => $matriculaData['condicion_academica'],
                 'cantidad_matricula' => $cantidad_matriculas,
-                'aula_actual_id' => $aulaDisponible->id,
+                'aula_actual_id' => $aulaCicloDisponible->aula_id,
                 'modalidad_matricula' => 2, //1: Presencial, 2: Virtual
             ];
 
@@ -502,7 +502,7 @@ class MatriculaController extends Controller
             Log::error('Error en Api/MatriculaController::guardarMatricula: ' . $e->getMessage());
             return [
                 'success' => false,
-                'message' => 'Ocurrió un error al datos al realizar la matricula. Ponte en contacto con el admintrador para obtener ayuda.'
+                'message' => 'Ocurrió un error al realizar la matricula. Ponte en contacto con el admintrador para obtener ayuda.'
             ];
         }
     }
