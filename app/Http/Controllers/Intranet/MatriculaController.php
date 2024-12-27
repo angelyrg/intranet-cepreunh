@@ -1788,7 +1788,7 @@ class MatriculaController extends Controller
             'modalidad_estudio' => $validatedData['modalidad_estudio'],
             'condicion_academica' => $validatedData['condicion_academica'],
             'cantidad_matricula' => $validatedData['cantidad_matricula'],
-            'aula_ciclo_actual_id' => $validatedData['aula_ciclo_actual_id'],
+            'aula_ciclo_actual_id' => $validatedData['aula_ciclo_id'],
         ]);
 
         // Actualizar el pago asociado
