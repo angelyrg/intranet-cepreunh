@@ -5,6 +5,7 @@ namespace App\Livewire\Matricula;
 use App\Models\Intranet\Banco;
 use App\Models\Intranet\FormaDePago;
 use App\Models\Intranet\Pago;
+use Carbon\Carbon;
 use Livewire\Component;
 
 class PagosNuevo extends Component
@@ -19,7 +20,7 @@ class PagosNuevo extends Component
         $this->matricula_id = $matricula_id;
         $this->formasDePago = FormaDePago::all();
         $this->bancos = Banco::all();
-        $this->fecha_pago = now()->format('Y-m-d H:m:s');
+        $this->fecha_pago = Carbon::now()->format('Y-m-d\TH:i');
     }
 
     protected $rules = [

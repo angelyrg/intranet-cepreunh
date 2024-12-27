@@ -18,6 +18,9 @@ use Rappasoft\LaravelLivewireTables\Views\Filters\DateRangeFilter;
 use Rappasoft\LaravelLivewireTables\Views\Filters\SelectFilter;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\MatriculaExport;
+use App\Models\Intranet\Aula;
+use App\Models\Intranet\AulaCiclo;
+use Illuminate\Support\Facades\Auth;
 
 class MatriculasTable extends DataTableComponent
 {
@@ -40,6 +43,7 @@ class MatriculasTable extends DataTableComponent
     public $cicloId;
     public $sedeId;
     public $carrerasDelCicloFiltro;
+    public $aulasDelCicloFiltro;
     public $sedespemitidosFiltro;
 
 
@@ -55,6 +59,7 @@ class MatriculasTable extends DataTableComponent
         }
 
         $this->loadCarrerasDelCiclo();
+        $this->loadAulasDelCiclo();
     }
 
     private function loadCarrerasDelCiclo()
@@ -63,6 +68,16 @@ class MatriculasTable extends DataTableComponent
             ->carreras()
             ->select('carreras.descripcion', 'carreras.id')
             ->pluck('descripcion', 'id')
+            ->toArray();
+    }
+
+    private function loadAulasDelCiclo()
+    {
+        $this->aulasDelCicloFiltro = Ciclo::find($this->cicloId)
+            ->aulas()
+            ->where('sede_id', Auth::user()->sede_id)
+            ->select('aulas.id', 'aulas.descripcion', 'aulas.aforo')
+            ->pluck('aulas.descripcion', 'aulas.id')
             ->toArray();
     }
 
@@ -127,6 +142,7 @@ class MatriculasTable extends DataTableComponent
             Column::make("CARRERA", "carrera.descripcion")->sortable()->searchable(),
             Column::make("ÁREA", "area.descripcion")->sortable()->searchable(),
             Column::make("SEDE", "sede.descripcion")->sortable()->searchable(),
+            Column::make("AULA", "aula.descripcion")->sortable()->searchable(),
             Column::make("MODALIDAD ESTUDIO", "modalidad_estudio")->sortable()->searchable(),
             Column::make("CONDICION ACADÉMICA", "condicion_academica")->sortable()->searchable(),
             
@@ -169,6 +185,13 @@ class MatriculasTable extends DataTableComponent
                     ->filter(function (Builder $query, $value) {
                         if ($value) {
                             $query->where('matriculas.sede_id', $value);
+                        }
+                    }),
+            SelectFilter::make('Aula', 'aula_actual_id')
+                ->options(['' => 'Todos'] + $this->aulasDelCicloFiltro)
+                    ->filter(function (Builder $query, $value) {
+                        if ($value) {
+                            $query->where('matriculas.aula_actual_id', $value);
                         }
                     }),
             DateRangeFilter::make('Fecha de matrícula', 'created_at')
