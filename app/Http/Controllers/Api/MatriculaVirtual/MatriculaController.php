@@ -450,7 +450,7 @@ class MatriculaController extends Controller
                 'modalidad_estudio' => $matriculaData['modalidad_estudio'],
                 'condicion_academica' => $matriculaData['condicion_academica'],
                 'cantidad_matricula' => $cantidad_matriculas,
-                'aula_ciclo_actual_id' => $aulaDisponible->id,
+                'aula_actual_id' => $aulaDisponible->id,
                 'modalidad_matricula' => 2, //1: Presencial, 2: Virtual
             ];
 
