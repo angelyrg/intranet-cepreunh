@@ -13,6 +13,7 @@ use App\Models\Intranet\IdentidadEtnica;
 use App\Models\Intranet\Parentesco;
 use App\Models\Intranet\TipoDocumento;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EstudianteController extends Controller
 {
@@ -21,7 +22,11 @@ class EstudianteController extends Controller
      */
     public function index()
     {
-        return view('intranet.estudiantes.index');
+        $sedeId = Auth::check() && Auth::user()->can('sedes.ver_todas')
+            ? null
+            : Auth::user()->sede_id;
+
+        return view('intranet.estudiantes.index', compact('sedeId'));
     }
 
     /**

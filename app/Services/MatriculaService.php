@@ -146,12 +146,14 @@ class MatriculaService
 
             $unh_logo_icon = public_path('assets/images/logos/CepreUNH.webp');
             $document_header_img = public_path('assets/images/document-header.jpg');
+            $sello_VB = public_path('assets/images/sello_cepreunh_VB.webp');
             
             $data = [
                 'success' => true,
                 'matricula' => $matricula,
                 'unh_logo_icon' => $unh_logo_icon,
-                'document_header_img' => $document_header_img
+                'document_header_img' => $document_header_img,
+                'sello_VB' => $sello_VB
             ];
 
             return $data;

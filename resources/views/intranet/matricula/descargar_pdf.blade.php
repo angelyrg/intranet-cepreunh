@@ -143,6 +143,12 @@
         .legal-section *{
             font-size: 8px;
         }
+
+        .sello_vb{
+            width: 2.7cm;
+            height: 2.7cm;
+            margin: auto 23%;
+        }
     </style>
 </head>
 <body>
@@ -235,6 +241,12 @@
                                     {{ $matricula->modalidad_matricula }}
                                 </td>
                             </tr>
+                            <tr>
+                                <td class="text-end">MODALIDAD DE ESTUDIO:</td>
+                                <td class="text-uppercase text-bold">
+                                    {{ $matricula->modalidad_estudio }}
+                                </td>
+                            </tr>
                         </table>
                     </div>
                 </td>
@@ -252,8 +264,12 @@
                         <div class="firma_linea"></div>
                         <p class="text-center">FIRMA DEL POSTULANTE</p>
                     </td>
-                    <td class="firma-item">
-                        <div class="firma_linea"></div>
+                    <td class="firma-item ">
+                        <div class="firma_linea">
+                            @if (strtoupper($matricula->modalidad_matricula) === 'VIRTUAL')
+                            <img class="sello_vb" src="{{ $sello_VB }}" alt="">
+                            @endif
+                        </div>
                         <p class="text-center">CEPRE UNH</p>
                     </td>
                 </tr>
