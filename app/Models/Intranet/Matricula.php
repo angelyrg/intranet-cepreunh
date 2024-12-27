@@ -64,7 +64,12 @@ class Matricula extends Model
 
     public function aula()
     {
-        return $this->belongsTo(Aula::class, 'aula_actual_id');
+        return $this->belongsTo(Aula::class, 'aula_actual_id', 'id');
+    }
+
+    public function aula_actual()
+    {
+        return $this->belongsTo(Aula::class, 'aula_actual_id', 'id');
     }
 
     public function aulas()
