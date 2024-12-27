@@ -247,7 +247,7 @@ class MatriculasTable extends DataTableComponent
             $query->where('ciclo_id', $this->cicloId);
         }
         if ($this->sedeId) {
-            $query->where('sede_id', $this->sedeId);
+            $query->where('matriculas.sede_id', $this->sedeId);
         }
         return $query;
     }
