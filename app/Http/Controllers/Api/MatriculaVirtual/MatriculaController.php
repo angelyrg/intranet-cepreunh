@@ -475,7 +475,7 @@ class MatriculaController extends Controller
 
             $aula = AulaMatricula::create([
                 'matricula_id' => $matricula->id,
-                'aula_ciclo_id' => $aulaDisponible->id,
+                'aula_ciclo_id' => $aulaCicloDisponible->id,
             ]);
 
             if ($estudiante && $matricula && $pago && $aula)
