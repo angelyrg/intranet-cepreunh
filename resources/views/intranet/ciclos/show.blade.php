@@ -150,7 +150,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="card-title">Matrículas</h5>
+                    <h5 class="card-title">Estudiantes matriculados en el ciclo</h5>
                     <div>
                         @if($ciclo->estado == 1)
                         @can('matricula.crear')

@@ -232,7 +232,7 @@ class MatriculasTable extends DataTableComponent
     public function bulkActions(): array
     {
         return [
-            'export' => 'Export',
+            'export' => 'Exportar',
         ];
     }
 
