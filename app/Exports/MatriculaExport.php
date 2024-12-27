@@ -57,7 +57,7 @@ class MatriculaExport implements FromCollection, WithHeadings, WithMapping, Shou
             $matricula->estudiante->apellido_paterno,
             $matricula->estudiante->apellido_materno,
             $matricula->estudiante->genero->descripcion,
-            $matricula->carrera->descripcion,
+            $matricula->carrera->descripcion ?? '-c-',
             $matricula->area->descripcion,
             $matricula->sede->descripcion,
             $matricula->aula->descripcion,
