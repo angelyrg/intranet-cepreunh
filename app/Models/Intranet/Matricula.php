@@ -90,4 +90,22 @@ class Matricula extends Model
             $matricula->uuid = (string) Str::uuid(); // Genera un UUID
         });
     }
+
+    protected static function booted()
+    {
+        static::deleting(function ($matricula) {
+            // Soft delete de los pagos relacionados
+            $matricula->pagos->each(function ($pago) {
+                $pago->delete();
+            });
+        });
+
+        static::restoring(function ($matricula) {
+            // Restaurar los pagos relacionados
+            $matricula->pagos()->withTrashed()->each(function ($pago) {
+                $pago->restore();
+            });
+        });
+    }
+
 }
