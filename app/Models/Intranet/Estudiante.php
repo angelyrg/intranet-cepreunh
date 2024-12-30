@@ -80,4 +80,27 @@ class Estudiante extends Model
     {
         return $this->belongsTo(Apoderado::class);
     }
+    
+    public function sede_actual()
+    {
+        return $this->belongsTo(Sede::class, 'sede_actual_id');
+    }
+
+    protected static function booted()
+    {
+        static::deleting(function ($estudiante) {
+            // Soft delete de las matrículas relacionadas
+            $estudiante->matriculas->each(function ($matricula) {
+                $matricula->delete();
+            });
+        });
+
+        static::restoring(function ($estudiante) {
+            // Restaurar las matrículas relacionadas
+            $estudiante->matriculas()->withTrashed()->each(function ($matricula) {
+                $matricula->restore();
+            });
+        });
+    }
+
 }

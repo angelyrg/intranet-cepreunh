@@ -66,10 +66,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Route::post('matricula/update', [MatriculaController::class, 'update'])->name('matricula.update');
     Route::get('matricula/{matricula}/descargar', [MatriculaController::class, 'descargar'])->name('matricula.descargar');
     Route::get('matricula/{matricula}/imprimir', [MatriculaController::class, 'imprimir'])->name('matricula.imprimir');
+    Route::delete('matricula/{matricula}/delete', [MatriculaController::class, 'delete'])->name('matricula.delete');
 
     // Route::resource('matriculas', MatriculaController::class)->names('matriculas');
 
     Route::get('estudiante', [EstudianteController::class, 'index'])->name('estudiante.index');
+    Route::get('estudiante/{estudiante}/show', [EstudianteController::class, 'show'])->name('estudiante.show');
     Route::get('estudiante/{estudiante}/edit', [EstudianteController::class, 'edit'])->name('estudiante.edit');
     Route::put('estudiante/{estudiante}/update', [EstudianteController::class, 'update'])->name('estudiante.update');
 
