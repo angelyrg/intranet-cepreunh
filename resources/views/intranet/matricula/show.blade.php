@@ -356,6 +356,10 @@
                             </a>
                         </div>
                         <div>
+                            <button type="button" class="btn btn-outline-danger btnDelete" data-id="{{ $matricula->id }}">
+                                <span><i class="ti ti-trash"></i></span>
+                                <span>Eliminar</span>
+                            </button>
                             <a href="{{ route('matricula.imprimir', $matricula->id) }}" class="btn btn-primary" target="_blank">
                                 <span><i class="ti ti-printer"></i></span>
                                 <span>Imprimir ficha</span>
@@ -409,5 +413,56 @@
         </div>
     </div>
 </div>
+
+@endsection
+
+@section('scripts')
+<script src="{{ asset('assets/js/tools.js') }}"></script>
+
+<script>
+    document.querySelectorAll('.btnDelete').forEach(button => {
+        button.addEventListener('click', function() {
+            const matriculaId = this.getAttribute('data-id');
+            
+            // Mostrar la alerta de confirmación con SweetAlert2
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: 'Esta matrícula será eliminada permanentemente.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, eliminar!',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Si el usuario confirma, enviar el formulario de eliminación
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '{{ route('matricula.delete', ':matricula') }}'.replace(':matricula', matriculaId);
+
+                    // Crear el token CSRF
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    const csrfInput = document.createElement('input');
+                    csrfInput.type = 'hidden';
+                    csrfInput.name = '_token';
+                    csrfInput.value = csrfToken;
+                    form.appendChild(csrfInput);
+                    
+                    // Agregar el método DELETE
+                    const methodInput = document.createElement('input');
+                    methodInput.type = 'hidden';
+                    methodInput.name = '_method';
+                    methodInput.value = 'DELETE';
+                    form.appendChild(methodInput);
+                    
+                    // Enviar el formulario
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            });
+        });
+    });
+</script>
 
 @endsection

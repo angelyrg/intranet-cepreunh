@@ -1885,4 +1885,17 @@ class MatriculaController extends Controller
         return $pdf->stream('FICHA_DE_MATRICULA_' . $matriculaData['matricula']->estudiante->nro_documento . '.pdf');
     }
 
+    public function delete($id){
+        $matricula = Matricula::findOrFail($id);
+        $matricula->delete(); //Softdelete
+        
+        if($matricula->save()){
+            return redirect()->route('estudiante.show', $matricula->estudiante_id)
+                ->with('success', 'Matrícula eliminada correctamente.');
+        }else{
+            return redirect()->route('estudiante.show', $matricula->estudiante_id)
+                ->with('error', 'No se pudo eliminar la matrícula.');
+
+        }
+    }
 }

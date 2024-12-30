@@ -258,6 +258,13 @@ class MatriculasTable extends DataTableComponent
         if ($this->sedeId) {
             $query->where('matriculas.sede_id', $this->sedeId);
         }
+
+        $query->whereIn('matriculas.id', function ($subquery) {
+            $subquery->selectRaw('MAX(id)')
+                ->from('matriculas')
+                ->groupBy('estudiante_id');
+        });
+
         return $query;
     }
 
@@ -301,6 +308,13 @@ class MatriculasTable extends DataTableComponent
         $this->clearSelected();
 
         return Excel::download(new MatriculaExport($matriculas), 'matriculas.xlsx');
+    }
+
+    public function delete()
+    {
+        Matricula::destroy($this->getSelected());
+        $this->clearSelected();
+        session()->flash('message', 'Matrículas eliminadas correctamente.');
     }
 
 }

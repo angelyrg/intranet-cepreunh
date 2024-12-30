@@ -20,6 +20,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\MatriculaExport;
 use App\Models\Intranet\Estudiante;
 use App\Models\Intranet\Genero;
+use Carbon\Carbon;
 
 class EstudiantesTable extends DataTableComponent
 {
@@ -75,6 +76,14 @@ class EstudiantesTable extends DataTableComponent
                 ];
             })
                 ->buttons([
+                    LinkColumn::make('View', 'id')
+                        ->title(fn($row) => '<i class="ti ti-eye fs-5"></i>')
+                        ->location(fn($row) => route('estudiante.show', $row))
+                        ->attributes(fn($row)  => [
+                            'class' => 'text-info',
+                            'alt' => 'Ver detalles',
+                            'title' => 'Ver detalles'
+                        ])->html(),
                     LinkColumn::make('Editar', 'id')
                         ->title(fn($row) => '<i class="ti ti-edit fs-5"></i>')
                         ->location(fn($row) => route('estudiante.edit', $row))
@@ -83,14 +92,14 @@ class EstudiantesTable extends DataTableComponent
                             'alt' => 'Editar',
                             'title' => 'Editar'
                         ])->html(),
-                    LinkColumn::make('Eliminar', 'id')
-                        ->title(fn($row) => '<i class="ti ti-trash fs-5"></i>')
-                        ->location(fn($row) => '#')
-                        ->attributes(fn($row)  => [
-                            'class' => 'text-danger',
-                            'alt' => 'Editar',
-                            'title' => 'Editar'
-                        ])->html(),
+                    // LinkColumn::make('Eliminar', 'id')
+                    //     ->title(fn($row) => '<i class="ti ti-trash fs-5"></i>')
+                    //     ->location(fn($row) => '#') TODO: Eliminar estudiante
+                    //     ->attributes(fn($row)  => [
+                    //         'class' => 'text-danger',
+                    //         'alt' => 'Editar',
+                    //         'title' => 'Editar'
+                    //     ])->html(),
                 ]),
 
             Column::make("DNI", "nro_documento")->sortable()->searchable(),
@@ -99,8 +108,23 @@ class EstudiantesTable extends DataTableComponent
             Column::make("APELLIDO MATERNO", "apellido_materno")->sortable()->searchable(),
             Column::make("GÉNERO", "genero.descripcion")->sortable()->searchable(),
             Column::make("ESTADO CIVIL", "estado_civil.descripcion")->sortable()->searchable(),
-            Column::make("FECHA NAC.", "fecha_nacimiento")->sortable()->searchable(),
-            Column::make("TEL. PERSONAL", "telefono_personal")->sortable()->searchable(),
+            Column::make("EDAD", "fecha_nacimiento")
+                ->label(fn($row) => Carbon::parse($row->fecha_nacimiento)->age)
+                ->sortable(),
+            Column::make("FECHA NAC.", "fecha_nacimiento")
+                ->sortable()
+                ->searchable()
+                ->label(function ($row) {
+                    return Carbon::parse($row->fecha_nacimiento)->format('d/m/Y');
+                }),
+            
+            Column::make('MATRÍCULAS')
+                ->label(function ($row) {
+                    return '<a href="' . route('estudiante.show', $row->id) . '" class="text-decoration-underline">Ver(' . $row->matriculas_count . ')</a>';
+                })
+                ->sortable()
+                ->html(),
+
             Column::make("WHATSAPP", "whatsapp")->sortable()->searchable(),
             Column::make("CORREO PERSONAL", "correo_personal")->sortable()->searchable(),
             Column::make("CORREO INSTITUCIONAL", "correo_institucional")->sortable()->searchable(),
@@ -148,7 +172,8 @@ class EstudiantesTable extends DataTableComponent
 
     public function builder(): Builder
     {
-        $query = Estudiante::query();
+        $query = Estudiante::query()
+            ->withCount('matriculas');
 
         if ($this->sedeId) {
             $query->where('sede_actual_id', $this->sedeId);

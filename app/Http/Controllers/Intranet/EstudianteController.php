@@ -48,9 +48,17 @@ class EstudianteController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Estudiante $estudiante)
     {
-        //
+        $estudiante = $estudiante->load([
+            'matriculas.ciclo',
+            'matriculas.area',
+            'matriculas.carrera',
+            'matriculas.aula_actual',
+            'matriculas.pagos.banco',
+        ]);
+
+        return view('intranet.estudiantes.show', compact('estudiante'));
     }
 
     /**
