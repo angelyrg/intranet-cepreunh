@@ -250,3 +250,29 @@
 {{-- content|end --}}
 
 @endsection
+
+@section('scripts')
+<script src="{{ asset('assets/js/tools.js') }}"></script>
+<script>
+    document.addEventListener('livewire:initialized', () => {
+        window.confirmDeletion = function(matriculaId) {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: 'Esta matrícula y sus datos asociados serán eliminados. ¿Estás seguro de que deseas continuar?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, eliminar!',
+                cancelButtonText: 'Cancelar',
+                customClass: {
+                    confirmButton: 'btn btn-danger',
+                    cancelButton: 'btn btn-outline-primary'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Livewire.dispatch('delete-matricula', {matriculaId: matriculaId});
+                }
+            });
+        };
+    });
+</script>
+@endsection
