@@ -93,6 +93,8 @@ class EstudiantesTable extends DataTableComponent
                             'alt' => 'Editar',
                             'title' => 'Editar'
                         ])->html(),
+                    
+                    (auth()->user()->can('estudiante.eliminar')) ? 
                     LinkColumn::make('Delete', 'id')
                         ->title(fn($row) => '<i class="ti ti-trash fs-5 text-danger"></i>')
                         ->location(fn($row) => '#')
@@ -104,7 +106,7 @@ class EstudiantesTable extends DataTableComponent
                                 'onclick' => 'confirmDeleteEstudiante(' . $row->id . ')',
                             ];
                         })
-                        ->html(),
+                        ->html() : '',
                 ]),
 
             Column::make("DNI", "nro_documento")->sortable()->searchable(),
