@@ -45,12 +45,21 @@ class MatriculaExport implements FromCollection, WithHeadings, WithMapping, Shou
             'Correo Institucional', 
             '¿Tiene Discapacidad?', 
             'Modalidad Matrícula', 
-            'Fecha de Matrícula'
+            'Fecha de Matrícula',
+            'Monto total',
+            'Comisión total',
+            'Monto neto total',
+            'Cantidad de pagos'
         ];
     }
 
     public function map($matricula): array
     {
+        $totalMonto = $matricula->pagos->sum('monto');
+        $totalComision = $matricula->pagos->sum('comision');
+        $totalMontoNeto = $matricula->pagos->sum('monto_neto');
+        $cantidadPagos = $matricula->pagos->count();
+
         return [
             $matricula->estudiante->nro_documento ?? '',
             $matricula->estudiante->nombres ?? '',
@@ -69,7 +78,11 @@ class MatriculaExport implements FromCollection, WithHeadings, WithMapping, Shou
             $matricula->estudiante->correo_institucional ?? '',
             ($matricula->estudiante->tiene_discapacidad ?? false) ? 'Sí' : 'No',
             $matricula->modalidad_matricula == 1 ? 'Presencial' : ($matricula->modalidad_matricula == 2 ? 'Virtual' : 'Desconocido'),
-            $matricula->created_at->format('d/m/Y h:i:sA')
+            $matricula->created_at->format('d/m/Y h:i:sA'),
+            $totalMonto,
+            $totalComision,
+            $totalMontoNeto,
+            $cantidadPagos,
         ];
     }
 }
