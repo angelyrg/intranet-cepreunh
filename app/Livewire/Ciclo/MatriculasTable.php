@@ -160,6 +160,34 @@ class MatriculasTable extends DataTableComponent
                 }),
 
             DateColumn::make('FECHA DE MATRÍCULA', 'created_at')->sortable()->outputFormat('d/m/Y h:i:sA'),
+
+            Column::make('Monto total')
+            ->label(function ($row) {
+                $totalPagos = $row->pagos->sum('monto');
+                return 'S/' . number_format($totalPagos, 2);
+            })
+                ->sortable()
+                ->searchable(),
+            Column::make('Comisión total')
+                ->label(function ($row) {
+                    $totalPagos = $row->pagos->sum('comision');
+                    return 'S/' . number_format($totalPagos, 2);
+                })
+                ->sortable()
+                ->searchable(),
+            Column::make('Monto neto total')
+            ->label(function ($row) {
+                $totalPagos = $row->pagos->sum('monto_neto');
+                return 'S/' . number_format($totalPagos, 2);
+            })
+                ->sortable()
+                ->searchable(),
+            Column::make('Cantidad de pagos')
+            ->label(function ($row) {
+                return $row->pagos->count();
+            })
+                ->sortable()
+                ->searchable(),
         ];
     }
 
@@ -249,6 +277,7 @@ class MatriculasTable extends DataTableComponent
             'carrera',
             'area',
             'sede',
+            'pagos',
             'aula_actual'
         ]);
 
@@ -288,6 +317,7 @@ class MatriculasTable extends DataTableComponent
                     'carrera',
                     'area',
                     'sede',
+                    'pagos',
                     'aula_actual'
                 ])
                 ->get();
@@ -299,6 +329,7 @@ class MatriculasTable extends DataTableComponent
                 'carrera',
                 'area',
                 'sede',
+                'pagos',
                 'aula_actual'
             ])
                 ->whereIn('id', $selectedIds)

@@ -132,12 +132,12 @@
                             <span>Aulas</span>
                         </button>
                     </div>
-                    <div>
+                    {{-- <div>
                         <button type="button" class="btn btn-outline-primary w-100 d-flex justify-content-center align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modalPrecios">
                             <i class="ti ti-coin"></i>
                             <span>Precios</span>
                         </button>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
