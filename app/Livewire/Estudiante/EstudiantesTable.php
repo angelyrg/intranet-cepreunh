@@ -21,6 +21,7 @@ use App\Exports\MatriculaExport;
 use App\Models\Intranet\Estudiante;
 use App\Models\Intranet\Genero;
 use Carbon\Carbon;
+use Livewire\Attributes\On;
 
 class EstudiantesTable extends DataTableComponent
 {
@@ -28,7 +29,7 @@ class EstudiantesTable extends DataTableComponent
     public ?bool $searchFilterDefer = true; // Añadir .defer
     public ?int $searchFilterDebounce = 300;  // 300 ms
 
-    public string $emptyMessage = 'No se encontraron resultados para tu búsqueda';
+    public string $emptyMessage = 'No se encontraron estudiantes para tu búsqueda';
     public string $filterLabel = 'Filtrar';
     public string $columnsLabel = 'Columnas';
     public string $showingLabel = 'Mostrando :from a :to de :total entradas';
@@ -92,14 +93,18 @@ class EstudiantesTable extends DataTableComponent
                             'alt' => 'Editar',
                             'title' => 'Editar'
                         ])->html(),
-                    // LinkColumn::make('Eliminar', 'id')
-                    //     ->title(fn($row) => '<i class="ti ti-trash fs-5"></i>')
-                    //     ->location(fn($row) => '#') TODO: Eliminar estudiante
-                    //     ->attributes(fn($row)  => [
-                    //         'class' => 'text-danger',
-                    //         'alt' => 'Editar',
-                    //         'title' => 'Editar'
-                    //     ])->html(),
+                    LinkColumn::make('Delete', 'id')
+                        ->title(fn($row) => '<i class="ti ti-trash fs-5 text-danger"></i>')
+                        ->location(fn($row) => '#')
+                        ->attributes(function ($row) {
+                            return [
+                                'class' => 'text-danger',
+                                'alt' => 'Eliminar estudiante',
+                                'title' => 'Eliminar estudiante',
+                                'onclick' => 'confirmDeleteEstudiante(' . $row->id . ')',
+                            ];
+                        })
+                        ->html(),
                 ]),
 
             Column::make("DNI", "nro_documento")->sortable()->searchable(),
@@ -204,4 +209,12 @@ class EstudiantesTable extends DataTableComponent
     //     return Excel::download(new MatriculaExport($estudiantes), 'matriculas.xlsx');
     // }
 
+    #[On('delete-estudiante')]
+    public function deleteEstudiante($estudianteId)
+    {
+        $estudiante = Estudiante::find($estudianteId);
+        if ($estudiante->delete()) {
+            $this->dispatch('show-alert', message: 'Estudiante eliminado correctamente');
+        }
+    }
 }

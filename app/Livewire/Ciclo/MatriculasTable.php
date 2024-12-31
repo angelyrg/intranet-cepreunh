@@ -21,6 +21,7 @@ use App\Exports\MatriculaExport;
 use App\Models\Intranet\Aula;
 use App\Models\Intranet\AulaCiclo;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\On;
 
 class MatriculasTable extends DataTableComponent
 {
@@ -28,7 +29,7 @@ class MatriculasTable extends DataTableComponent
     public ?bool $searchFilterDefer = true; // Añadir .defer
     public ?int $searchFilterDebounce = 300;  // 300 ms
 
-    public string $emptyMessage = 'No se encontraron resultados para tu búsqueda';
+    public string $emptyMessage = 'No se encontraron matrículas para tu búsqueda';
     public string $filterLabel = 'Filtrar';
     public string $columnsLabel = 'Columnas';
     public string $showingLabel = 'Mostrando :from a :to de :total entradas';
@@ -122,14 +123,18 @@ class MatriculasTable extends DataTableComponent
                         'alt' => 'Editar matrícula',
                         'title' => 'Editar matrícula'
                     ])->html(),
-                    // LinkColumn::make('View', 'estudiante.id')
-                    // ->title(fn($row) => '<i class="ti ti-mood-edit fs-5"></i>')
-                    // ->location(fn($row) => route('estudiante.edit', $row->estudiante))
-                    // ->attributes(fn($row)  => [
-                    //     'class' => 'text-info',
-                    //     'alt' => 'Editar Estudiante',
-                    //     'title' => 'Editar Estudiante'
-                    // ])->html(),
+                    LinkColumn::make('Delete', 'id')
+                        ->title(fn($row) => '<i class="ti ti-trash fs-5 text-danger"></i>')
+                        ->location(fn($row) => '#')
+                        ->attributes(function ($row) {
+                            return [
+                                'class' => 'text-danger',
+                                'alt' => 'Eliminar matrícula',
+                                'title' => 'Eliminar matrícula',
+                                'onclick' => 'confirmDeletion(' . $row->id . ')',
+                            ];
+                        })
+                        ->html(),
                 ]),
 
             // Column::make('DNI1', "estudiante.nro_documento")->collapseAlways(),
@@ -160,6 +165,34 @@ class MatriculasTable extends DataTableComponent
                 }),
 
             DateColumn::make('FECHA DE MATRÍCULA', 'created_at')->sortable()->outputFormat('d/m/Y h:i:sA'),
+
+            Column::make('Monto total')
+            ->label(function ($row) {
+                $totalPagos = $row->pagos->sum('monto');
+                return 'S/' . number_format($totalPagos, 2);
+            })
+                ->sortable()
+                ->searchable(),
+            Column::make('Comisión total')
+                ->label(function ($row) {
+                    $totalPagos = $row->pagos->sum('comision');
+                    return 'S/' . number_format($totalPagos, 2);
+                })
+                ->sortable()
+                ->searchable(),
+            Column::make('Monto neto total')
+            ->label(function ($row) {
+                $totalPagos = $row->pagos->sum('monto_neto');
+                return 'S/' . number_format($totalPagos, 2);
+            })
+                ->sortable()
+                ->searchable(),
+            Column::make('Cantidad de pagos')
+            ->label(function ($row) {
+                return $row->pagos->count();
+            })
+                ->sortable()
+                ->searchable(),
         ];
     }
 
@@ -249,6 +282,7 @@ class MatriculasTable extends DataTableComponent
             'carrera',
             'area',
             'sede',
+            'pagos',
             'aula_actual'
         ]);
 
@@ -288,6 +322,7 @@ class MatriculasTable extends DataTableComponent
                     'carrera',
                     'area',
                     'sede',
+                    'pagos',
                     'aula_actual'
                 ])
                 ->get();
@@ -299,6 +334,7 @@ class MatriculasTable extends DataTableComponent
                 'carrera',
                 'area',
                 'sede',
+                'pagos',
                 'aula_actual'
             ])
                 ->whereIn('id', $selectedIds)
@@ -310,11 +346,12 @@ class MatriculasTable extends DataTableComponent
         return Excel::download(new MatriculaExport($matriculas), 'matriculas.xlsx');
     }
 
-    public function delete()
+    #[On('delete-matricula')]
+    public function deleteMatricula($matriculaId)
     {
-        Matricula::destroy($this->getSelected());
-        $this->clearSelected();
-        session()->flash('message', 'Matrículas eliminadas correctamente.');
+        $matricula = Matricula::find($matriculaId);
+        if ($matricula->delete()){
+            $this->dispatch('show-alert', message: 'Matricula eliminado correctamente');
+        }        
     }
-
 }
