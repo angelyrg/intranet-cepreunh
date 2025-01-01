@@ -66,22 +66,27 @@
                                                         </button> --}}
                                                     </div>
                                                     @endif
-                                    
+
+                                                    @php
+                                                        // Cargar todas las relaciones de aula de forma anticipada
+                                                        $aulasCiclos = \App\Models\Intranet\AulaCiclo::with('aula')
+                                                            ->whereIn('aula_id', $aulasAsignadas) // Solo obtener los que corresponden a los $aulasAsignadas
+                                                            ->where('area_id', $area->id) // Filtrar por el área correspondiente
+                                                            ->get(); // Ejecutar la consulta y obtener los resultados
+                                                    @endphp
+
                                                     <ul class="list-group mt-2 border">
-                                                        @foreach($aulasAsignadas as $aulaId)
-                                                            @php
-                                                                $aulaCiclo = \App\Models\Intranet\AulaCiclo::with('aula')->where('aula_id', $aulaId)->where('area_id', $area->id)->first();
-                                                            @endphp
+                                                        @foreach($aulasCiclos as $aulaCiclo)
                                                             @if ($aulaCiclo)
                                                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                                                     <span>
-                                                                        {{ $aulaCiclo->aula->descripcion}}
+                                                                        {{ $aulaCiclo->aula->descripcion }}
                                                                     </span>
                                                                     @if($ciclo->estado == 1 && Auth::user()->can('ciclo.configurar_aulas'))
-                                                                    <button class="btn btn-danger btn-sm" wire:click="quitarAula({{ $aulaCiclo->aula?->id ?? ''}})">
-                                                                        <i class="ti ti-arrow-left"></i>
-                                                                        Quitar
-                                                                    </button>
+                                                                        <button class="btn btn-danger btn-sm" wire:click="quitarAula({{ $aulaCiclo->aula?->id ?? '' }})">
+                                                                            <i class="ti ti-arrow-left"></i>
+                                                                            Quitar
+                                                                        </button>
                                                                     @endif
                                                                 </li>
                                                             @endif

@@ -43,8 +43,9 @@
             <table class="table text-nowrap mb-0 align-middle" id="tbl{{ $slug }}">
                 <thead class="text-dark fs-4">
                     <tr>
+                        <th></th>
                         <th>
-                            <h6 class="fs-4 fw-semibold mb-0"></h6>
+                            <h6 class="fs-4 fw-semibold mb-0">ACCIONES</h6>
                         </th>
                         <th>
                             <h6 class="fs-4 fw-semibold mb-0">ESTADO</h6>

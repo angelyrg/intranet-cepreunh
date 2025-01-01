@@ -123,6 +123,7 @@ class MatriculasTable extends DataTableComponent
                         'alt' => 'Editar matrícula',
                         'title' => 'Editar matrícula'
                     ])->html(),
+                    (auth()->user()->can('matricula.eliminar')) ? 
                     LinkColumn::make('Delete', 'id')
                         ->title(fn($row) => '<i class="ti ti-trash fs-5 text-danger"></i>')
                         ->location(fn($row) => '#')
@@ -134,7 +135,7 @@ class MatriculasTable extends DataTableComponent
                                 'onclick' => 'confirmDeletion(' . $row->id . ')',
                             ];
                         })
-                        ->html(),
+                        ->html() : '',
                 ]),
 
             // Column::make('DNI1', "estudiante.nro_documento")->collapseAlways(),

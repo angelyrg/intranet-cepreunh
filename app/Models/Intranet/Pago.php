@@ -36,4 +36,9 @@ class Pago extends Model
     {
         return $this->belongsTo(FormaDePago::class);
     }
+
+    public function matricula()
+    {
+        return $this->belongsTo(Matricula::class, 'matricula_id');
+    }
 }
