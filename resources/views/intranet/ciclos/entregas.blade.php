@@ -32,7 +32,6 @@
 {{-- Breadcrumb|end --}}
 
 {{-- content|start --}}
-@can('pagos.lista')
 <div class="row">
     <div class="col-12">
         <div class="card">
@@ -85,11 +84,13 @@
                                     <p class="mb-0">Apellidos: <span id="apellidos_estudiante"></span></p>
                                     <p class="mb-0">DNI: <span id="nro_documento_estudiante"></span></p>
 
+                                    @can('entrega.crear')
                                     <form class="mt-3" id="form_entregar_material">
                                         <input type="hidden" name="matricula_id" id="matricula_id" value="">
                                         <input type="hidden" name="sede_id" id="sede_id" value="">
                                         <button class="btn btn-primary" type="submit" id="btn_entregar_material">Entregar material</button>
                                     </form>
+                                    @endcan
 
                                 </div>
                             </div>
@@ -100,6 +101,7 @@
         </div>
     </div>
 
+    @can('entregas.lista')
     <div class="col-12">
         <div class="card">
             <div class="card-header py-1">
@@ -120,11 +122,11 @@
                         <tbody id="tblEntregasBody"></tbody>
                     </table>
                 </div>
+            </div>
         </div>
     </div>
-
+    @endcan
 </div>
-@endcan
 {{-- content|end --}}
 
 @endsection
