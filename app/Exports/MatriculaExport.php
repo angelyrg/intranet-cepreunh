@@ -28,11 +28,13 @@ class MatriculaExport implements FromCollection, WithHeadings, WithMapping, Shou
     public function headings(): array
     {
         return [
-            'DNI', 
+            'EstudianteID',
+            'DNI',
             'Nombres', 
             'Apellido Paterno', 
             'Apellido Materno', 
             'Género', 
+            'MatrículaID',
             'Carrera', 
             'Área', 
             'Sede', 
@@ -61,11 +63,13 @@ class MatriculaExport implements FromCollection, WithHeadings, WithMapping, Shou
         $cantidadPagos = $matricula->pagos->count();
 
         return [
+            $matricula->estudiante->id ?? '',
             $matricula->estudiante->nro_documento ?? '',
             $matricula->estudiante->nombres ?? '',
             $matricula->estudiante->apellido_paterno ?? '',
             $matricula->estudiante->apellido_materno ?? '',
             $matricula->estudiante->genero->descripcion ?? '',
+            $matricula->id ?? '',
             $matricula->carrera->descripcion ?? '',
             $matricula->area->descripcion ?? '',
             $matricula->sede->descripcion ?? '',
