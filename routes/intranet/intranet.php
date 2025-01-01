@@ -9,6 +9,7 @@ use App\Http\Controllers\Intranet\AulaController;
 use App\Http\Controllers\Intranet\CarreraCicloController;
 use App\Http\Controllers\Intranet\CicloController;
 use App\Http\Controllers\Intranet\DocenteController;
+use App\Http\Controllers\Intranet\EntregaController;
 use App\Http\Controllers\Intranet\EstudianteController;
 use App\Http\Controllers\Intranet\MatriculaController;
 use App\Http\Controllers\Intranet\PermissionController;
@@ -55,7 +56,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('ciclos/{ciclo}/create_precios', [CicloController::class, 'create_precios'])->name('ciclos.create_precios');
     Route::get('ciclos/{ciclo}/asignar_carreras', [CicloController::class, 'asignar_carreras'])->name('ciclos.asignar_carreras');
     Route::get('ciclos/{ciclo}/asignar_asignaturas', [CicloController::class, 'asignar_asignaturas'])->name('ciclos.asignar_asignaturas');
-    
+    Route::get('ciclos/{ciclo}/entregas', [CicloController::class, 'entregas'])->name('ciclos.entregas');
+
+
     Route::post('matricula/buscar_dni', [MatriculaController::class, 'buscar_dni'])->name('matricula.buscar_dni');
     Route::get('matricula/datos-personales', [MatriculaController::class, 'datos_personales'])->name('matricula.datos_personales');
     Route::post('matricula/store_estudiante', [MatriculaController::class, 'store_estudiante'])->name('matricula.store_estudiante');
@@ -88,5 +91,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('aulas', AulaController::class)->except(['create', 'show', 'destroy'])->names('aulas');
     Route::delete('aulas/{aula}/eliminar', [AulaController::class, 'eliminar'])->name('aulas.eliminar');
+
+
+    Route::get('entregas/buscar_matricula/{dni}/{ciclo_id}', [EntregaController::class, 'buscar_matricula'])->name('entregas.buscar_matricula');
+    Route::post('entregas/store', [EntregaController::class, 'store'])->name('entregas.store');
+    Route::get('entregas/byMatricula/{matricula_id}', [EntregaController::class, 'getEntregasByMatricula'])->name('entregas.entregasByMatricula');
 
 });

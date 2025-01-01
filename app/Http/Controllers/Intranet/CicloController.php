@@ -5,14 +5,8 @@ namespace App\Http\Controllers\Intranet;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Ciclos\StoreCicloRequest;
 use App\Http\Requests\Ciclos\UpdateCicloRequest;
-use App\Livewire\Ciclo\GrupoPrecio;
-use App\Models\Intranet\Area;
-use App\Models\Intranet\Banco;
-use App\Models\Intranet\Carrera;
 use App\Models\Intranet\Ciclo;
-use App\Models\Intranet\Docente;
-use App\Models\Intranet\FormaDePago;
-use App\Models\Intranet\Precio;
+use App\Models\Intranet\MaterialEntregable;
 use App\Models\Intranet\TiposCiclos;
 use Carbon\Carbon;
 use DateTime;
@@ -207,6 +201,14 @@ class CicloController extends Controller
                                         </a>
                                     </li>';
                                 }
+            
+            if ($user->can('entrega.crear')) {
+                $actionsDropdown .= '<li>
+                                        <a class="dropdown-item d-flex align-items-center gap-3" href="' . route('ciclos.entregas', $id) . '">
+                                            <i class="fs-4 ti ti-book-2"></i> Entrega de materiales
+                                        </a>
+                                    </li>';
+                                }
 
             $actionsDropdown .= '</ul>
                             </div>';
@@ -290,4 +292,12 @@ class CicloController extends Controller
     {
         return view("intranet.ciclos.asignar_asignaturas", compact('ciclo'));
     }
+    
+    public function entregas(Ciclo $ciclo)
+    {
+        $materiales_entregables = MaterialEntregable::all();
+        return view("intranet.ciclos.entregas", compact('ciclo', 'materiales_entregables'));
+    }
+
+    
 }

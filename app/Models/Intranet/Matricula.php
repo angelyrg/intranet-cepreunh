@@ -82,6 +82,10 @@ class Matricula extends Model
         return $this->hasMany(AulaMatricula::class, 'matricula_id');
     }
 
+    public function entregas(){
+        return $this->hasMany(Entrega::class, 'matricula_id');
+    }
+
     protected static function boot()
     {
         parent::boot();
