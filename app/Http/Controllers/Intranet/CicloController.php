@@ -153,7 +153,7 @@ class CicloController extends Controller
             $estado = $item->estado;
             $fecha_creacion = (new DateTime($item->created_at))->format('d/m/Y');
 
-            $acciones = "<div class='btnActionCarrera'>";
+            $acciones = "<div class='btnActionCarrera d-flex gap-1'>";
 
             // Verificar permiso para editar
             if ($user->can('ciclo.editar')) {
@@ -169,13 +169,6 @@ class CicloController extends Controller
                         </a>";
             }
 
-            // Verificar permiso para ver
-            if ($user->can('ciclo.detalles')) {
-                $acciones .= "<a class='btn btn-sm btn-outline-primary' href=" . route('ciclos.show', $id) . ">
-                            <i class='ti ti-eye'></i>                                        
-                        </a>";
-            }
-
             $acciones .= "</div>";
 
             if ($estado > 0) {
@@ -185,12 +178,42 @@ class CicloController extends Controller
             }
 
             if ($user->can('ciclo.detalles')) {
-                $cicloDetalleEnlace = "<a href=" . route('ciclos.show', $id) . ">$descripcion</a>";
+                $cicloDetalleEnlace = "<a href=" . route('ciclos.show', $id) . " class='text-decoration-underline fw-bold'>$descripcion</a>";
             } else {
                 $cicloDetalleEnlace = $descripcion;
             }
 
+            $actionsDropdown = '
+                                    <div class="dropdown dropstart">
+                                        <a href="#" class="text-muted" id="dropdownMenuButton" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                            <i class="ti ti-dots fs-5"></i>
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
+                                            
+
+            if ($user->can('ciclo.detalles')) {
+                $actionsDropdown .= '<li>
+                                        <a class="dropdown-item d-flex align-items-center gap-3" href="' . route('ciclos.show', $id) . '">
+                                            <i class="fs-4 ti ti-users"></i>Matriculados
+                                        </a>
+                                    </li>';
+            }
+            
+            if ($user->can('pagos.lista')) {
+                $actionsDropdown .= '<li>
+                                        <a class="dropdown-item d-flex align-items-center gap-3" href="' . route('ciclos.pagos', $id) . '">
+                                            <i class="fs-4 ti ti-coin"></i> Reporte pagos
+                                        </a>
+                                    </li>';
+                                }
+
+            $actionsDropdown .= '</ul>
+                            </div>';
+                                
+
             $html .= "<tr>
+                <td>$actionsDropdown</td>
                 <td>$acciones</td>
                 <td>$estado</td>
                 <td>$cicloDetalleEnlace</td>
@@ -231,6 +254,16 @@ class CicloController extends Controller
         }
     }
 
+    public function pagosReporte($id)
+    {
+        $ciclo = Ciclo::findOrFail($id);
+
+        $sedeId = Auth::check() && Auth::user()->can('sedes.ver_todas')
+            ? null
+            : Auth::user()->sede_id;
+
+        return view('intranet.ciclos.pagos', compact('ciclo', 'sedeId'));
+    }
 
     public function matricula($ciclo)
     {

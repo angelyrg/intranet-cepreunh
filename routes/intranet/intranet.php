@@ -51,6 +51,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('ciclos', CicloController::class)->except(['create','destroy'])->names('ciclos');
     Route::delete('ciclos/{ciclo}/eliminar', [CicloController::class, 'eliminar'])->name('ciclos.eliminar');
     Route::get('ciclos/{ciclo}/matricula', [CicloController::class, 'matricula'])->name('ciclos.matricula');
+    Route::get('ciclos/{ciclo}/pagos', [CicloController::class, 'pagosReporte'])->name('ciclos.pagos');
     Route::get('ciclos/{ciclo}/create_precios', [CicloController::class, 'create_precios'])->name('ciclos.create_precios');
     Route::get('ciclos/{ciclo}/asignar_carreras', [CicloController::class, 'asignar_carreras'])->name('ciclos.asignar_carreras');
     Route::get('ciclos/{ciclo}/asignar_asignaturas', [CicloController::class, 'asignar_asignaturas'])->name('ciclos.asignar_asignaturas');
