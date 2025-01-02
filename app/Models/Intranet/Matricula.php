@@ -86,6 +86,16 @@ class Matricula extends Model
         return $this->hasMany(Entrega::class, 'matricula_id');
     }
 
+    public function usuarioRegistro()
+    {
+        return $this->belongsTo(User::class, 'usuario_registro_id');
+    }
+
+    public function asistencias()
+    {
+        return $this->hasMany(AsistenciaEstudiante::class, 'matricula_id');
+    }
+
     protected static function boot()
     {
         parent::boot();
@@ -102,12 +112,28 @@ class Matricula extends Model
             $matricula->pagos->each(function ($pago) {
                 $pago->delete();
             });
+
+            $matricula->entregas->each(function ($entrega) {
+                $entrega->delete();
+            });
+
+            $matricula->asistencias->each(function ($asistencia) {
+                $asistencia->delete();
+            });
         });
 
         static::restoring(function ($matricula) {
             // Restaurar los pagos relacionados
             $matricula->pagos()->withTrashed()->each(function ($pago) {
                 $pago->restore();
+            });
+            
+            $matricula->entregas()->withTrashed()->each(function ($entrega) {
+                $entrega->restore();
+            });
+
+            $matricula->asistencias()->withTrashed()->each(function ($asistencia) {
+                $asistencia->restore();
             });
         });
     }
