@@ -102,12 +102,20 @@ class Matricula extends Model
             $matricula->pagos->each(function ($pago) {
                 $pago->delete();
             });
+
+            $matricula->entregas->each(function ($entrega) {
+                $entrega->delete();
+            });
         });
 
         static::restoring(function ($matricula) {
             // Restaurar los pagos relacionados
             $matricula->pagos()->withTrashed()->each(function ($pago) {
                 $pago->restore();
+            });
+            
+            $matricula->entregas()->withTrashed()->each(function ($entrega) {
+                $entrega->restore();
             });
         });
     }
