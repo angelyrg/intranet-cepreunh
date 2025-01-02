@@ -67,7 +67,7 @@ class PagoExport implements FromCollection, WithHeadings, WithMapping, ShouldAut
             $pago->matricula->carrera->descripcion ?? '',
             $pago->matricula->area->descripcion ?? '',
             $pago->matricula->sede->descripcion ?? '',
-            $pago->created_at->format('d/m/Y h:i:sA'),
+            $pago->created_at ? $pago->created_at->format('d/m/Y h:i:sA') : '',
         ];
     }
 }
