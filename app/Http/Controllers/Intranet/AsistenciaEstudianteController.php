@@ -108,6 +108,11 @@ class AsistenciaEstudianteController extends Controller
 
     public function reporte(Request $request)
     {
+        $sedeId = Auth::check() && Auth::user()->can('sedes.ver_todas')
+            ? null
+            : Auth::user()->sede_id;
+
+
         $ciclos = Ciclo::all();
         $estudiantes = Estudiante::all();
         
@@ -135,6 +140,6 @@ class AsistenciaEstudianteController extends Controller
         $asistencias = $query->get();
 
         // Retornar la vista con los datos
-        return view('intranet.asistencia_estudiante.reporte', compact('asistencias', 'ciclos', 'estudiantes'));
+        return view('intranet.asistencia_estudiante.reporte', compact('asistencias', 'ciclos', 'estudiantes', 'sedeId'));
     }
 }
