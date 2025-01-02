@@ -21,7 +21,7 @@ class EntregaController extends Controller
                 $query->whereNull('deleted_at')
                     ->where('ciclo_id', $ciclo_id)
                     ->orderBy('created_at', 'desc')
-                    ->with('entregas')->first();
+                    ->with('entregas', 'carrera', 'area')->first();
             }])->first();
 
             if (!$estudiante) {

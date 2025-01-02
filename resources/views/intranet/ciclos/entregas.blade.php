@@ -80,9 +80,11 @@
                                 <div id="error_message" class="alert alert-danger mb-0 d-none" role="alert"></div>
                                 <div id="success_message" class="alert alert-success mb-0 d-none" role="alert"></div>
                                 <div id="entrega_materiales_container" class="d-none">
-                                    <p class="mb-0">Nombres: <span id="nombre_estudiante"></span></p>
-                                    <p class="mb-0">Apellidos: <span id="apellidos_estudiante"></span></p>
-                                    <p class="mb-0">DNI: <span id="nro_documento_estudiante"></span></p>
+                                    <p class="mb-0"><strong>DNI:</strong> <span id="nro_documento_estudiante"></span></p>
+                                    <p class="mb-0"><strong>Nombres:</strong> <span id="nombre_estudiante"></span></p>
+                                    <p class="mb-0"><strong>Apellidos:</strong> <span id="apellidos_estudiante"></span></p>
+                                    <p class="mb-0"><strong>Área:</strong> <span id="matricula_area"></span></p>
+                                    <p class="mb-0"><strong>Carrera:</strong> <span id="matricula_carrera"></span></p>
 
                                     @can('entrega.crear')
                                     <form class="mt-3" id="form_entregar_material">
@@ -116,6 +118,7 @@
                             <tr>
                                 <th class="text-center">N°</th>
                                 <th>Material</th>
+                                <th>Estado</th>
                                 <th>Fecha de entrega</th>
                             </tr>
                         </thead>
@@ -167,6 +170,9 @@
                     $('#nombre_estudiante').text(estudiante.nombres);
                     $('#apellidos_estudiante').text(estudiante.apellido_materno + ' ' + estudiante.apellido_paterno);
                     $('#nro_documento_estudiante').text(estudiante.nro_documento);
+                    $('#matricula_area').text(estudiante.matriculas[0].area.descripcion);
+                    $('#matricula_carrera').text(estudiante.matriculas[0].carrera.descripcion);
+
                     $('#matricula_id').val(estudiante.matriculas[0].id);
                     $('#sede_id').val(estudiante.matriculas[0].sede_id);
                     $('#entrega_materiales_container').removeClass('d-none').addClass('d-block');
@@ -253,6 +259,7 @@
                             <tr>
                                 <td class="text-center">${index + 1}</td>
                                 <td>${entrega.material_entregable.descripcion}</td>
+                                <td>${ entrega.estado == 1 ? 'Entregado' : entrega.estado }</td>
                                 <td>${new Date(entrega.created_at).toLocaleString()}</td>
                             </tr>
                         `;
