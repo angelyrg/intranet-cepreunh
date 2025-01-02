@@ -59,6 +59,7 @@ class PagosTable extends DataTableComponent
             Column::make("MONTO NETO", "monto_neto")->sortable()->searchable(),
             Column::make('FECHA DE PAGO')->label(fn($record) => Carbon::parse($record['fecha_pago'])->format('d/m/Y h:i:sA')),
             Column::make("MODALIDAD DE PAGO", "forma_de_pago.descripcion")->sortable()->searchable(),
+            Column::make("CONDICIÓN DE PAGO", "condicion_pago")->sortable()->searchable(),
             Column::make("BANCO", "banco.descripcion")->sortable()->searchable(),
             Column::make("DNI", "matricula.estudiante.nro_documento")->sortable()->searchable(),
             Column::make("NOMBRES", "matricula.estudiante.nombres")->sortable()->searchable(),
@@ -100,6 +101,14 @@ class PagosTable extends DataTableComponent
                 ->filter(function (Builder $query, $value) {
                     if ($value) {
                         $query->where('forma_de_pago_id', $value);
+                    }
+                }),
+            
+            SelectFilter::make('Condición de pago', 'condicion_pago')
+                ->options(['' => 'Todos'] + array_combine(Pago::CONDICIONES_PAGO, array_map(fn($item) => $item, Pago::CONDICIONES_PAGO)))
+                ->filter(function (Builder $query, $value) {
+                    if ($value) {
+                        $query->where('condicion_pago', $value);
                     }
                 }),
             
