@@ -8,20 +8,14 @@
         <div class="card-body px-4 py-3">
             <div class="row align-items-center">
                 <div class="col-12">
-                    <h4 class="fw-semibold mb-8">Entrega de materiales</h4>
+                    <h4 class="fw-semibold mb-8">Registro de asistencia de estudiantes</h4>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
                                 <a class="text-muted text-decoration-none" href="{{ route('dashboard') }}">Home</a>
                             </li>
-                            <li class="breadcrumb-item">
-                                <a class="text-muted text-decoration-none" href="{{ route('ciclos.index') }}">Ciclos</a>
-                            </li>
-                            <li class="breadcrumb-item">
-                                <a class="text-muted text-decoration-none"
-                                    href="{{ route('ciclos.show', $ciclo->id) }}">{{ $ciclo->descripcion }}</a>
-                            </li>
-                            <li class="breadcrumb-item active" aria-current="page">Entregas</li>
+                            
+                            <li class="breadcrumb-item active" aria-current="page">Asistencia</li>
                         </ol>
                     </nav>
                 </div>
@@ -37,7 +31,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="card-title">{{ $ciclo->descripcion }} > Entregas</h5>
+                    <h5 class="card-title">Asistencia</h5>
                 </div>
             </div>
             <div class="card-body">
@@ -45,31 +39,31 @@
                     <div class="col-12 col-md-6">
                         <div class="card">
                             <div class="card-body">
-                                <div class="form-group">
-                                    <label for="material_entregable_id">Selecciona el material a entregar</label>
-                                    <select class="form-select" id="material_entregable_id">
-                                        @foreach ($materiales_entregables as $material)
-                                            <option value="{{ $material->id }}">{{ $material->descripcion }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                
-                                <form class="mt-3" id="form_search_estudiante">
-
-                                    <input type="hidden" id="ciclo_id" name="ciclo_id" value="{{ $ciclo->id }}">
-
-                                    <label>Buscar estudiante</label>
-                                    <div class="input-group mb-3">
-                                        <input type="text" class="form-control" id="dni_estudiante" name="dni_estudiante"
-                                            placeholder="Escribe el DNI"
-                                            autocomplete="off"
-                                            maxlength="8"
-                                            autofocus="true"
-                                            oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-                                        <button class="btn bg-info-subtle text-info font-medium" type="submit" id="btn_buscar_estudiante">
-                                            <i class="ti ti-search"></i>
-                                        </button>
+                                
+                                <form class="mt-3" id="form_marcar_asistencia">
+                                    <div class="form-group">
+                                        <label for="ciclo_id">Seleccione ciclo académico</label>
+                                        <select class="form-select" id="ciclo_id">
+                                            @foreach ($ciclos as $ciclo)
+                                            <option value="{{ $ciclo->id }}">{{ $ciclo->descripcion }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
+
+
+                                    <div class="mt-4">
+                                        <label>Escribe el DNI para marcar la asistencia</label>
+                                        <div class="input-group mb-3">
+                                            <input type="text" class="form-control form-control-lg" id="dni_estudiante"
+                                                name="dni_estudiante" placeholder="Escribe el DNI" autocomplete="off"
+                                                maxlength="8" autofocus="true"
+                                                oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                            <button class="btn btn-primary bg-primary-subtle text-primary font-medium" type="submit" id="btn_send_form">
+                                                <i class="ti ti-send-2"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
                                 </form>
                             </div>
                         </div>
@@ -77,24 +71,27 @@
                     <div class="col-12 col-md-6">
                         <div class="card">
                             <div class="card-body">
+                                <div class="spinner-grow d-none" role="status" id="loading_spinner">
+                                    <span class="visually-hidden">Cargando...</span>
+                                </div>
                                 <div id="error_message" class="alert alert-danger mb-0 d-none" role="alert"></div>
                                 <div id="success_message" class="alert alert-success mb-0 d-none" role="alert"></div>
-                                <div id="entrega_materiales_container" class="d-none">
+
+                                <div class="alert alert-success mt-2 d-none" id="asistencia_detail">
+
+                                    <h5 class="text-center">
+                                        <span>Entrada:</span>
+                                        <br>
+                                        <strong id="fecha_entrada"></strong>
+                                    </h5>
+
                                     <p class="mb-0"><strong>DNI:</strong> <span id="nro_documento_estudiante"></span></p>
                                     <p class="mb-0"><strong>Nombres:</strong> <span id="nombre_estudiante"></span></p>
                                     <p class="mb-0"><strong>Apellidos:</strong> <span id="apellidos_estudiante"></span></p>
                                     <p class="mb-0"><strong>Área:</strong> <span id="matricula_area"></span></p>
                                     <p class="mb-0"><strong>Carrera:</strong> <span id="matricula_carrera"></span></p>
-
-                                    @can('entrega.crear')
-                                    <form class="mt-3" id="form_entregar_material">
-                                        <input type="hidden" name="matricula_id" id="matricula_id" value="">
-                                        <input type="hidden" name="sede_id" id="sede_id" value="">
-                                        <button class="btn btn-primary" type="submit" id="btn_entregar_material">Entregar material</button>
-                                    </form>
-                                    @endcan
-
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -102,34 +99,8 @@
             </div>
         </div>
     </div>
-
-    @can('entregas.lista')
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header py-1">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h6 class="card-title">Materiales entregados al estudiante</h6>
-                </div>
-            </div>
-            <div class="card-body p-2">
-                <div class="table-responsive">
-                    <table class="table table-sm table-hover table-striped" id="tblEntregas">
-                        <thead>
-                            <tr>
-                                <th class="text-center">N°</th>
-                                <th>Material</th>
-                                <th>Estado</th>
-                                <th>Fecha de entrega</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tblEntregasBody"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    @endcan
 </div>
+
 {{-- content|end --}}
 
 @endsection
@@ -143,47 +114,81 @@
             }
         });
 
+        const formAsistencia = $("#form_marcar_asistencia");
+        const dniInput = $("#dni_estudiante");
+
+        // Agrega un evento para detectar cuando se escriban 8 dígitos
+        dniInput.on("input", function () {
+            if (this.value.length === 8) {
+                formAsistencia.submit();
+            }
+        });
+
         //Buscar estudiante
-        $('#form_search_estudiante').on('submit', function(e) {
+       formAsistencia.on('submit', function(e) {
             e.preventDefault();
+
+            $('#loading_spinner').removeClass('d-none').addClass('d-block');
+            $('#asistencia_detail').removeClass('d-block').addClass('d-none');
+            $('#btn_send_form').prop('disabled', true);
 
             const ciclo_id = $('#ciclo_id').val();
             const dni = $('#dni_estudiante').val();
-            const material_id = $('#material_entregable_id').val();           
 
+            console.log(ciclo_id, dni);
+  
+            
             $.ajax({
-                url: '/entregas/buscar_matricula/' + dni + '/' + ciclo_id,
-                type: 'GET',
+                url: '/asistencia/store',
+                type: 'POST',
+                data: {
+                    dni_estudiante: dni,
+                    ciclo_id: ciclo_id,
+                },
                 dataType: 'json',
-                beforeSend: function() {
-                    $('#nombre_estudiante').text('');
-                    $('#apellidos_estudiante').text('');
-                    $('#nro_documento_estudiante').text('');
-                    $('#btn_buscar_estudiante').html('<i class="ti ti-loader"></i>');
-                    $('#entrega_materiales_container').removeClass('d-block').addClass('d-none');
+                beforeSend: function() {                    
                     $('#error_message').removeClass('d-block').addClass('d-none').text('');
-                    $('#tblEntregasBody').empty();
+                    $('#success_message').removeClass('d-block').addClass('d-none').text('');
                 },
                 success: function(response) {
-                    const estudiante = response.estudiante;
+                    const fecha_entrada = new Date(response.asistencia.entrada);
+                    const fecha_entrada_formatted = fecha_entrada.toLocaleString('es-PE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit',
+                    minute: '2-digit' });
 
-                    $('#nombre_estudiante').text(estudiante.nombres);
-                    $('#apellidos_estudiante').text(estudiante.apellido_materno + ' ' + estudiante.apellido_paterno);
-                    $('#nro_documento_estudiante').text(estudiante.nro_documento);
-                    $('#matricula_area').text(estudiante.matriculas[0].area.descripcion);
-                    $('#matricula_carrera').text(estudiante.matriculas[0].carrera.descripcion);
+                    $('#success_message').removeClass('d-none').addClass('d-block').text(response.message ?? 'Asistencia registrada correctamente');
 
-                    $('#matricula_id').val(estudiante.matriculas[0].id);
-                    $('#sede_id').val(estudiante.matriculas[0].sede_id);
-                    $('#entrega_materiales_container').removeClass('d-none').addClass('d-block');
+                    $('#asistencia_detail').removeClass('d-none').addClass('d-block');
+                    
+                    $('#fecha_entrada').text(fecha_entrada_formatted);
 
-                    getEntregasByMatricula(estudiante.matriculas[0].id)
+                    $('#nro_documento_estudiante').text(response.estudiante.nro_documento);
+                    $('#nombre_estudiante').text(response.estudiante.nombres);
+                    $('#apellidos_estudiante').text(response.estudiante.apellido_paterno + ' ' + response.estudiante.apellido_materno);
+                    $('#matricula_area').text(response.matricula.area.descripcion);
+                    $('#matricula_carrera').text(response.matricula.carrera.descripcion);
                 },
                 error: function(xhr) {
-                    $('#error_message').removeClass('d-none').addClass('d-block').text(xhr.responseJSON.error);
+                    console.error(xhr);
+                    
+                    // Limpiar cualquier mensaje de error previo
+                    $('#error_message').removeClass('d-none').addClass('d-block').empty();
+
+                    // Mostrar el error general, si hay
+                    if (xhr.responseJSON.error) {
+                        $('#error_message').append('<p>' + xhr.responseJSON.error + '</p>');
+                    }
+
+                    // Verificar si hay errores específicos de validación
+                    const errors = xhr.responseJSON.errors;
+                    if (errors) {
+                        for (let field in errors) {
+                            $('#error_message').append('<p class="mb-0">' + errors[field].join(", ") + '</p>');
+                        }
+                    }
                 },
                 complete: function() {
-                    $('#btn_buscar_estudiante').html('<i class="ti ti-search"></i>');
+                    $('#loading_spinner').removeClass('d-block').addClass('d-none');
+                    $('#btn_send_form').prop('disabled', false);
                 }
             });
             

@@ -5,6 +5,7 @@ use App\Http\Controllers\Intranet\CarreraController;
 use App\Http\Controllers\Intranet\AreaController;
 use App\Http\Controllers\Intranet\AsignaturaCicloController;
 use App\Http\Controllers\Intranet\AsignaturaController;
+use App\Http\Controllers\Intranet\AsistenciaEstudianteController;
 use App\Http\Controllers\Intranet\AulaController;
 use App\Http\Controllers\Intranet\CarreraCicloController;
 use App\Http\Controllers\Intranet\CicloController;
@@ -15,11 +16,7 @@ use App\Http\Controllers\Intranet\MatriculaController;
 use App\Http\Controllers\Intranet\PermissionController;
 use App\Http\Controllers\Intranet\PrecioController;
 use App\Http\Controllers\Intranet\SedeController;
-use App\Models\Intranet\AsignaturaCiclo;
 use App\Models\Intranet\Carrera;
-use App\Models\Intranet\CarreraCiclo;
-use App\Models\Intranet\FormaDePago;
-use Spatie\Permission\Contracts\Permission;
 
 // Rutas protegidas con autenticación y confirmación de correo verificado
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -96,5 +93,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('entregas/buscar_matricula/{dni}/{ciclo_id}', [EntregaController::class, 'buscar_matricula'])->name('entregas.buscar_matricula');
     Route::post('entregas/store', [EntregaController::class, 'store'])->name('entregas.store');
     Route::get('entregas/byMatricula/{matricula_id}', [EntregaController::class, 'getEntregasByMatricula'])->name('entregas.entregasByMatricula');
+
+    
+    Route::get('asistencia/marcar', [AsistenciaEstudianteController::class, 'index'])->name('asistencia_estudiante.index');
+    Route::post('asistencia/store', [AsistenciaEstudianteController::class, 'store'])->name('asistencia_estudiante.store');
+    Route::get('asistencia/reporte', [AsistenciaEstudianteController::class, 'reporte'])->name('asistencia_estudiante.reporte');
+
 
 });
