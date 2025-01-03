@@ -73,15 +73,31 @@
                                     </div>
 
                                     <div class="mt-4">
-                                        <label class="mb-1">Escribe el DNI del estudiante para marcar su asistencia</label>
-                                        <div class="input-group mb-3">
-                                            <input type="text" class="form-control form-control-lg" id="dni_estudiante"
-                                                name="dni_estudiante" placeholder="Escribe el DNI" autocomplete="off"
-                                                maxlength="8" autofocus="true"
-                                                oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-                                            <button class="btn btn-primary bg-primary-subtle text-primary font-medium" type="submit" id="btn_send_form">
-                                                <i class="ti ti-send-2"></i>
-                                            </button>
+                                        <div id="input_dni_message" class="alert alert-warning d-none" role="alert">
+                                            <p>
+                                                No se pueden registrar asistencias fuera del horario establecido
+                                            </p>
+                                            <div>
+                                                <p class="mb-0">
+                                                    <span>Horario para PRESENTE:</span>
+                                                    <span id="horario_presente"></span>
+                                                </p>
+                                                <p class="mb-0">
+                                                    <span>Horario para TARDE:</span>
+                                                    <span id="horario_tarde"></span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div id="input_dni_estudiante" class="d-none">
+                                            <label class="mb-1">Escribe el DNI del estudiante para marcar su asistencia</label>
+                                            <div class="input-group mb-3">
+                                                <input type="text" class="form-control form-control-lg" id="dni_estudiante" name="dni_estudiante"
+                                                    placeholder="Escribe el DNI" autocomplete="off" maxlength="8" autofocus="true"
+                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                                <button class="btn btn-primary bg-primary-subtle text-primary font-medium" type="submit" id="btn_send_form">
+                                                    <i class="ti ti-send-2"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -131,6 +147,19 @@
 @section('scripts')
 <script>
     $(document).ready(function() {
+        let ESTADO_MARCACION = 0;
+        let habilitarInputPresenteDesde_seconds = null;
+        let habilitarInputPresenteHasta_seconds = null;
+        let habilitarInputTardeDesde_seconds = null;
+        let habilitarInputTardeHasta_seconds = null;
+        
+        let habilitarInputPresenteDesde_time = '';
+        let habilitarInputPresenteHasta_time = '';
+        let habilitarInputTardeDesde_time = '';
+        let habilitarInputTardeHasta_time = '';
+
+        obtenerHorarioDelCiclo();
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -225,33 +254,144 @@
             
         });
 
+        // Obtener Horario según el ciclo
+        $('#ciclo_id').on('change', function() {
+            $('#input_dni_message').removeClass('d-block').addClass('d-none');
+            $('#input_dni_estudiante').removeClass('d-block').addClass('d-none');
+            
+            resetearValores();
+            obtenerHorarioDelCiclo();
+        });
+
+        function resetearValores(){
+            ESTADO_MARCACION = 0;
+            habilitarInputPresenteDesde_seconds = null;
+            habilitarInputPresenteHasta_seconds = null;
+            habilitarInputTardeDesde_seconds = null;
+            habilitarInputTardeHasta_seconds = null;
+
+            habilitarInputPresenteDesde_time = null;
+            habilitarInputPresenteHasta_time = null;
+            habilitarInputTardeDesde_time = null;
+            habilitarInputTardeHasta_time = null;
+        }
+
+        function obtenerHorarioDelCiclo(){
+            const ciclo_id = $('#ciclo_id').val();
+
+            resetearValores();
+            
+            $('#error_message').removeClass('d-block').addClass('d-none').text('');
+            $('#success_message').removeClass('d-block').addClass('d-none').text('');
+            
+            $.ajax({
+                url: '/ciclos/' + ciclo_id + '/horario',
+                type: 'GET',
+                dataType: 'json',
+                
+                success: function(response) {
+                    const horario = response.horario_de_estudiantes;
+
+                    habilitarInputPresenteDesde_time = horario.presente_inicio;
+                    habilitarInputPresenteHasta_time = horario.presente_fin;
+                    habilitarInputTardeDesde_time = horario.tarde_inicio;
+                    habilitarInputTardeHasta_time = horario.tarde_fin;
+                    
+                    // Convertir los horarios de presente y tarde a segundos desde medianoche
+                    const presenteInicio = convertToSeconds(horario.presente_inicio);
+                    const presenteFin = convertToSeconds(horario.presente_fin);
+                    const tardeInicio = convertToSeconds(horario.tarde_inicio);
+                    const tardeFin = convertToSeconds(horario.tarde_fin);
+
+                    habilitarInputPresenteDesde_seconds = presenteInicio;
+                    habilitarInputPresenteHasta_seconds = presenteFin;
+                    habilitarInputTardeDesde_seconds = tardeInicio;
+                    habilitarInputTardeHasta_seconds = tardeFin;
+                },
+                error: function(xhr) {
+                    $('#error_message').removeClass('d-none').addClass('d-block').text(xhr.responseJSON.error);
+                },
+            });
+        }
+
+        function verificarDisponibilidadParaMarcar(){
+            const now = new Date();
+            const currentTime = now.getHours() * 60 * 60 + now.getMinutes() * 60 + now.getSeconds();
+
+            if (currentTime >= habilitarInputPresenteDesde_seconds && currentTime <= habilitarInputPresenteHasta_seconds) {
+                ESTADO_MARCACION = 1;
+            } else if (currentTime >= habilitarInputTardeDesde_seconds && currentTime <= habilitarInputTardeHasta_seconds) {
+                ESTADO_MARCACION = 2;
+            } else {
+                ESTADO_MARCACION = 0;
+            }
+        }
+
+        function actualizarEstadoDeMarcacion() {
+            verificarDisponibilidadParaMarcar();
+            habilitarInput();
+        }
+
+        function habilitarInput() {
+            if (ESTADO_MARCACION === 1 || ESTADO_MARCACION === 2) {
+                $('#input_dni_message').removeClass('d-block').addClass('d-none');
+                $('#input_dni_estudiante').removeClass('d-none').addClass('d-block');
+                
+            } else {
+                $('#input_dni_message').removeClass('d-none').addClass('d-block');
+                $('#input_dni_estudiante').removeClass('d-block').addClass('d-none');
+
+                $('#horario_presente').text(habilitarInputPresenteDesde_time + ' - ' + habilitarInputPresenteHasta_time);
+                $('#horario_tarde').text( habilitarInputTardeDesde_time + ' - ' + habilitarInputTardeHasta_time);
+            }
+        }
+
+
+        function convertToSeconds(time) {
+            let parts = time.split(':');
+            let hoursInSeconds = parseInt(parts[0]) * 3600; // Convertir horas a segundos
+            let minutesInSeconds = parseInt(parts[1]) * 60; // Convertir minutos a segundos
+            let seconds = parseInt(parts[2]); // Segundos
+            return hoursInSeconds + minutesInSeconds + seconds;
+        }
+        
+        
+        // RELOJ
+        function actualizarReloj() {
+            const ahora = new Date();
+            let horas = ahora.getHours();
+            const minutos = String(ahora.getMinutes()).padStart(2, '0');
+            const segundos = String(ahora.getSeconds()).padStart(2, '0');
+            let ampm = "AM";
+            
+            // Convertir la hora a formato de 12 horas
+            if (horas >= 12) {
+                ampm = "PM";
+            }
+            horas = horas % 12;
+            horas = horas ? horas : 12; // La hora 0 debe ser 12
+        
+            // Mostrar la hora en formato 12 horas (hh:mm:ss AM/PM)
+            document.getElementById('reloj').innerHTML = `${horas}:${minutos}:${segundos} <span class="ampm">${ampm}</span>`;
+
+            actualizarEstadoDeMarcacion();
+            
+            if (ESTADO_MARCACION === 1) {
+                document.getElementById('reloj').style.border = "3px solid rgb(8, 176, 50)";
+            } else if (ESTADO_MARCACION === 2) {
+                document.getElementById('reloj').style.border = "3px solid rgb(255, 98, 0)";
+            }else{
+                document.getElementById('reloj').style.border = 'none';
+            }
+
+        }
+    
+        // Llamar a la función cada segundo (1000 ms)
+        setInterval(actualizarReloj, 1000);
+    
+        // Ejecutar la función inmediatamente al cargar la página
+        actualizarReloj();
     });
 
-</script>
-
-<script>
-    function actualizarReloj() {
-      const ahora = new Date();
-      let horas = ahora.getHours();
-      const minutos = String(ahora.getMinutes()).padStart(2, '0');
-      const segundos = String(ahora.getSeconds()).padStart(2, '0');
-      let ampm = "AM";
-      
-      // Convertir la hora a formato de 12 horas
-      if (horas >= 12) {
-        ampm = "PM";
-      }
-      horas = horas % 12;
-      horas = horas ? horas : 12; // La hora 0 debe ser 12
-
-      // Mostrar la hora en formato 12 horas (hh:mm:ss AM/PM)
-      document.getElementById('reloj').innerHTML = `${horas}:${minutos}:${segundos} <span class="ampm">${ampm}</span>`;
-    }
-
-    // Llamar a la función cada segundo (1000 ms)
-    setInterval(actualizarReloj, 1000);
-
-    // Ejecutar la función inmediatamente al cargar la página
-    actualizarReloj();
 </script>
 @endsection
