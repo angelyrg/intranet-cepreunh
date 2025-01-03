@@ -95,7 +95,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('entregas/byMatricula/{matricula_id}', [EntregaController::class, 'getEntregasByMatricula'])->name('entregas.entregasByMatricula');
 
     
-    Route::get('asistencia/marcar', [AsistenciaEstudianteController::class, 'index'])->name('asistencia_estudiante.index');
+    Route::get('asistencia/marcar', [AsistenciaEstudianteController::class, 'registro'])->name('asistencia_estudiante.index');
     Route::post('asistencia/store', [AsistenciaEstudianteController::class, 'store'])->name('asistencia_estudiante.store');
     Route::get('asistencia/reporte', [AsistenciaEstudianteController::class, 'reporte'])->name('asistencia_estudiante.reporte');
 

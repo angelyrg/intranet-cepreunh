@@ -1,5 +1,27 @@
 @extends('intranet.layouts.app')
 
+
+@section('css')
+    <style>    
+        #reloj {
+            font-size: 3rem;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 15px;
+            background-color: #34495e;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 320px;
+            margin: 0 auto;
+        }
+    
+        .ampm {
+            font-size: 1.2rem;
+            color: #f39c12;
+        }
+    </style>
+@endsection
+
 @section('content')
 
 {{-- Breadcrumb|start --}}
@@ -7,17 +29,21 @@
     <div class="card bg-info-subtle shadow-none position-relative overflow-hidden mb-4">
         <div class="card-body px-4 py-3">
             <div class="row align-items-center">
-                <div class="col-12">
+                <div class="col-12 col-md-6">
                     <h4 class="fw-semibold mb-8">Registro de asistencia de estudiantes</h4>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
                                 <a class="text-muted text-decoration-none" href="{{ route('dashboard') }}">Home</a>
                             </li>
-                            
                             <li class="breadcrumb-item active" aria-current="page">Asistencia</li>
                         </ol>
                     </nav>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="text-end">
+                        <div id="reloj"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -29,20 +55,16 @@
 <div class="row">
     <div class="col-12">
         <div class="card">
-            <div class="card-header">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="card-title">Asistencia</h5>
-                </div>
-            </div>
+            @can('asistencia.crear')
             <div class="card-body">
                 <div class="row">
                     <div class="col-12 col-md-6">
-                        <div class="card">
+
+                        <div class="card mt-2">
                             <div class="card-body">
-                                
-                                <form class="mt-3" id="form_marcar_asistencia">
+                                <form id="form_marcar_asistencia">
                                     <div class="form-group">
-                                        <label for="ciclo_id">Seleccione ciclo académico</label>
+                                        <label class="mb-1" for="ciclo_id">Seleccione ciclo académico</label>
                                         <select class="form-select" id="ciclo_id">
                                             @foreach ($ciclos as $ciclo)
                                             <option value="{{ $ciclo->id }}">{{ $ciclo->descripcion }}</option>
@@ -50,9 +72,8 @@
                                         </select>
                                     </div>
 
-
                                     <div class="mt-4">
-                                        <label>Escribe el DNI para marcar la asistencia</label>
+                                        <label class="mb-1">Escribe el DNI del estudiante para marcar su asistencia</label>
                                         <div class="input-group mb-3">
                                             <input type="text" class="form-control form-control-lg" id="dni_estudiante"
                                                 name="dni_estudiante" placeholder="Escribe el DNI" autocomplete="off"
@@ -71,16 +92,17 @@
                     <div class="col-12 col-md-6">
                         <div class="card">
                             <div class="card-body">
+
                                 <div class="spinner-grow d-none" role="status" id="loading_spinner">
                                     <span class="visually-hidden">Cargando...</span>
                                 </div>
                                 <div id="error_message" class="alert alert-danger mb-0 d-none" role="alert"></div>
                                 <div id="success_message" class="alert alert-success mb-0 d-none" role="alert"></div>
 
-                                <div class="alert alert-success mt-2 d-none" id="asistencia_detail">
+                                <div class="alert alert-info mt-2 d-none" id="asistencia_detail">
 
                                     <h5 class="text-center">
-                                        <span>Entrada:</span>
+                                        <strong id="asistencia_estado"></strong>
                                         <br>
                                         <strong id="fecha_entrada"></strong>
                                     </h5>
@@ -97,6 +119,7 @@
                     </div>
                 </div>
             </div>
+            @endcan
         </div>
     </div>
 </div>
@@ -125,7 +148,7 @@
         });
 
         //Buscar estudiante
-       formAsistencia.on('submit', function(e) {
+        formAsistencia.on('submit', function(e) {
             e.preventDefault();
 
             $('#loading_spinner').removeClass('d-none').addClass('d-block');
@@ -135,9 +158,6 @@
             const ciclo_id = $('#ciclo_id').val();
             const dni = $('#dni_estudiante').val();
 
-            console.log(ciclo_id, dni);
-  
-            
             $.ajax({
                 url: '/asistencia/store',
                 type: 'POST',
@@ -153,7 +173,7 @@
                 success: function(response) {
                     const fecha_entrada = new Date(response.asistencia.entrada);
                     const fecha_entrada_formatted = fecha_entrada.toLocaleString('es-PE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit',
-                    minute: '2-digit' });
+                    minute: '2-digit', second: '2-digit' });
 
                     $('#success_message').removeClass('d-none').addClass('d-block').text(response.message ?? 'Asistencia registrada correctamente');
 
@@ -166,6 +186,16 @@
                     $('#apellidos_estudiante').text(response.estudiante.apellido_paterno + ' ' + response.estudiante.apellido_materno);
                     $('#matricula_area').text(response.matricula.area.descripcion);
                     $('#matricula_carrera').text(response.matricula.carrera.descripcion);
+
+                    if (response.asistencia.estado === 1) {
+                        $('#asistencia_estado').text('PRESENTE');
+                    } else if (response.asistencia.estado === 2) {
+                        $('#asistencia_estado').text('TARDE');
+                    } else if (response.asistencia.estado === 3) {
+                        $('#asistencia_estado').text('FALTA (fuera de horario)');
+                    }else {
+                        $('#asistencia_estado').text('Error');
+                    }
                 },
                 error: function(xhr) {
                     console.error(xhr);
@@ -189,91 +219,39 @@
                 complete: function() {
                     $('#loading_spinner').removeClass('d-block').addClass('d-none');
                     $('#btn_send_form').prop('disabled', false);
+                    $('#dni_estudiante')[0].select();
                 }
             });
             
         });
 
-
-        //Entregar material
-        $('#form_entregar_material').on('submit', function(e) {
-            e.preventDefault();
-
-            const matricula_id = $('#matricula_id').val();
-            const material_entregable_id = $('#material_entregable_id').val();
-            const sede_id = $('#sede_id').val();
-            const ciclo_id = $('#ciclo_id').val();
-
-            $.ajax({
-                url: '/entregas/store',
-                type: 'POST',
-                data: {
-                    material_entregable_id: material_entregable_id,
-                    matricula_id: matricula_id,
-                    ciclo_id: ciclo_id,
-                    sede_id: sede_id,
-                },
-                dataType: 'json',
-                beforeSend: function() {                    
-                    $('#btn_entregar_material').html('<i class="ti ti-loader ti-spin"></i> Enviando...').prop('disabled', true);
-                    $('#error_message').removeClass('d-block').addClass('d-none').text('');
-                    $('#success_message').removeClass('d-block').addClass('d-none').text('');
-                },
-                success: function(response) {
-                    getEntregasByMatricula(matricula_id);
-                    $('#success_message').removeClass('d-none').addClass('d-block').text('Material entregado correctamente');
-                },
-                error: function(xhr) {
-                    // Limpiar cualquier mensaje de error previo
-                    $('#error_message').removeClass('d-none').addClass('d-block').empty();
-
-                    // Mostrar el error general, si hay
-                    if (xhr.responseJSON.error) {
-                        $('#error_message').append('<p>' + xhr.responseJSON.error + '</p>');
-                    }
-
-                    // Verificar si hay errores específicos de validación
-                    const errors = xhr.responseJSON.errors;
-                    if (errors) {
-                        for (let field in errors) {
-                            $('#error_message').append('<p class="mb-0">' + errors[field].join(", ") + '</p>');
-                        }
-                    }
-                },
-                complete: function() {
-                    $('#btn_entregar_material').html('Entregar Material').prop('disabled', false);
-                }
-
-            });
-        });
-
-        //Get by Matricula
-        function getEntregasByMatricula(matricula_id){
-            $.ajax({
-                url: '/entregas/byMatricula/' + matricula_id,
-                type: 'GET',
-                dataType: 'json',
-                beforeSend: function() {
-                    $('#tblEntregasBody').empty();
-                },
-                success: function(response) {                    
-                    const entregas = response.entregas;
-                    let html = '';
-                    entregas.forEach((entrega, index) => {
-                        html += `
-                            <tr>
-                                <td class="text-center">${index + 1}</td>
-                                <td>${entrega.material_entregable.descripcion}</td>
-                                <td>${ entrega.estado == 1 ? 'Entregado' : entrega.estado }</td>
-                                <td>${new Date(entrega.created_at).toLocaleString()}</td>
-                            </tr>
-                        `;
-                    });                    
-                    $('#tblEntregasBody').html(html);
-                }
-            });
-        }
     });
 
+</script>
+
+<script>
+    function actualizarReloj() {
+      const ahora = new Date();
+      let horas = ahora.getHours();
+      const minutos = String(ahora.getMinutes()).padStart(2, '0');
+      const segundos = String(ahora.getSeconds()).padStart(2, '0');
+      let ampm = "AM";
+      
+      // Convertir la hora a formato de 12 horas
+      if (horas >= 12) {
+        ampm = "PM";
+      }
+      horas = horas % 12;
+      horas = horas ? horas : 12; // La hora 0 debe ser 12
+
+      // Mostrar la hora en formato 12 horas (hh:mm:ss AM/PM)
+      document.getElementById('reloj').innerHTML = `${horas}:${minutos}:${segundos} <span class="ampm">${ampm}</span>`;
+    }
+
+    // Llamar a la función cada segundo (1000 ms)
+    setInterval(actualizarReloj, 1000);
+
+    // Ejecutar la función inmediatamente al cargar la página
+    actualizarReloj();
 </script>
 @endsection
