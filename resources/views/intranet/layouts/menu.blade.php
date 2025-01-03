@@ -57,6 +57,8 @@
       </li>
       @endcan
       
+      @if (auth()->user()->can('ver menu administracion'))
+          
       <li class="nav-small-cap">
         <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
         <span class="hide-menu">ADMINISTRACIÓN</span>
@@ -117,6 +119,12 @@
       </li>
       @endcan
 
+      @endif
+
+
+
+      @if (auth()->user()->can('ver menu gestion academica'))
+          
       <li class="nav-small-cap">
           <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
         <span class="hide-menu">GESTIÓN ACADÉMICA</span>
@@ -166,7 +174,11 @@
       </li>
       @endcan
 
-      @can('asistencias.lista')
+      @php
+        $tienePermisoAsitencia = auth()->user()->can('asistencias.lista') || auth()->user()->can('asistencia.crear');
+      @endphp
+
+      @if ($tienePermisoAsitencia)
       <li class="sidebar-item">
         <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
           <span class="d-flex">
@@ -175,6 +187,8 @@
           <span class="hide-menu">Asistencias</span>
         </a>
         <ul aria-expanded="false" class="collapse first-level">
+      
+          @can('asistencia.crear')
           <li class="sidebar-item">
             <a href="{{ route('asistencia_estudiante.index') }}" class="sidebar-link">
               <div class="round-16 d-flex align-items-center justify-content-center">
@@ -183,6 +197,9 @@
               <span class="hide-menu">Marcar</span>
             </a>
           </li>
+          @endcan
+      
+          @can('asistencias.lista')
           <li class="sidebar-item">
             <a href="{{ route('asistencia_estudiante.reporte') }}" class="sidebar-link">
               <div class="round-16 d-flex align-items-center justify-content-center">
@@ -191,9 +208,11 @@
               <span class="hide-menu">Reporte</span>
             </a>
           </li>
+          @endcan
+      
         </ul>
       </li>
-      @endcan
+      @endif
 
       @can('evaluaciones.lista')
       <li class="sidebar-item">
@@ -216,6 +235,12 @@
         </a>
       </li>
       @endcan
+
+      @endif
+
+
+
+
 
       @can('cms.configuracion')
       <li class="nav-small-cap">

@@ -17,10 +17,10 @@ use Illuminate\Http\Request;
 class AsistenciaEstudianteController extends Controller
 {
 
-    public function index()
+    public function registro()
     {
         $ciclos = Ciclo::all();
-        return view('intranet.asistencia_estudiante.index', compact('ciclos'));
+        return view('intranet.asistencia_estudiante.registro', compact('ciclos'));
     }
 
 
