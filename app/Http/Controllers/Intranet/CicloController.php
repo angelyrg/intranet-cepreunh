@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Ciclos\StoreCicloRequest;
 use App\Http\Requests\Ciclos\UpdateCicloRequest;
 use App\Models\Intranet\Ciclo;
+use App\Models\Intranet\HorarioEstudiante;
 use App\Models\Intranet\MaterialEntregable;
 use App\Models\Intranet\TiposCiclos;
 use Carbon\Carbon;
@@ -299,5 +300,29 @@ class CicloController extends Controller
         return view("intranet.ciclos.entregas", compact('ciclo', 'materiales_entregables'));
     }
 
-    
+    /**
+     * @param  int  $ciclo
+     * @param  int  $sede
+     * @return \Illuminate\Http\JsonResponse
+     */    
+    public function horario($ciclo)
+    {
+        $sede = Auth::user()->sede_id;
+
+        $horario_de_estudiantes = HorarioEstudiante::where('ciclo_id', $ciclo)
+            ->where('sede_id', $sede)
+            ->first();
+
+        if (!$horario_de_estudiantes) {
+            return response()->json([
+                'error' => 'No se encontró el horario para este ciclo y sede. Por favor comuníquese con el administrador del sistema.',
+            ], 404);
+        }
+
+        return response()->json([
+            'message' => 'Horario encontrado.',
+            'horario_de_estudiantes' => $horario_de_estudiantes,
+        ], 200);
+
+    }
 }

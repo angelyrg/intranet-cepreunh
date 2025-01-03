@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Estudiante;
 
+use App\Exports\AsistenciaEstudianteExport;
 use App\Models\Intranet\Area;
 use App\Models\Intranet\Ciclo;
 use Illuminate\Database\Eloquent\Builder;
@@ -67,7 +68,7 @@ class ReporteAsistenciaTable extends DataTableComponent
                 ->sortable()
                 ->searchable()
                 ->format(function ($value) {
-                    return $value == 1 ? 'Presente' : ($value == 2 ? 'Tarde' : 'Falta');
+                    return $value == 1 ? 'PRESENTE' : ($value == 2 ? 'TARDE' : 'FALTA');
                 }),
             Column::make("DNI", "estudiante.nro_documento")->sortable()->searchable(),
             Column::make("Nombres", "estudiante.nombres")->sortable()->searchable(),
@@ -78,6 +79,7 @@ class ReporteAsistenciaTable extends DataTableComponent
             Column::make("Tel. Personal", "estudiante.telefono_personal")->sortable()->searchable(),
             Column::make("Whatsapp", "estudiante.whatsapp")->sortable()->searchable(),
             Column::make("Tel. Apoderado", "estudiante.apoderado.telefono_apoderado")->sortable()->searchable(),
+            Column::make("Tutor registro", "usuarioRegistro.name")->sortable()->searchable(),
         ];
     }
 
@@ -98,6 +100,20 @@ class ReporteAsistenciaTable extends DataTableComponent
                             ->whereDate('asistencias_estudiantes.created_at', '<=', $dateRange['maxDate']);
                     }
                 }),
+
+            SelectFilter::make('Estado', 'estado')
+                ->options([
+                    '' => 'Todos',
+                    1 => 'PRESENTE',
+                    2 => 'TARDE',
+                    3 => 'FALTA',
+                ])
+                ->filter(function (Builder $query, $value) {
+                    if ($value) {
+                        $query->where('asistencias_estudiantes.estado', $value);
+                    }
+                }),
+
             SelectFilter::make('Sede', 'sede_id')
                 ->options(['' => 'Todos'] + $this->sedespemitidosFiltro)
                 ->filter(function (Builder $query, $value) {
@@ -122,26 +138,26 @@ class ReporteAsistenciaTable extends DataTableComponent
     }
 
 
-    // public function bulkActions(): array
-    // {
-    //     return [
-    //         'export' => 'Export',
-    //     ];
-    // }
+    public function bulkActions(): array
+    {
+        return [
+            'export' => 'Exportar',
+        ];
+    }
 
-    // public function export()
-    // {
-    //     $selectedIds  = $this->getSelected();
+    public function export()
+    {
+        $selectedIds  = $this->getSelected();
 
-    //     if (empty($selectedIds)) {
-    //         $estudiantes = $this->builder()->get();
-    //     } else {
-    //         $estudiantes = Estudiante::whereIn('id', $selectedIds)->get();
-    //     }
+        if (empty($selectedIds)) {
+            $asistencias = $this->builder()->get();
+        } else {
+            $asistencias = AsistenciaEstudiante::whereIn('id', $selectedIds)->get();
+        }
 
-    //     $this->clearSelected();
+        $this->clearSelected();
 
-    //     return Excel::download(new MatriculaExport($estudiantes), 'matriculas.xlsx');
-    // }
+        return Excel::download(new AsistenciaEstudianteExport($asistencias), 'asistencias.xlsx');
+    }
 
 }
