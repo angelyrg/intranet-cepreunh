@@ -30,6 +30,9 @@ class ReporteAsistenciaTable extends DataTableComponent
     public ?bool $searchFilterDefer = true; // Añadir .defer
     public ?int $searchFilterDebounce = 300;  // 300 ms
 
+    public string $emptyMessage = 'No se encontraron registros de asistencias para tu búsqueda';
+
+
     public $cicloId;
     public $sedeId;
     public $carrerasDelCicloFiltro;
@@ -112,7 +115,7 @@ class ReporteAsistenciaTable extends DataTableComponent
             ->withCount('estudiante', 'matricula');
 
         if ($this->sedeId) {
-            $query->where('sede_id', $this->sedeId);
+            $query->where('asistencias_estudiantes.sede_id', $this->sedeId);
         }
 
         return $query;
