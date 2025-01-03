@@ -54,6 +54,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('ciclos/{ciclo}/asignar_carreras', [CicloController::class, 'asignar_carreras'])->name('ciclos.asignar_carreras');
     Route::get('ciclos/{ciclo}/asignar_asignaturas', [CicloController::class, 'asignar_asignaturas'])->name('ciclos.asignar_asignaturas');
     Route::get('ciclos/{ciclo}/entregas', [CicloController::class, 'entregas'])->name('ciclos.entregas');
+    Route::get('ciclos/{ciclo}/horario', [CicloController::class, 'horario'])->name('ciclos.horario');
 
 
     Route::post('matricula/buscar_dni', [MatriculaController::class, 'buscar_dni'])->name('matricula.buscar_dni');
