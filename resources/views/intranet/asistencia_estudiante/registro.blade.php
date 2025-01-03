@@ -73,7 +73,7 @@
                                     </div>
 
                                     <div class="mt-4">
-                                        <label class="mb-1">Escribe el DNI para marcar la asistencia</label>
+                                        <label class="mb-1">Escribe el DNI del estudiante para marcar su asistencia</label>
                                         <div class="input-group mb-3">
                                             <input type="text" class="form-control form-control-lg" id="dni_estudiante"
                                                 name="dni_estudiante" placeholder="Escribe el DNI" autocomplete="off"
@@ -102,7 +102,7 @@
                                 <div class="alert alert-info mt-2 d-none" id="asistencia_detail">
 
                                     <h5 class="text-center">
-                                        <span>Entrada:</span>
+                                        <strong id="asistencia_estado"></strong>
                                         <br>
                                         <strong id="fecha_entrada"></strong>
                                     </h5>
@@ -148,7 +148,7 @@
         });
 
         //Buscar estudiante
-       formAsistencia.on('submit', function(e) {
+        formAsistencia.on('submit', function(e) {
             e.preventDefault();
 
             $('#loading_spinner').removeClass('d-none').addClass('d-block');
@@ -158,9 +158,6 @@
             const ciclo_id = $('#ciclo_id').val();
             const dni = $('#dni_estudiante').val();
 
-            console.log(ciclo_id, dni);
-  
-            
             $.ajax({
                 url: '/asistencia/store',
                 type: 'POST',
@@ -189,6 +186,16 @@
                     $('#apellidos_estudiante').text(response.estudiante.apellido_paterno + ' ' + response.estudiante.apellido_materno);
                     $('#matricula_area').text(response.matricula.area.descripcion);
                     $('#matricula_carrera').text(response.matricula.carrera.descripcion);
+
+                    if (response.asistencia.estado === 1) {
+                        $('#asistencia_estado').text('PRESENTE');
+                    } else if (response.asistencia.estado === 2) {
+                        $('#asistencia_estado').text('TARDE');
+                    } else if (response.asistencia.estado === 3) {
+                        $('#asistencia_estado').text('FALTA (fuera de horario)');
+                    }else {
+                        $('#asistencia_estado').text('Error');
+                    }
                 },
                 error: function(xhr) {
                     console.error(xhr);

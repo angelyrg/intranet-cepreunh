@@ -132,6 +132,14 @@
                             <span>Aulas</span>
                         </button>
                     </div>
+                    <div>
+
+                        <button class="btn btn-outline-primary w-100 d-flex justify-content-center align-items-center gap-1"
+                            type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                            <i class="ti ti-clock-cog"></i>
+                            <span>Horario para estudiantes</span>
+                        </button>
+                    </div>
                     {{-- <div>
                         <button type="button" class="btn btn-outline-primary w-100 d-flex justify-content-center align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modalPrecios">
                             <i class="ti ti-coin"></i>
@@ -244,6 +252,19 @@
                 <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
+    </div>
+</div>
+
+{{-- Offcanvas right --}}
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasRightLabel">Horario Estudiante</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <h6>Configuración para el registro de asistencia del estudiante</h6>
+
+        @livewire('ciclo.configurar-horario-estudiante', ['cicloId' => $ciclo->id])
     </div>
 </div>
 

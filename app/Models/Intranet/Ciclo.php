@@ -60,6 +60,11 @@ class Ciclo extends Model
         return $this->hasMany(AulaCiclo::class);
     }
 
+    public function horarios()
+    {
+        return $this->hasMany(HorarioEstudiante::class, 'ciclo_id');
+    }
+
     // TODO: Agregar las relaciones:  Semanas
 
 }

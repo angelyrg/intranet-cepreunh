@@ -7,6 +7,7 @@ use App\Http\Requests\Estudiantes\StoreAsistenciaEstudianteRequest;
 use App\Models\Intranet\AsistenciaEstudiante;
 use App\Models\Intranet\Ciclo;
 use App\Models\Intranet\Estudiante;
+use App\Models\Intranet\HorarioEstudiante;
 use App\Models\Intranet\Matricula;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -41,6 +42,7 @@ class AsistenciaEstudianteController extends Controller
                 ->with(['matriculas' => function ($query) use ($ciclo_id) {
                     $query->whereNull('deleted_at')
                         ->where('ciclo_id', $ciclo_id)
+                        ->where('sede_id', Auth::user()->sede_id)
                         ->orderBy('created_at', 'desc')
                         ->with(['area', 'carrera']);
                 }])->first();
@@ -71,6 +73,29 @@ class AsistenciaEstudianteController extends Controller
                 ], 422);
             }
 
+
+            $horario = HorarioEstudiante::where('ciclo_id', $ciclo_id)
+                ->where('sede_id', Auth::user()->sede_id)
+                ->first();
+
+            if (!$horario) {
+                return response()->json([
+                    'error' => 'No se encontró un horario configurado para este ciclo y sede. Comuníquese con el administrador del sistema.',
+                ], 404);
+            }
+
+            $horaActual = Carbon::now()->format('H:i:s');
+
+            if (Carbon::parse($horaActual)->between(Carbon::parse($horario->presente_inicio), Carbon::parse($horario->presente_fin))) {
+                $asistenciaEstado = 1;
+            }
+            elseif (Carbon::parse($horaActual)->between(Carbon::parse($horario->tarde_inicio), Carbon::parse($horario->tarde_fin))) {
+                $asistenciaEstado = 2;
+            } else {
+                $asistenciaEstado = 3;
+            }
+
+
             // Crear registro de asistencia
             $asistencia = $matricula->asistencias()->create([
                 'estudiante_id' => $estudiante->id,
@@ -78,7 +103,7 @@ class AsistenciaEstudianteController extends Controller
                 'ciclo_id' => $matricula->ciclo_id,
                 'sede_id' => $matricula->sede_id,
                 'usuario_registro_id' => Auth::id(),
-                'estado' => 1, // 1: Presente 2: Tarde 3: Falta
+                'estado' => $asistenciaEstado, // 1: Presente 2: Tarde 3: Falta
                 'entrada' => Carbon::now(),
             ]);
 
